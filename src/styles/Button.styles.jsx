@@ -1,13 +1,17 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-export const StyledButton = styled.button`
+export const StyledButton = styled(Link)`
   border-radius: 4px;
-  background-color: black;
+  background-color: ${({ background }) => background || "black"};
   border: none;
-  color: #ffffff;
+  color: ${({ color }) => color || "#ffffff"};
   text-align: center;
   font-size: 15px;
   height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding-inline: 20px;
   margin-top: 10px;
   padding: 5px;

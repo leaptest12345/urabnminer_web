@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import {
@@ -9,20 +9,24 @@ import {
   SignUpWrapper,
 } from "../styles/SignUp.styles";
 import { FaGoogle, FaFacebook, FaApple } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import PhotoCapture from "../components/PhotoCapture";
+import { RowView } from "../styles/Invoice.styles";
+import ImageModal from "../components/ImageModal";
 
 export default function SignUp() {
-  const hiddenFileInput = React.useRef(null);
-  const handleClick = (event) => {
-    hiddenFileInput.current.click();
-  };
-
-  const handleChange = (event) => {
-    const fileUploaded = event.target.files[0];
-  };
+  const [photo, setPhoto] = useState("");
   return (
     <Wrapper>
       <SignUpWrapper>
-        <Button title="Photo" width="20%" onClick={handleClick} />
+        <RowView>
+          <PhotoCapture
+            handleChange={(e) =>
+              setPhoto(URL.createObjectURL(e.target.files[0]))
+            }
+          />
+          <ImageModal url={photo} />
+        </RowView>
         <SignUpContainer>
           <Input label="FirstName" />
           <Input label="LastName" />
@@ -31,16 +35,6 @@ export default function SignUp() {
           <Input label="Password" />
           <Input label="ConfirmPassword" />
         </SignUpContainer>
-        <input
-          type="file"
-          ref={hiddenFileInput}
-          onChange={handleChange}
-          style={{ display: "none" }}
-        />
-        {/* <FaApple color="black" style={{ width: "50px", height: "50px" }} />
-        <FaFacebook color="blue" style={{ width: "50px", height: "50px" }} />
-        <FaGoogle color="green" style={{ width: "50px", height: "50px" }} /> */}
-
         <Button title="Register" width="50%" />
       </SignUpWrapper>
     </Wrapper>

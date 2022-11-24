@@ -13,7 +13,7 @@ export const CustomerBox = styled.div`
 export const CustomerPhotoView = styled.div`
   display: flex;
   flex-direction: column;
-  height: 15vh;
+  height: 40vh;
   margin-top: 2%;
   justify-content: space-between;
 `;

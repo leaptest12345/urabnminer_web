@@ -6,6 +6,7 @@ export const StyledInput = styled.input`
   border-radius: 4px;
   padding-inline: 10px;
   font-size: 1em;
+  width: ${({ width }) => width || ""};
   border: 2px solid white;
   :hover {
     border: 2px solid lightblue;

@@ -6,35 +6,46 @@ import {
   SideBarTitle,
   SideBarFooter,
 } from "../styles/SideBar.styles";
-import { FaBars, FaFileInvoice, FaHome, FaOutdent } from "react-icons/fa";
-
+import {
+  FaBars,
+  FaFileInvoice,
+  FaHome,
+  FaOutdent,
+  FaProductHunt,
+} from "react-icons/fa";
+import { Link } from "react-router-dom";
 export default function SideBar() {
   const [isOpen, setIsOpen] = useState(false);
   const SIDEBAR = [
     {
       id: 1,
-      iconImg: FaBars,
+      iconImg: FaProductHunt,
       title: "Home",
+      path: "/product",
     },
     {
       id: 2,
       iconImg: FaHome,
       title: "page Name",
+      path: "/profile",
     },
     {
       id: 3,
       iconImg: FaFileInvoice,
       title: "page Name",
+      path: "/invoice",
     },
     {
       id: 4,
       iconImg: FaBars,
       title: "page Name",
+      path: "/customer",
     },
     {
       id: 5,
       iconImg: FaHome,
       title: "page Name",
+      path: "/privacy",
     },
     {
       id: 6,
@@ -50,20 +61,19 @@ export default function SideBar() {
           <SideBarTitle isOpen={isOpen}>Settigs</SideBarTitle>
         </SideBarContent>
       </SideBarHeader>
+
       {SIDEBAR.map((item) => {
         return (
-          <SideBarContent isOpen={isOpen}>
-            <item.iconImg
-              style={{ background: "none", width: 20, height: 20 }}
-            />
-            <SideBarTitle isOpen={isOpen}>{item.title}</SideBarTitle>
-          </SideBarContent>
+          <Link to={item.path}>
+            <SideBarContent isOpen={isOpen}>
+              <item.iconImg
+                style={{ background: "none", width: 20, height: 20 }}
+              />
+              <SideBarTitle isOpen={isOpen}>{item.title}</SideBarTitle>
+            </SideBarContent>
+          </Link>
         );
       })}
-      {/* <SideBarFooter isOpen={isOpen}>
-        <FaFileInvoice style={{ background: "none", width: 20, height: 20 }} />
-        <SideBarTitle isOpen={isOpen}>{item.title}</SideBarTitle>
-      </SideBarFooter> */}
       <SideBarFooter>
         <SideBarContent isOpen={isOpen}>
           <FaFileInvoice
