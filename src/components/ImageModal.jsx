@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Lightbox } from "react-modal-image";
 import styled from "styled-components";
 
-export default function ImageModal({ url, style, imgWidth, margin }) {
+export default function ImageModal({ url, style, imgWidth, margin, disable }) {
   const [imageModal, setImageModal] = useState(false);
   const ModalImage = styled.img`
     width: ${({ width }) => width || "150px"};
@@ -17,9 +17,9 @@ export default function ImageModal({ url, style, imgWidth, margin }) {
         margin={margin}
         onClick={() => setImageModal(true)}
         style={style}
-        src={url}
+        src={url ? url : null}
       />
-      {imageModal ? (
+      {imageModal && !disable ? (
         <Lightbox
           large={url}
           alt="UrbanMiner"

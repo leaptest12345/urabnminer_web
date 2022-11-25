@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "../components/Button";
 import ImageModal from "../components/ImageModal";
 import Input from "../components/Input";
@@ -9,19 +9,23 @@ import {
   ProfileImgView,
   ProfileInput,
 } from "../styles/Profile.styles";
+import { defautlUrl } from "../utils/constants/commonConst";
 import { Title, Wrapper, Text } from "../utils/GlobalStyles";
 
-const defautlUrl =
-  "https://cdn.dribbble.com/users/439063/avatars/normal/4f4177a2f6c0cc8e75dde4ff6b3705ae.png?1634834389";
 export default function Profile({}) {
+  const [photo, setPhoto] = useState("");
   return (
     <Wrapper>
       <Title>Profile</Title>
       <ProfileContainer>
         <Text>your profile photo</Text>
         <ProfileImgView>
-          <ImageModal url={defautlUrl} />
-          <PhotoCapture />
+          <ImageModal url={photo || defautlUrl} />
+          <PhotoCapture
+            handleChange={(e) =>
+              setPhoto(URL.createObjectURL(e.target.files[0]))
+            }
+          />
         </ProfileImgView>
         <ProfileInput>
           <Input label="FirstName" />

@@ -11,7 +11,7 @@ export default function Input({ placeholder, onChange, type, ref, label }) {
       : StyledInput;
   return (
     <InputContainer>
-      <InputText>{label}</InputText>
+      <InputText>{label}:</InputText>
       <CustomInput ref={ref} placeholder={placeholder} onChange={onChange} />
     </InputContainer>
   );

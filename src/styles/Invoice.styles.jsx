@@ -28,7 +28,11 @@ export const InvoiceView2 = styled.div`
   grid-template-rows: 30vh 55vh;
   grid-row-gap: 2%;
   overflow: visible;
+  @media (max-width: 900px) {
+    top: 10%;
+  }
   @media (max-width: 800px) {
+    top: 0;
     display: grid;
     position: relative;
     grid-template-columns: auto;

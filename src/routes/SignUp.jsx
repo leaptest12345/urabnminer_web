@@ -13,20 +13,17 @@ import { Link } from "react-router-dom";
 import PhotoCapture from "../components/PhotoCapture";
 import { RowView } from "../styles/Invoice.styles";
 import ImageModal from "../components/ImageModal";
+import { defautlUrl } from "../utils/constants/commonConst";
 
 export default function SignUp() {
   const [photo, setPhoto] = useState("");
   return (
     <Wrapper>
       <SignUpWrapper>
-        <RowView>
-          <PhotoCapture
-            handleChange={(e) =>
-              setPhoto(URL.createObjectURL(e.target.files[0]))
-            }
-          />
-          <ImageModal url={photo} />
-        </RowView>
+        <PhotoCapture
+          handleChange={(e) => setPhoto(URL.createObjectURL(e.target.files[0]))}
+        />
+        <ImageModal url={photo || defautlUrl} disable={true} />
         <SignUpContainer>
           <Input label="FirstName" />
           <Input label="LastName" />

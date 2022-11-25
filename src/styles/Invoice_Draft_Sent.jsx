@@ -1,9 +1,10 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-export const InvoiceDraftSentBox = styled.div`
+export const InvoiceDraftSentBox = styled(Link)`
   display: flex;
   flex-direction: row;
-  background-color: whitesmoke;
+  background-color: #f5f5f5;
   border-radius: 6px;
   padding: 10px;
   padding-right: 20px;
@@ -12,10 +13,15 @@ export const InvoiceDraftSentBox = styled.div`
   align-items: center;
   box-shadow: 3px 0 5px -2px #888;
   margin-top: 10px;
+  :hover {
+    background-color: lightgray;
+    cursor: pointer;
+  }
 `;
 export const InvoiceSubBox = styled.div`
   display: flex;
   flex-direction: column;
+  width: 65%;
   justify-content: space-between;
 `;
 export const InvoiceView = styled.div`
@@ -31,4 +37,21 @@ export const InvoiceView = styled.div`
   @media (max-width: 600px) {
     grid-template-columns: 100%;
   }
+`;
+export const ItemCardText = styled.span`
+  position: absolute;
+  color: black;
+  top: 25%;
+  left: 25%;
+  font-size: 0.8rem;
+  font-weight: 600;
+  @media (max-width: 1000px) {
+  }
+`;
+export const ItemCard = styled.div`
+  position: relative;
+  height: 100%;
+  width: 15%;
+  align-items: center;
+  display: flex;
 `;

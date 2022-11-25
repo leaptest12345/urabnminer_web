@@ -19,15 +19,15 @@ export const StyledButton = styled(Link)`
   width: ${({ width }) => width || "30%"};
   cursor: pointer;
   :hover {
-    background-color: brown;
+    background-color: #2a547e;
   }
   :focus {
     outline: none;
     border: none;
   }
-  @media (max-width: 700px) {
+  /* @media (max-width: 700px) {
     width: 40%;
-  }
+  } */
 `;
 
 export const ButtonText = styled.span`

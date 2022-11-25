@@ -9,7 +9,7 @@ export const StyledInput = styled.input`
   width: ${({ width }) => width || ""};
   border: 2px solid white;
   :hover {
-    border: 2px solid lightblue;
+    border: 2px solid lightskyblue;
   }
 `;
 export const PasswordInput = styled(StyledInput).attrs({

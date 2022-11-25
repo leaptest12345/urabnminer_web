@@ -1,70 +1,13 @@
 import { Autocomplete, TextField } from "@mui/material";
 import React from "react";
 import styled from "styled-components";
+import { SearchOptions } from "../utils/constants/commonConst";
 
 export default function SearchAutoComplete({ onChange, defaultValue }) {
-  const options = [
-    "The Godfather",
-    "Pulp Fiction",
-    "The Godfather",
-    "Pulp Fiction",
-    "The Godfather",
-    "Pulp Fiction",
-    "The Godfather",
-    "Pulp Fiction",
-    "The Godfather",
-    "Pulp Fiction",
-    "The Godfather",
-    "Pulp Fiction",
-    "The Godfather",
-    "Pulp Fiction",
-    "The Godfather",
-    "Pulp Fiction",
-    "The Godfather",
-    "Pulp Fiction",
-    "The Godfather",
-    "Pulp Fiction",
-    "The Godfather",
-    "Pulp Fiction",
-    "The Godfather",
-    "Pulp Fiction",
-    "The Godfather",
-    "Pulp Fiction",
-    "The Godfather",
-    "Pulp Fiction",
-    "The Godfather",
-    "Pulp Fiction",
-    "The Godfather",
-    "Pulp Fiction",
-    "The Godfather",
-    "Pulp Fiction",
-    "The Godfather",
-    "Pulp Fiction",
-    "The Godfather",
-    "Pulp Fiction",
-    "The Godfather",
-    "Pulp Fiction",
-    "The Godfather",
-    "Pulp Fiction",
-    "The Godfather",
-    "Pulp Fiction",
-    "The Godfather",
-    "Pulp Fiction",
-    "The Godfather",
-    "Pulp Fiction",
-    "The Godfather",
-    "Pulp Fiction",
-    "The Godfather",
-    "Pulp Fiction",
-    "The Godfather",
-    "Pulp Fiction",
-    "The Godfather",
-    "Pulp Fiction",
-  ];
   const WhiteBorderTextField = styled(TextField)`
     .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-      border-color: lightblue;
-      border-width: 2px;
+      border-color: black;
+      border-width: 0px;
     }
   `;
 
@@ -72,7 +15,7 @@ export default function SearchAutoComplete({ onChange, defaultValue }) {
     <Autocomplete
       disablePortal
       id="combo-box-demo"
-      options={options}
+      options={SearchOptions}
       sx={{
         width: "100%",
         backgroundColor: "white",
@@ -80,7 +23,12 @@ export default function SearchAutoComplete({ onChange, defaultValue }) {
       }}
       defaultValue={defaultValue}
       ListboxProps={{
-        style: { backgroundColor: "lightgreen", maxHeight: "200px" },
+        style: {
+          backgroundColor: "whitesmoke",
+          maxHeight: "200px",
+          border: "1px solid black",
+          borderRadius: "6px",
+        },
       }}
       onChange={onChange}
       renderInput={(params) => (

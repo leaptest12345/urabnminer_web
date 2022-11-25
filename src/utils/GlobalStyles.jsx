@@ -8,6 +8,9 @@ export const Wrapper = styled.div`
   background-color: #dcdee1;
   overflow-y: scroll;
   transition: all 0.3s ease-in-out;
+  @media (max-width: 900px) {
+    margin-top: 10vh;
+  }
 `;
 
 export const Title = styled.span`
@@ -27,6 +30,11 @@ export const Text = styled.span`
   font-size: 1rem;
   color: ${({ color }) => color || "black"};
 `;
+export const Text_bold = styled.span`
+  font-size: 1rem;
+  color: ${({ color }) => color || "white"};
+  font-weight: 600;
+`;
 export const Bold_1 = styled.span`
   font-size: 1rem;
   color: ${({ color }) => color || "black"};
@@ -38,8 +46,9 @@ export const MediumBold = styled.span`
   font-weight: 600;
 `;
 export const TextSmall = styled.span`
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   color: ${({ color }) => color || "black"};
+  font-weight: 500;
 `;
 export const InputText = styled.text`
   font-size: 1em;
@@ -51,7 +60,8 @@ export const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 10vh;
+  height: 11vh;
+  margin-top: 5px;
   @media (max-width: 800px) {
   }
 `;
@@ -76,4 +86,13 @@ export const TextArea = styled.textarea`
 `;
 export const View_6 = styled.div`
   width: 60%;
+`;
+
+export const Img40 = styled.img`
+  height: 40px;
+  width: 40px;
+`;
+export const Img35 = styled.img`
+  height: 35px;
+  width: 35px;
 `;

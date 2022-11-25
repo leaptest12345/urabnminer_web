@@ -12,28 +12,38 @@ import Invoice from "./routes/Invoice";
 import PrivacyPolicy from "./routes/PrivacyPolicy";
 import Header from "./components/Header";
 import Product from "./routes/Product";
+import Login from "./routes/Login";
+import Feedback from "./routes/Feedback";
+import ResetPassword from "./routes/ResetPassoword";
 function App() {
   const MainContainer = styled.div`
     display: flex;
     overflow-y: scroll;
+    background-color: #dcdee1;
+    margin: 0;
+    padding: 0;
   `;
   return (
-    <main>
-      <MainContainer>
-        <Router>
-          <SideBar />
-          <Routes>
-            <Route exact path="/" element={<SignUp />}></Route>
-            <Route exact path="/product" element={<Product />}></Route>
-            <Route exact path="/profile" element={<Profile />}></Route>
-            <Route exact path="/customer" element={<Customer />}></Route>
-            <Route exact path="/privacy" element={<PrivacyPolicy />}></Route>
-            <Route exact path="/invoice" element={<Invoice />}></Route>
-          </Routes>
-        </Router>
-      </MainContainer>
-    </main>
+    <MainContainer>
+      <Router>
+        <SideBar />
+        <Routes>
+          <Route exact path="/login" element={<Login />}></Route>
+          <Route exact path="/signup" element={<SignUp />}></Route>
+          <Route exact path="/" element={<SignUp />}></Route>
+          <Route exact path="/product" element={<Product />}></Route>
+          <Route exact path="/profile" element={<Profile />}></Route>
+          <Route exact path="/customer" element={<Customer />}></Route>
+          <Route exact path="/privacy" element={<ResetPassword />}></Route>
+          <Route exact path="/feedback" element={<Feedback />}></Route>
+          <Route exact path="/invoice" element={<Invoice />}></Route>
+          <Route exact path="/draft" element={<Invoice_Draft_Sent />}></Route>
+        </Routes>
+      </Router>
+    </MainContainer>
   );
 }
 
 export default App;
+{
+}

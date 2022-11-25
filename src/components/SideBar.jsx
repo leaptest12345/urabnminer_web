@@ -4,85 +4,83 @@ import {
   SideBarContent,
   SideBarHeader,
   SideBarTitle,
-  SideBarFooter,
 } from "../styles/SideBar.styles";
-import {
-  FaBars,
-  FaFileInvoice,
-  FaHome,
-  FaOutdent,
-  FaProductHunt,
-} from "react-icons/fa";
+import { FaBars } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
+import { SIDEBAR } from "../utils/constants/commonConst";
+import LogoutIcon from "@mui/icons-material/Logout";
+import SettingsIcon from "@mui/icons-material/Settings";
+
 export default function SideBar() {
-  const [isOpen, setIsOpen] = useState(false);
-  const SIDEBAR = [
-    {
-      id: 1,
-      iconImg: FaProductHunt,
-      title: "Home",
-      path: "/product",
-    },
-    {
-      id: 2,
-      iconImg: FaHome,
-      title: "page Name",
-      path: "/profile",
-    },
-    {
-      id: 3,
-      iconImg: FaFileInvoice,
-      title: "page Name",
-      path: "/invoice",
-    },
-    {
-      id: 4,
-      iconImg: FaBars,
-      title: "page Name",
-      path: "/customer",
-    },
-    {
-      id: 5,
-      iconImg: FaHome,
-      title: "page Name",
-      path: "/privacy",
-    },
-    {
-      id: 6,
-      iconImg: FaFileInvoice,
-      title: "page Name",
-    },
-  ];
+  const [isOpen, setIsOpen] = useState(true);
+  const [sideBardId, setSideBarId] = useState(1);
+  const SideBarContentView = isOpen
+    ? styled.div`
+        height: 65%;
+        overflow: visible;
+        @media (max-width: 900px) {
+          height: 100%;
+          margin-top: 10px;
+        }
+      `
+    : styled.div`
+        height: 65%;
+        overflow: visible;
+        @media (max-width: 900px) {
+          display: flex;
+          height: 75%;
+          width: 65%;
+          justify-content: space-between;
+        }
+      `;
+  const SideBarFooter = isOpen
+    ? styled.div`
+        border-top: 1px solid grey;
+        overflow: visible;
+        margin-top: 10px;
+      `
+    : styled.div`
+        border-top: 1px solid grey;
+        @media (max-width: 900px) {
+          display: flex;
+          border: 0;
+          justify-content: space-between;
+        }
+      `;
   return (
     <SideBarContainer isOpen={isOpen}>
       <SideBarHeader onClick={() => setIsOpen(!isOpen)}>
-        <SideBarContent isOpen={isOpen}>
-          <FaFileInvoice style={{ width: "20px", height: "20px" }} />
-          <SideBarTitle isOpen={isOpen}>Settigs</SideBarTitle>
-        </SideBarContent>
+        <FaBars style={{ width: "20px", height: "20px" }} />
+        <SideBarTitle isOpen={isOpen}>Settigs</SideBarTitle>
       </SideBarHeader>
-
-      {SIDEBAR.map((item) => {
-        return (
-          <Link to={item.path}>
-            <SideBarContent isOpen={isOpen}>
-              <item.iconImg
-                style={{ background: "none", width: 20, height: 20 }}
-              />
-              <SideBarTitle isOpen={isOpen}>{item.title}</SideBarTitle>
-            </SideBarContent>
-          </Link>
-        );
-      })}
+      <SideBarContentView>
+        {SIDEBAR.map((item) => {
+          return (
+            <Link
+              to={item.path}
+              onClick={() => setIsOpen(false) + setSideBarId(item.id)}
+            >
+              <SideBarContent
+                isOpen={isOpen}
+                background={sideBardId == item.id ? true : false}
+              >
+                <item.iconImg
+                  style={{ background: "none", width: 20, height: 20 }}
+                />
+                <SideBarTitle isOpen={isOpen}>{item.title}</SideBarTitle>
+              </SideBarContent>
+            </Link>
+          );
+        })}
+      </SideBarContentView>
       <SideBarFooter>
         <SideBarContent isOpen={isOpen}>
-          <FaFileInvoice
-            style={{ background: "none", width: 20, height: 20 }}
-          />
+          <SettingsIcon style={{ background: "none", width: 20, height: 20 }} />
           <SideBarTitle isOpen={isOpen}>Settigs</SideBarTitle>
         </SideBarContent>
         <SideBarContent isOpen={isOpen}>
-          <FaOutdent style={{ background: "none", width: 20, height: 20 }} />
+          <LogoutIcon style={{ background: "none", width: 20, height: 20 }} />
           <SideBarTitle isOpen={isOpen}>LogOut</SideBarTitle>
         </SideBarContent>
       </SideBarFooter>

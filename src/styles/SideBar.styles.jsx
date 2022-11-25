@@ -8,32 +8,64 @@ export const SideBarContainer = styled.nav`
   margin: 0;
   box-shadow: 3px 0 5px -2px #888;
   padding-inline: 15px;
-  align-items: flex-start;
   background-color: #11111d;
   animation: width 200ms ease-in-out;
   transition: all 0.3s ease;
+  @media (max-width: 900px) {
+    position: absolute;
+    height: ${({ isOpen }) => (isOpen ? "100vh" : "10vh")};
+    width: ${({ isOpen }) => (isOpen ? "45vw" : "100vw")};
+    z-index: 1;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    display: flex;
+    padding: ${({ isOpen }) => (isOpen ? "20px" : "")};
+    align-items: ${({ isOpen }) => (isOpen ? "flex-start" : "center")};
+    justify-content: space-between;
+    flex-direction: ${({ isOpen }) => (isOpen ? "column" : "row")};
+  }
 `;
-export const SideBarFooter = styled.div`
-  border-top: 1px solid grey;
-`;
+
 export const SideBarHeader = styled.div`
   height: 15vh;
   display: flex;
+  padding: 25px;
   border-bottom: 1px solid grey;
 `;
+
 export const SideBarContent = styled.div`
   height: 7vh;
   margin-bottom: 10px;
   display: flex;
   border-radius: 6px;
-  color: white;
-  padding-inline: ${({ isOpen }) => (isOpen ? "25px" : "")};
+  color: ${({ background }) => (background ? "black" : "white")};
+  background-color: ${({ background }) => (background ? "white" : "")};
+  padding-inline: ${({ isOpen }) => (isOpen ? "10px" : "0px")};
   font-size: 1em;
   align-items: center;
   justify-content: ${({ isOpen }) => (isOpen ? "" : "center")};
   :hover {
     background-color: #ffffff;
     color: black;
+    /* ::after {
+      content: "name";
+      position: absolute;
+      background-color: lightblue;
+      padding-inline: 10px;
+      padding: 5px;
+      z-index: 1;
+      overflow-x: visible;
+      border-radius: 6px;
+      bottom: 0%;
+      color: black;
+    } */
+  }
+
+  @media (max-width: 900px) {
+    height: auto;
+    width: ${({ isOpen }) => (isOpen ? "200px" : "")};
+    margin-bottom: ${({ isOpen }) => (isOpen ? "10px" : "0px")};
+    padding: ${({ isOpen }) => (isOpen ? "10px" : "15px")};
   }
 `;
 const fadeInUp = keyframes` 
@@ -45,7 +77,6 @@ const fadeInUp = keyframes`
   }
 `;
 export const SideBarTitle = styled.text`
-  background: none;
   display: ${({ isOpen }) => (isOpen ? "" : "none")};
   margin-left: ${({ isOpen }) => (isOpen ? "25px" : "none")};
   animation: ${fadeInUp} 0.8s ease-in-out 0s;
