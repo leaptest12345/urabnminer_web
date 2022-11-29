@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   SideBarContainer,
   SideBarContent,
@@ -6,15 +6,23 @@ import {
   SideBarTitle,
 } from "../styles/SideBar.styles";
 import { FaBars } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { SIDEBAR } from "../utils/constants/commonConst";
 import LogoutIcon from "@mui/icons-material/Logout";
 import SettingsIcon from "@mui/icons-material/Settings";
+import { AuthContext } from "../utils/AuthContext";
 
 export default function SideBar() {
+  const navigate = useNavigate();
+
   const [isOpen, setIsOpen] = useState(true);
   const [sideBardId, setSideBarId] = useState(1);
+  const { signOut } = React.useContext(AuthContext);
+
+  const location = useLocation();
+  const path = location.pathname;
+
   const SideBarContentView = isOpen
     ? styled.div`
         height: 65%;
@@ -48,6 +56,14 @@ export default function SideBar() {
           justify-content: space-between;
         }
       `;
+  const signOutUser = () => {
+    navigate("/");
+    signOut();
+  };
+
+  useEffect(() => {}, []);
+  const img = { background: "none", width: 20, height: 20 };
+
   return (
     <SideBarContainer isOpen={isOpen}>
       <SideBarHeader onClick={() => setIsOpen(!isOpen)}>
@@ -57,17 +73,12 @@ export default function SideBar() {
       <SideBarContentView>
         {SIDEBAR.map((item) => {
           return (
-            <Link
-              to={item.path}
-              onClick={() => setIsOpen(false) + setSideBarId(item.id)}
-            >
+            <Link to={item.path} onClick={() => setSideBarId(item.id)}>
               <SideBarContent
                 isOpen={isOpen}
-                background={sideBardId == item.id ? true : false}
+                background={path == item.path ? true : false}
               >
-                <item.iconImg
-                  style={{ background: "none", width: 20, height: 20 }}
-                />
+                <item.iconImg style={img} />
                 <SideBarTitle isOpen={isOpen}>{item.title}</SideBarTitle>
               </SideBarContent>
             </Link>
@@ -75,12 +86,17 @@ export default function SideBar() {
         })}
       </SideBarContentView>
       <SideBarFooter>
-        <SideBarContent isOpen={isOpen}>
-          <SettingsIcon style={{ background: "none", width: 20, height: 20 }} />
-          <SideBarTitle isOpen={isOpen}>Settigs</SideBarTitle>
-        </SideBarContent>
-        <SideBarContent isOpen={isOpen}>
-          <LogoutIcon style={{ background: "none", width: 20, height: 20 }} />
+        <Link to="/settings" onClick={() => setSideBarId(-1)}>
+          <SideBarContent
+            isOpen={isOpen}
+            background={path == "/settings" ? true : false}
+          >
+            <SettingsIcon style={img} />
+            <SideBarTitle isOpen={isOpen}>Settigs</SideBarTitle>
+          </SideBarContent>
+        </Link>
+        <SideBarContent isOpen={isOpen} onClick={() => signOutUser()}>
+          <LogoutIcon style={img} />
           <SideBarTitle isOpen={isOpen}>LogOut</SideBarTitle>
         </SideBarContent>
       </SideBarFooter>

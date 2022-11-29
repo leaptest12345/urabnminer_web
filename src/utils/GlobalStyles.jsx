@@ -19,7 +19,12 @@ export const Title = styled.span`
   font-weight: 600;
   line-height: 50px;
 `;
-
+export const ItemTitle = styled.span`
+  font-size: 1.5rem;
+  color: black;
+  font-weight: 600;
+  line-height: 50px;
+`;
 export const MediumText = styled.span`
   font-size: 1.5rem;
   color: ${({ color }) => color || "black"};
@@ -48,7 +53,12 @@ export const MediumBold = styled.span`
 export const TextSmall = styled.span`
   font-size: 0.85rem;
   color: ${({ color }) => color || "black"};
-  font-weight: 500;
+  font-weight: 400;
+`;
+export const SmallBold = styled.span`
+  font-size: 0.85rem;
+  color: ${({ color }) => color || "black"};
+  font-weight: 600;
 `;
 export const InputText = styled.text`
   font-size: 1em;
@@ -87,7 +97,11 @@ export const TextArea = styled.textarea`
 export const View_6 = styled.div`
   width: 60%;
 `;
-
+export const View_6_Row = styled.div`
+  width: 60%;
+  display: flex;
+  justify-content: space-around;
+`;
 export const Img40 = styled.img`
   height: 40px;
   width: 40px;

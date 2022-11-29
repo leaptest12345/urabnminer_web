@@ -7,10 +7,19 @@ export const StyledInput = styled.input`
   padding-inline: 10px;
   font-size: 1em;
   width: ${({ width }) => width || ""};
-  border: 2px solid white;
+  border: ${({ error }) => (error ? "1.5px" : "2px")} solid
+    ${({ error }) => (error ? "red" : "white")};
   :hover {
-    border: 2px solid lightskyblue;
+    border: ${({ error }) => (error ? "1.5px" : "2px")} solid
+      ${({ error }) => (error ? "red" : "lightskyblue")};
   }
+`;
+export const DollerSymbol = styled.span`
+  position: absolute;
+  color: black;
+  font-size: 17px;
+  font-weight: 600;
+  left: 42%;
 `;
 export const PasswordInput = styled(StyledInput).attrs({
   type: "password",

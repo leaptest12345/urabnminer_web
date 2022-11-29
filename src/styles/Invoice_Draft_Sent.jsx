@@ -38,16 +38,7 @@ export const InvoiceView = styled.div`
     grid-template-columns: 100%;
   }
 `;
-export const ItemCardText = styled.span`
-  position: absolute;
-  color: black;
-  top: 25%;
-  left: 25%;
-  font-size: 0.8rem;
-  font-weight: 600;
-  @media (max-width: 1000px) {
-  }
-`;
+
 export const ItemCard = styled.div`
   position: relative;
   height: 100%;

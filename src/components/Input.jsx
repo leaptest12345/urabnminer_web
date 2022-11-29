@@ -2,7 +2,14 @@ import React from "react";
 import { FileInput, PasswordInput, StyledInput } from "../styles/Input.styles";
 import { InputContainer, InputText } from "../utils/GlobalStyles";
 
-export default function Input({ placeholder, onChange, type, ref, label }) {
+export default function Input({
+  placeholder,
+  onChange,
+  type,
+  ref,
+  label,
+  value,
+}) {
   const CustomInput =
     type == "password"
       ? PasswordInput
@@ -12,7 +19,12 @@ export default function Input({ placeholder, onChange, type, ref, label }) {
   return (
     <InputContainer>
       <InputText>{label}:</InputText>
-      <CustomInput ref={ref} placeholder={placeholder} onChange={onChange} />
+      <CustomInput
+        value={value}
+        ref={ref}
+        placeholder={placeholder}
+        onChange={onChange}
+      />
     </InputContainer>
   );
 }

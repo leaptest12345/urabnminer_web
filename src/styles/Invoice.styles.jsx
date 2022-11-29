@@ -59,6 +59,16 @@ export const SenderBox = styled.div`
   background-color: ${({ background }) => background || "black"};
   border-radius: 6px;
   margin-bottom: 20px;
+  padding: 10px;
+  padding-inline: 20px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+`;
+export const SenderSubbox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 export const InvoiceItemView = styled.div`
   margin-top: 10px;
@@ -89,6 +99,7 @@ export const RowView = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-top: 10px;
+  position: ${({ zIndex }) => (zIndex ? null : "relative")};
   width: 70%;
   @media (max-width: 900px) {
     width: 100%;
@@ -109,4 +120,22 @@ export const InvoiceImage = styled.div`
   display: flex;
   flex-wrap: wrap;
   margin-top: 20px;
+`;
+export const TouchView = styled.div`
+  background-color: ${({ background }) => background || "whitesmoke"};
+  box-shadow: ${({ background }) =>
+    background ? "3px 0 5px -2px #888" : null};
+  width: 35%;
+  height: 5vh;
+  border-radius: 4px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  :hover {
+    background-color: #2a547e;
+    cursor: pointer;
+  }
+  span {
+    color: ${({ color }) => color || "black"};
+  }
 `;

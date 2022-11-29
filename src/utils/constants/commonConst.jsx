@@ -47,6 +47,12 @@ export const SIDEBAR = [
   },
   {
     id: 7,
+    iconImg: PrivacyTipIcon,
+    title: "Term&Con",
+    path: "/term",
+  },
+  {
+    id: 8,
     iconImg: FeedbackIcon,
     title: "Feedback",
     path: "/feedback",

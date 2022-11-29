@@ -3,7 +3,13 @@ import React from "react";
 import styled from "styled-components";
 import { SearchOptions } from "../utils/constants/commonConst";
 
-export default function SearchAutoComplete({ onChange, defaultValue }) {
+export default function SearchAutoComplete({
+  onChange,
+  defaultValue,
+  width,
+  searchOptions,
+  clearIcon,
+}) {
   const WhiteBorderTextField = styled(TextField)`
     .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
       border-color: black;
@@ -13,20 +19,21 @@ export default function SearchAutoComplete({ onChange, defaultValue }) {
 
   return (
     <Autocomplete
+      style={{ zIndex: 111 }}
       disablePortal
       id="combo-box-demo"
-      options={SearchOptions}
+      options={searchOptions || SearchOptions}
       sx={{
-        width: "100%",
+        width: width ? width : "100%",
         backgroundColor: "white",
         borderRadius: "3px",
       }}
+      clearIcon={clearIcon}
       defaultValue={defaultValue}
       ListboxProps={{
         style: {
           backgroundColor: "whitesmoke",
           maxHeight: "200px",
-          border: "1px solid black",
           borderRadius: "6px",
         },
       }}

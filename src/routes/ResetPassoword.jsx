@@ -1,31 +1,30 @@
-import React from "react";
-import styled from "styled-components";
+import React, { useState } from "react";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import { Bold_1, Text, Title, Wrapper } from "../utils/GlobalStyles";
 import LOCK from "../assets/lock.gif";
+import { toastAlert } from "../utils/toastAlert";
+import { sendEmail } from "../utils/firebase/firebaseApi";
+import {
+  ForgotPasswordContainer,
+  ForgotTitle,
+  LockImg,
+} from "../styles/ResetPass.styles";
 export default function ResetPassword() {
-  const ForgotPasswordContainer = styled.div`
-    padding-inline: 10%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    height: 80vh;
-    width: 50vw;
-    @media (max-width: 900px) {
-      width: 100vw;
+  const [email, setEmail] = useState("");
+  const onResetPass = async () => {
+    try {
+      if (!email) toastAlert(0, "Please Enter Valid Email Address!");
+      else {
+        await sendEmail(email);
+        toastAlert(1, "Please Check Your Email!");
+        setEmail("");
+      }
+    } catch (error) {
+      console.log("email", error);
+      toastAlert(0, error);
     }
-  `;
-  const ForgotTitle = styled.div`
-    display: flex;
-    flex-direction: column;
-    height: 9vh;
-    justify-content: space-between;
-  `;
-  const LockImg = styled.img`
-    width: 200px;
-    height: 200px;
-  `;
+  };
   return (
     <Wrapper>
       <Title>Reset Password</Title>
@@ -35,8 +34,16 @@ export default function ResetPassword() {
           <Bold_1>Forgot Password?</Bold_1>
           <Text>No Worries,We'll Send You Instructions</Text>
         </ForgotTitle>
-        <Input label="Email" />
-        <Button title="Reset Password" width="100%" />
+        <Input
+          label="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <Button
+          title="Reset Password"
+          width="100%"
+          onClick={() => onResetPass()}
+        />
       </ForgotPasswordContainer>
     </Wrapper>
   );
