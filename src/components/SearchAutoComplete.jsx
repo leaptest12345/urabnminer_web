@@ -1,6 +1,9 @@
-import { Autocomplete, TextField } from "@mui/material";
+import { Autocomplete } from "@mui/material";
 import React from "react";
-import styled from "styled-components";
+import {
+  ListBoxProps,
+  WhiteBorderTextField,
+} from "../styles/SearchAutoComplete.styles";
 import { SearchOptions } from "../utils/constants/commonConst";
 
 export default function SearchAutoComplete({
@@ -10,13 +13,6 @@ export default function SearchAutoComplete({
   searchOptions,
   clearIcon,
 }) {
-  const WhiteBorderTextField = styled(TextField)`
-    .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-      border-color: black;
-      border-width: 0px;
-    }
-  `;
-
   return (
     <Autocomplete
       style={{ zIndex: 111 }}
@@ -30,13 +26,7 @@ export default function SearchAutoComplete({
       }}
       clearIcon={clearIcon}
       defaultValue={defaultValue}
-      ListboxProps={{
-        style: {
-          backgroundColor: "whitesmoke",
-          maxHeight: "200px",
-          borderRadius: "6px",
-        },
-      }}
+      ListboxProps={ListBoxProps}
       onChange={onChange}
       renderInput={(params) => (
         <WhiteBorderTextField

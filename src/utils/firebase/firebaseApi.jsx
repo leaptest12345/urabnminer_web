@@ -1,14 +1,32 @@
 import { onValue, ref, set, update } from "firebase/database";
-import { auth, database, storage } from "./firebaseConfig";
+import { auth, database } from "./firebaseConfig";
 import {
+  createUserWithEmailAndPassword,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
+  updateEmail,
 } from "firebase/auth";
+import { ArrayConverter } from "../ArrayConverter";
 
 //auth
 export const LoginAuth = (email, password) => {
   return new Promise((resolve, reject) => {
     signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        resolve(user);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        reject(errorMessage.split(":")[1]);
+      });
+  });
+};
+
+export const SignUpAuth = (email, password) => {
+  return new Promise((resolve, reject) => {
+    createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
         resolve(user);
@@ -30,6 +48,18 @@ export const sendEmail = (email) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         reject(errorMessage.split(":")[1]);
+      });
+  });
+};
+
+export const changeEmail = (email) => {
+  return new Promise((resolve, reject) => {
+    updateEmail(auth.currentUser, email)
+      .then(() => {
+        resolve("Email updated!");
+      })
+      .catch((error) => {
+        reject(error);
       });
   });
 };
@@ -59,4 +89,25 @@ export const getData = (refPath) => {
       resolve(data);
     });
   });
+};
+
+export const getCustomerList = async () => {
+  try {
+    const id = localStorage.getItem("userID");
+    const customerDetail = await getData(`USER_CUSTOMER/${id}/CUSTOMER`);
+    let arr = [];
+    ArrayConverter(customerDetail).map((item) => {
+      arr.push({
+        ...item,
+        label:
+          item.UserFirstName +
+          " " +
+          item.UserLastName +
+          `(${item.BusinessName})`,
+      });
+    });
+    return arr;
+  } catch (error) {
+    console.log(error);
+  }
 };

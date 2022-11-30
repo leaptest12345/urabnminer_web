@@ -483,3 +483,6 @@ export const SearchOptions = [
   { code: "ZM", label: "Zambia", phone: "260" },
   { code: "ZW", label: "Zimbabwe", phone: "263" },
 ];
+
+export const emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+export const phoneReg = /(^[0-9]+$|^$)/;

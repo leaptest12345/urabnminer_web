@@ -12,11 +12,24 @@ import {
   ProfileImgView,
   ProfileInput,
 } from "../styles/Profile.styles";
-import { defautlUrl } from "../utils/constants/commonConst";
-import { getData, updateData } from "../utils/firebase/firebaseApi";
-import { Title, Wrapper, Text, Row, InputText } from "../utils/GlobalStyles";
+import { defautlUrl, emailReg, phoneReg } from "../utils/constants/commonConst";
+import {
+  changeEmail,
+  getData,
+  updateData,
+} from "../utils/firebase/firebaseApi";
+import {
+  deleteProfileImage,
+  uploadProfileImage,
+} from "../utils/firebase/firebaseStorage";
+import {
+  Title,
+  Wrapper,
+  Row,
+  InputText,
+  Text_reg,
+} from "../utils/GlobalStyles";
 import { toastAlert } from "../utils/toastAlert";
-
 export default function Profile({}) {
   const [photo, setPhoto] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -24,13 +37,11 @@ export default function Profile({}) {
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [loading, setLoading] = useState(false);
+  const [photoName, setPhotoName] = useState(null);
   const id = localStorage.getItem("userID");
-  const data = {
-    firstName: firstName,
-    lastName: lastName,
-    phoneNumber: phoneNumber,
-    email: email,
-  };
+  const [changePhoto, setChangePhoto] = useState(null);
+  const [countryCode, setCountryCode] = useState("");
+  const [countryName, setCountryName] = useState("");
   const getUserDetail = async () => {
     try {
       const id = localStorage.getItem("userID");
@@ -40,7 +51,9 @@ export default function Profile({}) {
       setLastName(userDetail?.lastName);
       setEmail(userDetail?.email);
       setPhoto(userDetail?.photo);
+      setPhotoName(userDetail?.photoName);
       setPhoneNumber(userDetail?.phoneNumber);
+      setCountryName(userDetail?.countryName);
     } catch (error) {
       console.log(error);
     }
@@ -48,37 +61,87 @@ export default function Profile({}) {
   const updateProfile = async () => {
     setLoading(true);
     try {
-      await updateData(`USERS/${id}`, data);
-      toastAlert(1, "Profile has been updated!");
-      setLoading(false);
+      if (emailReg.test(email)) {
+        if (phoneReg.test(phoneNumber)) {
+          if (changePhoto) {
+            console.log("inside changephotot");
+            if (photoName) {
+              console.log("inside 123");
+              const value = await deleteProfileImage(photoName);
+              console.log(value);
+            }
+            const uploadProfile = await uploadProfileImage(changePhoto);
+            await updateData(`USERS/${id}`, {
+              photo: uploadProfile[0],
+              photoName: uploadProfile[1],
+              firstName: firstName,
+              lastName: lastName,
+              phoneNumber: phoneNumber,
+              email: email,
+              countryCode: countryCode,
+              countryName: countryName,
+            });
+          } else {
+            await updateData(`USERS/${id}`, {
+              firstName: firstName,
+              lastName: lastName,
+              phoneNumber: phoneNumber,
+              email: email,
+              countryCode: countryCode,
+              countryName: countryName,
+            });
+          }
+          const result = await changeEmail(email);
+          console.log(result);
+          toastAlert(1, "Profile has been updated!");
+          setLoading(false);
+        } else {
+          toastAlert(0, "Please Enter Valid Phone Number!");
+          setLoading(false);
+        }
+      } else {
+        toastAlert(0, "Please Enter Valid Email Address!");
+        setLoading(false);
+      }
     } catch (error) {
+      console.log(error);
       setLoading(false);
     }
   };
   useEffect(() => {
     getUserDetail();
   }, []);
+  const handlePhoto = (e) => {
+    setPhoto(e.target.files[0]);
+    setChangePhoto(e.target.files[0]);
+  };
+  const onSearchChange = (e, value) => {
+    console.log(value.label);
+    setCountryCode(value.phone);
+    setCountryName(value.label);
+  };
   return (
     <Wrapper>
       <LoaderSpinner visible={loading} isCenter={true} />
       <Title>Profile</Title>
       <ProfileContainer>
-        <Text>your profile photo</Text>
+        <Text_reg>your profile photo</Text_reg>
         <ProfileImgView>
           <ImageModal url={photo || defautlUrl} />
-          <PhotoCapture
-            handleChange={(e) =>
-              setPhoto(URL.createObjectURL(e.target.files[0]))
-            }
-          />
+          <PhotoCapture handleChange={handlePhoto} />
         </ProfileImgView>
         <ProfileInput>
           <InputText>PhoneNumber:</InputText>
           <Row>
-            <SearchAutoComplete width="30%" />
+            <SearchAutoComplete
+              defaultValue={countryName + ""}
+              width="30%"
+              onChange={onSearchChange}
+            />
             <StyledInput
               width="67%"
               value={phoneNumber}
+              error={phoneNumber ? !phoneReg.test(phoneNumber) : false}
               onChange={(e) => setPhoneNumber(e.target.value)}
             />
           </Row>
@@ -95,6 +158,7 @@ export default function Profile({}) {
           <Input
             value={email}
             label="Email"
+            error={email ? !emailReg.test(email) : false}
             onChange={(e) => setEmail(e.target.value)}
           />
           <Button title="Save" onClick={() => updateProfile()} />

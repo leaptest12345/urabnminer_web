@@ -15,17 +15,20 @@ import { getData, setData } from "../utils/firebase/firebaseApi";
 import {
   InputText,
   Row,
-  Text,
+  Text_reg,
   Title,
   View_6,
   Wrapper,
 } from "../utils/GlobalStyles";
 import { toastAlert } from "../utils/toastAlert";
-import uuid from "react-uuid";
 import { uniqueId } from "../utils/uniqueId";
 import { uploadCustomerImage } from "../utils/firebase/firebaseStorage";
+import LoaderSpinner from "../components/Loader";
+import { useNavigate } from "react-router";
+import { emailReg } from "../utils/constants/commonConst";
 
 export default function Customer() {
+  const navigate = useNavigate();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -35,14 +38,17 @@ export default function Customer() {
   const [photo1, setPhoto1] = useState("");
   const [photo2, setPhoto2] = useState("");
   const [customerList, setCustomerList] = useState([]);
-
+  const [loading, setLoading] = useState(false);
+  const [custId, setCustId] = useState(null);
   const id = localStorage.getItem("userID");
+
   const getCustomerDetail = async (value) => {
     try {
       console.log("valie", value);
       if (value == null) {
         clearDetail();
       } else {
+        setCustId(value?.ID);
         setFirstName(value?.UserFirstName);
         setLastName(value?.UserLastName);
         setEmail(value?.BusinessEmail);
@@ -56,8 +62,8 @@ export default function Customer() {
       console.log(images);
       if (images.length != 0) {
         setPhoto(images[0]?.url);
-        setPhoto(images[1]?.url);
-        setPhoto(images[2]?.url);
+        setPhoto1(images[1]?.url);
+        setPhoto2(images[2]?.url);
       }
     } catch (error) {
       console.log(error);
@@ -72,12 +78,12 @@ export default function Customer() {
     setPhoto("");
     setPhoto1("");
     setPhoto2("");
+    setCustId(null);
   };
   const getCustomerList = async () => {
     try {
       const customerDetail = await getData(`USER_CUSTOMER/${id}/CUSTOMER`);
       let arr = [];
-
       ArrayConverter(customerDetail).map((item) => {
         arr.push({
           ...item,
@@ -93,35 +99,73 @@ export default function Customer() {
       console.log(error);
     }
   };
+  const alredyExist = () => {
+    let result = false;
+    customerList.map((item) => {
+      console.log(item.BusinessEmail, email, item.BusinessEmail == email);
+      if (item.BusinessEmail == email) result = true;
+    });
+    return result;
+  };
   const createCustomer = async () => {
-    // if (!firstName || !lastName || !email || !address)
-    //   toastAlert(0, "All fields are mendatory please fill up!");
-    // else if (!photo || !photo1 || !photo2)
-    //   toastAlert(0, "Customer photos are required!");
-    if (false) null;
-    else {
-      const customerID = uniqueId;
-      const PhotoUrl = await uploadCustomerImage(photo, id, customerID);
-      console.log("photo url::", PhotoUrl);
-      // console.log("photo of url", PhotoUrl);
-      // const detail = await setData(`USER_CUSTOMER/${id}/CUSTOMER/${customerID}`, {
-      //   ID: customerID,
-      //   BusinessName: name,
-      //   BusinessEmail: email,
-      //   BusinessAddress: address,
-      //   UserFirstName: firstName,
-      //   UserLastName: lastName,
-      //   userID: id,
-      // });
-      // uploadCustomerImage(photo, id, uniqueId);
-      toastAlert(1, "Customer Successfully Created!");
+    try {
+      setLoading(true);
+      if (!firstName || !lastName || !email || !address || !name)
+        toastAlert(0, "All fields are mendatory please fill up!");
+      else if (!photo || !photo1 || !photo2)
+        toastAlert(0, "Customer photos are required!");
+      else {
+        const customerID = uniqueId;
+        const PhotoUrl = await uploadCustomerImage(photo, id, customerID);
+        await setData(`CUSTOMER_IMG/user:${id}/customer:${customerID}/1`, {
+          photoName: "BUSINESS_CARD",
+          url: PhotoUrl,
+        });
+        const PhotoUrl1 = await uploadCustomerImage(photo1, id, customerID);
+        await setData(`CUSTOMER_IMG/user:${id}/customer:${customerID}/2`, {
+          photoName: "SCRAP_PERMIT",
+          url: PhotoUrl1,
+        });
+        const PhotoUrl2 = await uploadCustomerImage(photo2, id, customerID);
+        await setData(`CUSTOMER_IMG/user:${id}/customer:${customerID}/3`, {
+          photoName: "THUMB_PRINT",
+          url: PhotoUrl2,
+        });
+        await setData(`USER_CUSTOMER/${id}/CUSTOMER/${customerID}`, {
+          ID: customerID,
+          BusinessName: name,
+          BusinessEmail: email,
+          BusinessAddress: address,
+          UserFirstName: firstName,
+          UserLastName: lastName,
+          userID: id,
+        });
+        toastAlert(1, "Customer Successfully Created!");
+        navigate("/product", {
+          state: {
+            customerDetail: {
+              ID: uniqueId,
+            },
+          },
+        });
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
     }
   };
   useEffect(() => {
     getCustomerList();
   }, []);
+  const onStartInvoice = () => {
+    console.log("sdf");
+    navigate("/subproduct", {
+      state: { productList: ArrayConverter(item.SUB_PRODUCT) },
+    });
+  };
   return (
     <Wrapper>
+      <LoaderSpinner visible={loading} isCenter={true} />
       <Title>Create Invoice</Title>
       <View_6>
         <SearchAutoComplete
@@ -148,6 +192,7 @@ export default function Customer() {
         <Input
           value={email}
           label="Business Email"
+          error={email ? !emailReg.test(email) : false}
           onChange={(e) => setEmail(e.target.value)}
         />
         <TextAreaView>
@@ -158,41 +203,46 @@ export default function Customer() {
           />
         </TextAreaView>
         <CustomerPhotoView>
-          <Text>Capture on ID or Business Card for your records</Text>
+          <Text_reg>Capture on ID or Business Card for your records</Text_reg>
           <Row>
-            <PhotoCapture
-              handleChange={(e) =>
-                setPhoto(URL.createObjectURL(e.target.files[0]))
-              }
-            />
+            <PhotoCapture handleChange={(e) => setPhoto(e.target.files[0])} />
             <ImageModal url={photo} />
           </Row>
         </CustomerPhotoView>
         <CustomerPhotoView>
-          <Text>Capture on ID or Business Card for your records</Text>
+          <Text_reg>Capture on ID or Business Card for your records</Text_reg>
           <Row>
-            <PhotoCapture
-              title="+"
-              handleChange={(e) =>
-                setPhoto1(URL.createObjectURL(e.target.files[0]))
-              }
-            />
+            <PhotoCapture handleChange={(e) => setPhoto1(e.target.files[0])} />
             <ImageModal url={photo1} />
           </Row>
         </CustomerPhotoView>
         <CustomerPhotoView>
-          <Text>Capture on ID or Business Card for your records</Text>
+          <Text_reg>Capture on ID or Business Card for your records</Text_reg>
           <Row>
-            <PhotoCapture
-              handleChange={(e) =>
-                setPhoto2(URL.createObjectURL(e.target.files[0]))
-              }
-            />
+            <PhotoCapture handleChange={(e) => setPhoto2(e.target.files[0])} />
             <ImageModal url={photo2} />
           </Row>
         </CustomerPhotoView>
       </CustomerBox>
-      <Button title="Start Invoice" onClick={() => createCustomer()} />
+      <Button title="df" onClick={() => onStartInvoice()} />
+      <Button
+        title="Start Invoice"
+        onClick={() => navigate("/subProduct")}
+        // onClick={() => {
+        //   if (custId != null) {
+        //     console.log("inside invigation");
+        //     navigate("/subproduct");
+        //   } else {
+        //     console.log("outside");
+        //     if (!alredyExist()) {
+        //       if (emailReg.test(email)) createCustomer();
+        //       else toastAlert(0, "Please Enter Valid Email Address!");
+        //     } else {
+        //       toastAlert(0, "This Customer Already Exist!");
+        //     }
+        //   }
+        // }}
+      />
     </Wrapper>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Button from "../components/Button";
 import Input from "../components/Input";
-import { Bold_1, Row, Text, Text_bold, Title } from "../utils/GlobalStyles";
+import { Bold_1, Row, Text_bold, Text_reg, Title } from "../utils/GlobalStyles";
 import APPROVAL from "../assets/approval.png";
 import CORRECT from "../assets/correct.png";
 import ImageModal from "../components/ImageModal";
@@ -51,12 +51,16 @@ export default function Login() {
         const user = userInDatabase();
         if (user) {
           signIn(user + "");
+          console.log(user);
+          toastAlert(1, "Login successfully!");
+        } else {
+          toastAlert(0, "User Doen't Exist!");
         }
-        toastAlert(1, "Login successfully!");
       }
       setLoading(false);
     } catch (error) {
       setLoading(false);
+      console.log(error);
       toastAlert(0, error);
     }
   };
@@ -73,7 +77,7 @@ export default function Login() {
             <Title>UrbanMiner</Title>
             <ImageModal disable={true} url={APPROVAL} style={imageStyle} />
           </Row>
-          <Text>Welcome Back,Please Enter Your Details</Text>
+          <Text_reg>Welcome Back,Please Enter Your Details</Text_reg>
           <Input label="Email" onChange={(e) => setEmail(e.target.value)} />
           <Input
             type="password"
@@ -82,9 +86,9 @@ export default function Login() {
           />
           <ForgotLink to="/resetpassword">Forgot Password?</ForgotLink>
           <Button title="LogIn" width="100%" onClick={() => onLogin()} />
-          <Text style={{ alignSelf: "center" }}>
+          <Text_reg style={{ alignSelf: "center" }}>
             Don't have an account? <ForgotLink to="/signup">SignUp</ForgotLink>
-          </Text>
+          </Text_reg>
         </LoginBoxLeft>
         <LoginBoxRight>
           <div

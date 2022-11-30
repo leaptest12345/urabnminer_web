@@ -76,7 +76,7 @@ const fadeInUp = keyframes`
     opacity: 1;
   }
 `;
-export const SideBarTitle = styled.text`
+export const SideBarTitle = styled.span`
   display: ${({ isOpen }) => (isOpen ? "" : "none")};
   margin-left: ${({ isOpen }) => (isOpen ? "25px" : "none")};
   animation: ${fadeInUp} 0.8s ease-in-out 0s;
@@ -85,3 +85,34 @@ export const SideBarTitle = styled.text`
 `;
 
 // #1d1b31 lightblue
+export const SideBarContentView1 = styled.div`
+  height: 65%;
+  overflow: visible;
+  @media (max-width: 900px) {
+    height: 100%;
+    margin-top: 10px;
+  }
+`;
+export const SideBarContentView2 = styled.div`
+  height: 65%;
+  overflow: visible;
+  @media (max-width: 900px) {
+    display: flex;
+    height: 75%;
+    width: 65%;
+    justify-content: space-between;
+  }
+`;
+export const SideBarFooter1 = styled.div`
+  border-top: 1px solid grey;
+  overflow: visible;
+  margin-top: 10px;
+`;
+export const SideBarFooter2 = styled.div`
+  border-top: 1px solid grey;
+  @media (max-width: 900px) {
+    display: flex;
+    border: 0;
+    justify-content: space-between;
+  }
+`;

@@ -9,6 +9,7 @@ export default function Input({
   ref,
   label,
   value,
+  error,
 }) {
   const CustomInput =
     type == "password"
@@ -20,6 +21,7 @@ export default function Input({
     <InputContainer>
       <InputText>{label}:</InputText>
       <CustomInput
+        error={error}
         value={value}
         ref={ref}
         placeholder={placeholder}

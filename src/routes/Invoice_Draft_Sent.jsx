@@ -32,6 +32,7 @@ export default function Invoice_Draft_Sent() {
         {invoiceList.map((item, index) => {
           return (
             <InvoiceSentBox
+              key={index + 1 + "*"}
               userName={item.UserName}
               date={new Date(item.invoiceDate).toString().slice(0, 15)}
               totalItems={item.totalItems}

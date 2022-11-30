@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Button from "../components/Button";
 import Input from "../components/Input";
-import { Bold_1, Text, Title, Wrapper } from "../utils/GlobalStyles";
+import { Bold_1, Text_reg, Title, Wrapper } from "../utils/GlobalStyles";
 import LOCK from "../assets/lock.gif";
 import { toastAlert } from "../utils/toastAlert";
 import { sendEmail } from "../utils/firebase/firebaseApi";
@@ -32,7 +32,7 @@ export default function ResetPassword() {
         <LockImg src={LOCK} />
         <ForgotTitle>
           <Bold_1>Forgot Password?</Bold_1>
-          <Text>No Worries,We'll Send You Instructions</Text>
+          <Text_reg>No Worries,We'll Send You Instructions</Text_reg>
         </ForgotTitle>
         <Input
           label="Email"

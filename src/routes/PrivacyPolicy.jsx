@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import LoaderSpinner from "../components/Loader";
 import { getData } from "../utils/firebase/firebaseApi";
-import { Text, Title, Wrapper } from "../utils/GlobalStyles";
+import { Text_reg, Title, Wrapper } from "../utils/GlobalStyles";
 
 export default function PrivacyPolicy() {
   const [privacyDetail, setPrivacyDetail] = useState(null);
@@ -29,13 +29,13 @@ export default function PrivacyPolicy() {
         }}
       >
         <Title>Privacy Policy</Title>
-        <Text
+        <Text_reg
           style={{
             marginTop: "35px",
           }}
         >
           {privacyDetail?.Description}
-        </Text>
+        </Text_reg>
       </div>
     </Wrapper>
   );

@@ -1,3 +1,4 @@
+import { Delete } from "@mui/icons-material";
 import styled from "styled-components";
 
 export const InvoiceContainer = styled.div`
@@ -137,5 +138,36 @@ export const TouchView = styled.div`
   }
   span {
     color: ${({ color }) => color || "black"};
+  }
+`;
+
+export const boldTextStyle = {
+  fontWeight: "600",
+  paddingInline: "30px",
+};
+export const DeleteBtn = styled(Delete)`
+  color: black;
+  :hover {
+    color: red;
+    cursor: pointer;
+  }
+`;
+
+export const DateView = styled.div`
+  background-color: lightgray;
+  width: 70%;
+  border-radius: 4px;
+  height: 4vh;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  :hover {
+    background-color: #2a547e;
+    cursor: pointer;
+  }
+  span {
+    :hover {
+      color: white;
+    }
   }
 `;

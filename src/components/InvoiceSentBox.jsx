@@ -4,35 +4,11 @@ import {
   InvoiceSubBox,
   ItemCard,
 } from "../styles/Invoice_Draft_Sent";
-import {
-  Bold_1,
-  Img35,
-  Img40,
-  Text,
-  TextSmall,
-  Text_bold,
-} from "../utils/GlobalStyles";
+import { Img35, Img40, TextSmall, Text_bold } from "../utils/GlobalStyles";
 import IMG from "../assets/receipt.png";
 import FILE from "../assets/file.png";
-import EYE from "../assets/eye.png";
-import styled from "styled-components";
-export default function InvoiceSentBox({
-  onClick,
-  userName,
-  date,
-  totalItems,
-}) {
-  const ItemCardText = styled.span`
-    position: absolute;
-    color: black;
-    top: 25%;
-    left: ${({ totalItemsLength }) => (totalItemsLength > 1 ? "25%" : "30%")};
-    font-size: 0.8rem;
-    font-weight: 600;
-    @media (max-width: 600px) {
-      left: ${({ totalItemsLength }) => (totalItemsLength > 1 ? "20%" : "25%")};
-    }
-  `;
+import { ItemCardText } from "../styles/InvoiceSentBox.styles";
+export default function InvoiceSentBox({ userName, date, totalItems }) {
   return (
     <InvoiceDraftSentBox to="/invoice">
       <Img35 src={IMG} />

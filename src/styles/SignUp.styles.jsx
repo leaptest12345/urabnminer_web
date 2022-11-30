@@ -1,6 +1,6 @@
 import styled, { keyframes } from "styled-components";
 
-export const InputText = styled.text`
+export const InputText = styled.span`
   font-size: 1em;
   color: black;
   font-weight: bold;

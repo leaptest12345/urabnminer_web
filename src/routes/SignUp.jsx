@@ -13,26 +13,116 @@ import { Link } from "react-router-dom";
 import PhotoCapture from "../components/PhotoCapture";
 import { RowView } from "../styles/Invoice.styles";
 import ImageModal from "../components/ImageModal";
-import { defautlUrl } from "../utils/constants/commonConst";
+import { defautlUrl, emailReg, phoneReg } from "../utils/constants/commonConst";
+import LoaderSpinner from "../components/Loader";
+import { uniqueId } from "../utils/uniqueId";
+import { setData, SignUpAuth } from "../utils/firebase/firebaseApi";
+import { uploadProfileImage } from "../utils/firebase/firebaseStorage";
+import { toastAlert } from "../utils/toastAlert";
 
 export default function SignUp() {
   const [photo, setPhoto] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [countryCode, setCountryCode] = useState("");
+  const [pass, setPass] = useState("");
+  const [confirmPass, setConfirmPass] = useState("");
+  const [loading, setLoading] = useState(false);
+  const userId = uniqueId;
+  const data = {
+    ID: userId,
+    firstName: firstName,
+    lastName: lastName,
+    phoneNumber: phone,
+    email: email,
+    countryCode: countryCode,
+    googleId: "",
+    facebookId: "",
+    isApproved: false,
+    token: "",
+  };
+  const validateDetail = () => {
+    if (pass == confirmPass) {
+      if (emailReg.test(email)) {
+        if (phoneReg.test(phone)) {
+          if (
+            firstName == "" ||
+            lastName == "" ||
+            pass == "" ||
+            confirmPass == "" ||
+            email == "" ||
+            phone == ""
+          )
+            toastAlert(0, "Please Enter Valid Details!");
+          else createUser();
+        } else toastAlert(0, "Please Enter Valid Phone Number!");
+      } else toastAlert(0, "Please Enter Valid Email Address!");
+    } else {
+      toastAlert(0, "Password Missmatch!");
+    }
+  };
+  const createUser = async () => {
+    try {
+      setLoading(true);
+      if (photo != "") {
+        const photoUrl = await uploadProfileImage(photo);
+        await setData(`USERS/${userId}`, {
+          ID: userId,
+          photo: photoUrl[0],
+          photoName: photoUrl[1],
+          firstName: firstName,
+          lastName: lastName,
+          phoneNumber: phone,
+          email: email,
+          countryCode: countryCode,
+          googleId: "",
+          facebookId: "",
+          isApproved: false,
+          token: "",
+        });
+      } else {
+        await setData(`USERS/${userId}`, data);
+      }
+      await SignUpAuth(email, pass);
+    } catch (error) {
+      setLoading(false);
+      toastAlert(0, error);
+    }
+  };
   return (
     <Wrapper>
+      <LoaderSpinner isCenter={true} visible={loading} />
       <SignUpWrapper>
-        <PhotoCapture
-          handleChange={(e) => setPhoto(URL.createObjectURL(e.target.files[0]))}
-        />
+        <PhotoCapture handleChange={(e) => setPhoto(e.target.files[0])} />
         <ImageModal url={photo || defautlUrl} disable={true} />
         <SignUpContainer>
-          <Input label="FirstName" />
-          <Input label="LastName" />
-          <Input label="Email" />
-          <Input label="PhoneNumber" />
-          <Input label="Password" />
-          <Input label="ConfirmPassword" />
+          <Input
+            label="FirstName"
+            onChange={(e) => setFirstName(e.target.value)}
+          />
+          <Input
+            label="LastName"
+            onChange={(e) => setLastName(e.target.value)}
+          />
+          <Input
+            label="Email"
+            error={email ? !emailReg.test(email) : false}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <Input
+            label="PhoneNumber"
+            error={phone ? !phoneReg.test(phone) : false}
+            onChange={(e) => setPhone(e.target.value)}
+          />
+          <Input label="Password" onChange={(e) => setPass(e.target.value)} />
+          <Input
+            label="ConfirmPassword"
+            onChange={(e) => setConfirmPass(e.target.value)}
+          />
         </SignUpContainer>
-        <Button title="Register" width="50%" />
+        <Button title="Register" width="50%" onClick={() => validateDetail()} />
       </SignUpWrapper>
     </Wrapper>
   );

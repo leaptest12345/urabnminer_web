@@ -25,15 +25,17 @@ import { Toaster } from "react-hot-toast";
 import Settings from "./routes/Settings";
 import TermConditions from "./routes/TermConditions";
 import SubProduct from "./routes/subProduct";
+
+const MainContainer = styled.div`
+  display: flex;
+  overflow-y: scroll;
+  background-color: #dcdee1;
+  margin: 0;
+  padding: 0;
+`;
 function App() {
   const [user, setUser] = useState(null);
-  const MainContainer = styled.div`
-    display: flex;
-    overflow-y: scroll;
-    background-color: #dcdee1;
-    margin: 0;
-    padding: 0;
-  `;
+
   const authContext = useMemo(() => ({
     signIn: (id) => {
       setTimeout(() => {

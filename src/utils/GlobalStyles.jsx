@@ -31,7 +31,7 @@ export const MediumText = styled.span`
   font-weight: 400;
 `;
 
-export const Text = styled.span`
+export const Text_reg = styled.span`
   font-size: 1rem;
   color: ${({ color }) => color || "black"};
 `;
@@ -60,7 +60,7 @@ export const SmallBold = styled.span`
   color: ${({ color }) => color || "black"};
   font-weight: 600;
 `;
-export const InputText = styled.text`
+export const InputText = styled.span`
   font-size: 1em;
   color: black;
   font-weight: 600;
@@ -101,6 +101,7 @@ export const View_6_Row = styled.div`
   width: 60%;
   display: flex;
   justify-content: space-around;
+  align-items: center;
 `;
 export const Img40 = styled.img`
   height: 40px;
@@ -109,4 +110,11 @@ export const Img40 = styled.img`
 export const Img35 = styled.img`
   height: 35px;
   width: 35px;
+`;
+export const DeleteView = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 30%;
+  justify-content: space-between;
 `;

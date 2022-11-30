@@ -1,12 +1,18 @@
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
 import { storage } from "./firebaseConfig";
 
 //storage
 export const uploadCustomerImage = async (imgfile, userid, customerID) => {
+  console.log("file :::", imgfile);
   return new Promise((resolve, reject) => {
     const storageRef = ref(
       storage,
-      `Customer_Image/user:${userid}/customer:${customerID}/${imgfile}`
+      `Customer_Image/user:${userid}/customer:${customerID}/${imgfile.name}`
     );
     const uploadTask = uploadBytesResumable(storageRef, imgfile);
     uploadTask.on(
@@ -36,7 +42,89 @@ export const uploadCustomerImage = async (imgfile, userid, customerID) => {
     );
   });
 };
-
+export const uploadInvoiceImages = async (
+  imgfile,
+  userid,
+  customerID,
+  invoiceId,
+  invoiceNumber
+) => {
+  return new Promise((resolve, reject) => {
+    const storageRef = ref(
+      storage,
+      `InvoiceImages/user:${userid}/customer:${customerID}/invoice:${invoiceId}/${invoiceNumber}`
+    );
+    const uploadTask = uploadBytesResumable(storageRef, imgfile);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+        switch (snapshot.state) {
+          case "paused":
+            console.log("Upload is paused");
+            break;
+          case "running":
+            console.log("Upload is running");
+            break;
+        }
+      },
+      (error) => {
+        reject(error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          console.log("File available at", downloadURL);
+          resolve([downloadURL, imgfile.name]);
+        });
+      }
+    );
+  });
+};
+export const uploadProfileImage = async (imgfile) => {
+  return new Promise((resolve, reject) => {
+    const storageRef = ref(storage, `/UserProfileImage/${imgfile.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, imgfile);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+        switch (snapshot.state) {
+          case "paused":
+            console.log("Upload is paused");
+            break;
+          case "running":
+            console.log("Upload is running");
+            break;
+        }
+      },
+      (error) => {
+        reject(error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          console.log("File available at", downloadURL);
+          resolve([downloadURL, imgfile.name]);
+        });
+      }
+    );
+  });
+};
+export const deleteProfileImage = async (name) => {
+  return new Promise((resolve, reject) => {
+    const storageRef = ref(storage, `/UserProfileImage/${name}`);
+    deleteObject(storageRef)
+      .then(() => {
+        resolve(" File deleted successfully");
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
 // export const uploadPdf = async (url, name, user, customer, invoice) => {
 //   return new Promise((resolve, reject) => {
 //     const uploadTask = storage()
@@ -61,57 +149,7 @@ export const uploadCustomerImage = async (imgfile, userid, customerID) => {
 //     );
 //   });
 // };
-// export const uploadImage = async (value) => {
-//   return new Promise((resolve, reject) => {
-//     const { uri } = value;
-//     const filename = uri.substring(uri.lastIndexOf("/") + 1);
-//     const uploadUri = Platform.OS === "ios" ? uri.replace("file://", "") : uri;
-//     const uploadTask = storage()
-//       .ref()
-//       .child(`/UserProfileImage/${filename}`)
-//       .putFile(uploadUri);
-//     uploadTask.on(
-//       "state_changed",
-//       (snapshot) => {
-//         var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-//       },
-//       (error) => {
-//         reject(error);
-//       },
-//       () => {
-//         uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-//           resolve([downloadURL, filename]);
-//         });
-//       }
-//     );
-//   });
-// };
-// export const uploadImage1 = async (value, userid, customerID, id, id1) => {
-//   return new Promise((resolve, reject) => {
-//     const { uri } = value;
-//     const filename = uri.substring(uri.lastIndexOf("/") + 1);
-//     const uploadUri = Platform.OS === "ios" ? uri.replace("file://", "") : uri;
-//     const uploadTask = storage()
-//       .ref(`InvoiceImages/user:${userid}`)
-//       .child(`customer:${customerID}`)
-//       .child(`invoice:${id}/${id1}`)
-//       .putFile(uploadUri);
-//     uploadTask.on(
-//       "state_changed",
-//       (snapshot) => {
-//         var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-//       },
-//       (error) => {
-//         reject(error);
-//       },
-//       () => {
-//         uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-//           resolve([downloadURL, filename]);
-//         });
-//       }
-//     );
-//   });
-// };
+
 // export const deleteInvoiceImage = async (userid, customerID, invoiceID, id) => {
 //   storage()
 //     .ref(`InvoiceImages/user:${userid}`)

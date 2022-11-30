@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import {
   SideBarContainer,
   SideBarContent,
+  SideBarContentView1,
+  SideBarContentView2,
+  SideBarFooter1,
+  SideBarFooter2,
   SideBarHeader,
   SideBarTitle,
 } from "../styles/SideBar.styles";
 import { FaBars } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import styled from "styled-components";
 import { SIDEBAR } from "../utils/constants/commonConst";
 import LogoutIcon from "@mui/icons-material/Logout";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -15,7 +18,6 @@ import { AuthContext } from "../utils/AuthContext";
 
 export default function SideBar() {
   const navigate = useNavigate();
-
   const [isOpen, setIsOpen] = useState(true);
   const [sideBardId, setSideBarId] = useState(1);
   const { signOut } = React.useContext(AuthContext);
@@ -23,39 +25,8 @@ export default function SideBar() {
   const location = useLocation();
   const path = location.pathname;
 
-  const SideBarContentView = isOpen
-    ? styled.div`
-        height: 65%;
-        overflow: visible;
-        @media (max-width: 900px) {
-          height: 100%;
-          margin-top: 10px;
-        }
-      `
-    : styled.div`
-        height: 65%;
-        overflow: visible;
-        @media (max-width: 900px) {
-          display: flex;
-          height: 75%;
-          width: 65%;
-          justify-content: space-between;
-        }
-      `;
-  const SideBarFooter = isOpen
-    ? styled.div`
-        border-top: 1px solid grey;
-        overflow: visible;
-        margin-top: 10px;
-      `
-    : styled.div`
-        border-top: 1px solid grey;
-        @media (max-width: 900px) {
-          display: flex;
-          border: 0;
-          justify-content: space-between;
-        }
-      `;
+  const SideBarContentView = isOpen ? SideBarContentView1 : SideBarContentView2;
+  const SideBarFooter = isOpen ? SideBarFooter1 : SideBarFooter2;
   const signOutUser = () => {
     navigate("/");
     signOut();
@@ -71,9 +42,13 @@ export default function SideBar() {
         <SideBarTitle isOpen={isOpen}>Settigs</SideBarTitle>
       </SideBarHeader>
       <SideBarContentView>
-        {SIDEBAR.map((item) => {
+        {SIDEBAR.map((item, index) => {
           return (
-            <Link to={item.path} onClick={() => setSideBarId(item.id)}>
+            <Link
+              to={item.path}
+              onClick={() => setSideBarId(item.id)}
+              key={index + 1 + "-"}
+            >
               <SideBarContent
                 isOpen={isOpen}
                 background={path == item.path ? true : false}

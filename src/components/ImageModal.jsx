@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Lightbox } from "react-modal-image";
-import styled from "styled-components";
-import LoaderSpinner from "./Loader";
+import { ModalImage } from "../styles/ModalImage.styles";
 
 export default function ImageModal({
   url,
@@ -13,14 +12,14 @@ export default function ImageModal({
 }) {
   const [imageModal, setImageModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  const ModalImage = styled.img`
-    width: ${({ width }) => width || "150px"};
-    height: 150px;
-    border-radius: 6px;
-    margin: ${({ margin }) => (margin ? "15px" : "")};
-    margin-top: ${({ marginVertical }) => (marginVertical ? "15px" : "")};
-    margin-bottom: ${({ marginVertical }) => (marginVertical ? "15px" : "")}; ;
-  `;
+
+  const src = url
+    ? url.toString().includes("http")
+      ? url
+      : url.toString().includes("/src/assets")
+      ? url
+      : URL.createObjectURL(url)
+    : null;
   return (
     <>
       <ModalImage
@@ -31,7 +30,7 @@ export default function ImageModal({
         marginVertical={marginVertical}
         onClick={() => setImageModal(true)}
         style={style}
-        src={url ? url : null}
+        src={src}
       />
       {imageModal && !disable && url ? (
         <Lightbox

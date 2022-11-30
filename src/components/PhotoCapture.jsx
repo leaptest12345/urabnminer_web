@@ -6,10 +6,13 @@ export default function PhotoCapture({ handleChange, title, width }) {
   const handleClick = (event) => {
     hiddenFileInput.current.click();
   };
-
   return (
     <>
-      <Button title={title || "photo"} width="20%" onClick={handleClick} />
+      <Button
+        title={title || "photo"}
+        width={width || "20%"}
+        onClick={handleClick}
+      />
       <input
         type="file"
         ref={hiddenFileInput}

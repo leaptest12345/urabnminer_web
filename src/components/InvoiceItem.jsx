@@ -1,6 +1,10 @@
+import { Delete } from "@mui/icons-material";
 import React, { useEffect, useState } from "react";
+import styled from "styled-components";
 import { DollerSymbol, StyledInput } from "../styles/Input.styles";
 import {
+  boldTextStyle,
+  DeleteBtn,
   InvoiceImage,
   InvoiceItemView,
   RowView,
@@ -9,7 +13,13 @@ import {
 import { ArrayConverter } from "../utils/ArrayConverter";
 import { convertIntoDoller } from "../utils/ConvertIntoDoller";
 import { getData } from "../utils/firebase/firebaseApi";
-import { Bold_1, ItemTitle, View_6, View_6_Row } from "../utils/GlobalStyles";
+import {
+  Bold_1,
+  DeleteView,
+  ItemTitle,
+  View_6,
+  View_6_Row,
+} from "../utils/GlobalStyles";
 import ImageModal from "./ImageModal";
 import PhotoCapture from "./PhotoCapture";
 import SearchAutoComplete from "./SearchAutoComplete";
@@ -34,6 +44,7 @@ export default function InvoiceItem({
   index,
   onWeightTypeChange,
   WeightType,
+  onDelete,
 }) {
   const re = /(^[0-9]+$|^$)/;
   console.log(WeightType == "");
@@ -60,12 +71,9 @@ export default function InvoiceItem({
   const Touch1_click = WeightType != "Unit" ? onWeightTypeChange : null;
   const Touch2_click = WeightType != "Weight" ? onWeightTypeChange : null;
   const Touch1_color = WeightType == "Unit" ? "#2a547e" : null;
-  const Touch2_color =
-    WeightType == "Weight" || (" " && WeightType != "Unit") ? "#2a547e" : null;
+  const Touch2_color = WeightType == "Weight" ? "#2a547e" : null;
   const textColor1 = WeightType == "Unit" ? "white" : "black";
-  const textColor2 =
-    WeightType == "Weight" || (" " && WeightType != "Unit") ? "white" : "black";
-
+  const textColor2 = WeightType == "Weight" ? "white" : "black";
   const unitError = Unit ? !re.test(parseFloat(Unit)) : false;
   const unitPriceError = UnitPrice ? !re.test(parseFloat(UnitPrice)) : false;
   const grossError = GrossWeight ? !re.test(parseFloat(GrossWeight)) : false;
@@ -73,10 +81,7 @@ export default function InvoiceItem({
   const WeightPriceError = WeightPrice
     ? !re.test(parseFloat(WeightPrice))
     : null;
-  const boldTextStyle = {
-    fontWeight: "600",
-    paddingInline: "30px",
-  };
+
   return (
     <>
       <InvoiceItemView>
@@ -84,7 +89,7 @@ export default function InvoiceItem({
           <ItemTitle>
             {index}) {ItemName}
           </ItemTitle>
-          <PhotoCapture title="Add Photo" handleChange={onImagePic} />
+          <DeleteBtn onClick={onDelete} />
         </RowView>
         <RowView style={{ marginTop: "20px" }}>
           <Bold_1>WeightType </Bold_1>
@@ -191,15 +196,25 @@ export default function InvoiceItem({
             </RowView>
           </>
         )}
-        {IMG && IMG.length != 0 ? (
+        <RowView style={{ marginTop: "20px" }}>
+          <Bold_1>Photo: </Bold_1>
+          <View_6>
+            <PhotoCapture width="15%" title="+" handleChange={onImagePic} />
+          </View_6>
+        </RowView>
+        {/* {IMG && IMG.length != 0 ? (
           <Bold_1 style={{ marginTop: "10px" }}>Photo:</Bold_1>
-        ) : null}
+        ) : null} */}
         <InvoiceImage>
           {IMG &&
             IMG.map((item, index) => {
               return (
                 <>
-                  <ImageModal url={item.url} margin={true} />
+                  <ImageModal
+                    url={item.url}
+                    margin={true}
+                    key={index + 1 + "?"}
+                  />
                 </>
               );
             })}

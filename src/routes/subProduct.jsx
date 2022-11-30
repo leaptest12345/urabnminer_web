@@ -24,6 +24,7 @@ export default function SubProduct({}) {
         {productList.map((item) => {
           return (
             <ProductCard
+              key={index + 1 + "!"}
               desc={item.prodductDescription}
               title={item.productName}
               url={item.productImage}

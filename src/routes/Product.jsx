@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import LoaderSpinner from "../components/Loader";
 import ProductCard from "../components/ProductCard";
 import { ProductContainer } from "../styles/Product.styles";
@@ -12,7 +12,6 @@ export default function Product() {
   const [loading, setLoading] = useState(false);
   // const navigate=
   const navigate = useNavigate();
-
   const getProductList = async () => {
     try {
       const list = await getData(`ADMIN/PRODUCT`);
@@ -23,21 +22,25 @@ export default function Product() {
       setLoading(false);
     }
   };
+
   const setSubProduct = (arr) => {
     setProductList(arr);
   };
+
   useEffect(() => {
     setLoading(true);
     getProductList();
   }, []);
+
   return (
     <Wrapper>
       <LoaderSpinner visible={loading} isCenter={true} />
       <Title>Product</Title>
       <ProductContainer>
-        {productList.map((item) => {
+        {productList.map((item, index) => {
           return (
             <ProductCard
+              key={index + 1 + "@"}
               // onClick={() => setSubProduct(ArrayConverter(item.SUB_PRODUCT))}
               onClick={() =>
                 navigate("/subproduct", {
