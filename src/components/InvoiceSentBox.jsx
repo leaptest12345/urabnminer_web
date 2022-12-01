@@ -8,9 +8,9 @@ import { Img35, Img40, TextSmall, Text_bold } from "../utils/GlobalStyles";
 import IMG from "../assets/receipt.png";
 import FILE from "../assets/file.png";
 import { ItemCardText } from "../styles/InvoiceSentBox.styles";
-export default function InvoiceSentBox({ userName, date, totalItems }) {
+export default function InvoiceSentBox({ userName, date, totalItems,onClick }) {
   return (
-    <InvoiceDraftSentBox to="/invoice">
+    <InvoiceDraftSentBox onClick={onClick}>
       <Img35 src={IMG} />
       <InvoiceSubBox>
         <TextSmall>

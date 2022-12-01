@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import LoaderSpinner from "../components/Loader";
 import ProductCard from "../components/ProductCard";
 import { ProductContainer } from "../styles/Product.styles";
 import { ArrayConverter } from "../utils/ArrayConverter";
 import { getData } from "../utils/firebase/firebaseApi";
 import { Title, Wrapper } from "../utils/GlobalStyles";
-
+import { useLocation, useNavigate } from "react-router";
 export default function Product() {
   const [productList, setProductList] = useState([]);
   const [loading, setLoading] = useState(false);
   // const navigate=
+  const {state}=useLocation()
+  console.log(state)
   const navigate = useNavigate();
   const getProductList = async () => {
     try {
@@ -43,7 +44,7 @@ export default function Product() {
               key={index + 1 + "@"}
               // onClick={() => setSubProduct(ArrayConverter(item.SUB_PRODUCT))}
               onClick={() =>
-                navigate("/subproduct", {
+                navigate("/customer", {
                   state: { productList: ArrayConverter(item.SUB_PRODUCT) },
                 })
               }

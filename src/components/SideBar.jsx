@@ -15,13 +15,15 @@ import { SIDEBAR } from "../utils/constants/commonConst";
 import LogoutIcon from "@mui/icons-material/Logout";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { AuthContext } from "../utils/AuthContext";
+import { getData } from "../utils/firebase/firebaseApi";
+import { RowView } from "../styles/Invoice.styles";
 
 export default function SideBar() {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(true);
   const [sideBardId, setSideBarId] = useState(1);
   const { signOut } = React.useContext(AuthContext);
-
+  const [user,setUser]=useState(null)
   const location = useLocation();
   const path = location.pathname;
 
@@ -31,15 +33,35 @@ export default function SideBar() {
     navigate("/");
     signOut();
   };
-
-  useEffect(() => {}, []);
+ 
+  const getuserDetail=async()=>{
+    try{
+      const id=localStorage.getItem('userID')
+      const detail=await getData(`/USERS/${id}`)
+      setUser(detail)
+    }
+    catch(error)
+    {
+      console.log(error)
+    }
+  }
+  useEffect(() => {
+   getuserDetail()
+  }, []);
   const img = { background: "none", width: 20, height: 20 };
 
   return (
     <SideBarContainer isOpen={isOpen}>
       <SideBarHeader onClick={() => setIsOpen(!isOpen)}>
-        <FaBars style={{ width: "20px", height: "20px" }} />
-        <SideBarTitle isOpen={isOpen}>Settigs</SideBarTitle>
+      <img src={user?.photo} style={{
+          width:'50px',
+          heigth:'100px',
+          borderRadius:'100%',
+        }}/>
+      <RowView>
+      <FaBars style={{ width: "20px", height: "20px" }} />
+        <SideBarTitle isOpen={isOpen}>{user?.firstName}</SideBarTitle>
+      </RowView>
       </SideBarHeader>
       <SideBarContentView>
         {SIDEBAR.map((item, index) => {

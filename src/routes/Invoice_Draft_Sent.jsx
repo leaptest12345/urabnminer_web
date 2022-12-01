@@ -5,9 +5,12 @@ import { InvoiceView } from "../styles/Invoice_Draft_Sent";
 import { ArrayConverter } from "../utils/ArrayConverter";
 import { getData } from "../utils/firebase/firebaseApi";
 import { Title, Wrapper } from "../utils/GlobalStyles";
+import {useNavigate} from 'react-router-dom'
 export default function Invoice_Draft_Sent() {
   const [invoiceList, setInvoiceList] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const navigate=useNavigate()
   const getInvoiceList = async () => {
     const id = localStorage.getItem("userID");
     const detail = await getData(`INVOICE_LIST`);
@@ -32,6 +35,7 @@ export default function Invoice_Draft_Sent() {
         {invoiceList.map((item, index) => {
           return (
             <InvoiceSentBox
+             onClick={()=>navigate('/product')}
               key={index + 1 + "*"}
               userName={item.UserName}
               date={new Date(item.invoiceDate).toString().slice(0, 15)}

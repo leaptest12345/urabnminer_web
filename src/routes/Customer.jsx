@@ -25,10 +25,10 @@ import { uniqueId } from "../utils/uniqueId";
 import { uploadCustomerImage } from "../utils/firebase/firebaseStorage";
 import LoaderSpinner from "../components/Loader";
 import { emailReg } from "../utils/constants/commonConst";
-import { useNavigate } from "react-router-dom";
-
+import { useLocation, useNavigate } from "react-router-dom";
 export default function Customer() {
   const navigate = useNavigate();
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -41,6 +41,8 @@ export default function Customer() {
   const [loading, setLoading] = useState(false);
   const [custId, setCustId] = useState(null);
   const id = localStorage.getItem("userID");
+
+  const {state}=useLocation()
 
   const getCustomerDetail = async (value) => {
     try {
@@ -157,10 +159,12 @@ export default function Customer() {
   useEffect(() => {
     getCustomerList();
   }, []);
-  const onStartInvoice = () => {
-    console.log("sdf");
-    navigate("/");
-  };
+
+  const onStartInvoice =() =>{
+    console.log("abcd vivek")
+    navigate('/invoice');
+  }
+
   return (
     <Wrapper>
       <LoaderSpinner visible={loading} isCenter={true} />
@@ -222,24 +226,22 @@ export default function Customer() {
           </Row>
         </CustomerPhotoView>
       </CustomerBox>
-      <Button title="df" onClick={() => onStartInvoice()} />
       <Button
         title="Start Invoice"
-        onClick={() => navigate("/subProduct")}
-        // onClick={() => {
-        //   if (custId != null) {
-        //     console.log("inside invigation");
-        //     navigate("/subproduct");
-        //   } else {
-        //     console.log("outside");
-        //     if (!alredyExist()) {
-        //       if (emailReg.test(email)) createCustomer();
-        //       else toastAlert(0, "Please Enter Valid Email Address!");
-        //     } else {
-        //       toastAlert(0, "This Customer Already Exist!");
-        //     }
-        //   }
-        // }}
+        onClick={() => {
+          if (custId != null) {
+            console.log("inside invigation");
+            navigate("/invoice");
+          } else {
+            console.log("outside");
+            if (!alredyExist()) {
+              if (emailReg.test(email)) createCustomer();
+              else toastAlert(0, "Please Enter Valid Email Address!");
+            } else {
+              toastAlert(0, "This Customer Already Exist!");
+            }
+          }
+        }}
       />
     </Wrapper>
   );

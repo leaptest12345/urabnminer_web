@@ -29,7 +29,10 @@ export const SideBarContainer = styled.nav`
 export const SideBarHeader = styled.div`
   height: 15vh;
   display: flex;
-  padding: 25px;
+  /* padding: 25px; */
+  flex-direction:column;
+  align-items:center;
+  justify-content:space-around;
   border-bottom: 1px solid grey;
 `;
 
@@ -106,9 +109,10 @@ export const SideBarContentView2 = styled.div`
 export const SideBarFooter1 = styled.div`
   border-top: 1px solid grey;
   overflow: visible;
-  margin-top: 10px;
+  margin-top: 25px;
 `;
 export const SideBarFooter2 = styled.div`
+margin-top: 25px;
   border-top: 1px solid grey;
   @media (max-width: 900px) {
     display: flex;

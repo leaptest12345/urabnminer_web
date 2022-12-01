@@ -397,7 +397,6 @@ export default function Invoice() {
               defaultValue={paymentType}
               onChange={(e, value) => setPaymentType(value.label)}
             />
-
             <InfoView>
               <Bold_1>Date:</Bold_1>
               <DateView onClick={() => setIsOpen(true)}>
