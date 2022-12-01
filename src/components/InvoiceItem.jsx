@@ -47,7 +47,6 @@ export default function InvoiceItem({
   onDelete,
 }) {
   const re = /(^[0-9]+$|^$)/;
-  console.log(WeightType == "");
   const [itemList, setItemList] = useState([]);
   const getItemList = async () => {
     try {
@@ -67,7 +66,6 @@ export default function InvoiceItem({
   useEffect(() => {
     getItemList();
   }, []);
-
   const Touch1_click = WeightType != "Unit" ? onWeightTypeChange : null;
   const Touch2_click = WeightType != "Weight" ? onWeightTypeChange : null;
   const Touch1_color = WeightType == "Unit" ? "#2a547e" : null;
