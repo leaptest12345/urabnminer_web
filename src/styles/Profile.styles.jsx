@@ -42,3 +42,13 @@ export const ProfileInput = styled.div`
     width: 100%;
   }
 `;
+
+export const ImageView = styled.div`
+  height: 165px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 165px;
+  border-radius: 100%;
+  background-color: white;
+`;

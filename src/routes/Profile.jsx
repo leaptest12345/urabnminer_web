@@ -7,6 +7,7 @@ import PhotoCapture from "../components/PhotoCapture";
 import SearchAutoComplete from "../components/SearchAutoComplete";
 import { StyledInput } from "../styles/Input.styles";
 import {
+  ImageView,
   ProfileContainer,
   ProfileImg,
   ProfileImgView,
@@ -127,7 +128,9 @@ export default function Profile({}) {
       <ProfileContainer>
         <Text_reg>your profile photo</Text_reg>
         <ProfileImgView>
-          <ImageModal url={photo || defautlUrl} />
+          <ImageView>
+            <ImageModal circle={true} url={photo || defautlUrl} />
+          </ImageView>
           <PhotoCapture handleChange={handlePhoto} />
         </ProfileImgView>
         <ProfileInput>

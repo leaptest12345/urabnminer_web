@@ -9,6 +9,7 @@ export default function ImageModal({
   margin,
   disable,
   marginVertical,
+  circle,
 }) {
   const [imageModal, setImageModal] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -23,6 +24,7 @@ export default function ImageModal({
   return (
     <>
       <ModalImage
+        circle={circle}
         onLoadStart={() => setLoading(true)}
         onLoad={() => setLoading(false)}
         width={imgWidth}
