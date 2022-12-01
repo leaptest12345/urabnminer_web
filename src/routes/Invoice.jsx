@@ -36,36 +36,17 @@ import "react-responsive-datepicker/dist/index.css";
 import { uniqueId } from "../utils/uniqueId";
 import { uploadInvoiceImages } from "../utils/firebase/firebaseStorage";
 import { useNavigate } from "react-router-dom";
-
-// const getAllData = async () => {
-//   setLoading(true);
-//   database()
-//     .ref(`/INVOICE/${invoiceID}`)
-//     .once('value', snapshot => {
-//       setItemDetail(snapshot.val());
-//     });
-//   database()
-//     .ref(
-//       `/INVOICE_IMAGES/User:${userId}/customer:${customerId}/invoice:${invoiceID}`,
-//     )
-//     .once('value', snapshot => {
-//       snapshot.val() == null
-//         ? setImageUploaded(false)
-//         : setIMG(snapshot.val());
-//     });
-//   getImages();
-//   database()
-//     .ref(`/INVOICE_LIST/${invoiceID}`)
-//     .once('value', snapshot => {
-//       setAmount(snapshot.val().Amount);
-//       setPaymentType(snapshot.val().paymentType);
-//       setNote(snapshot.val().note);
-//       setDate(new Date(snapshot.val().invoiceDate));
-//     });
-// };
+import {
+  onGrossChange,
+  onTareChange,
+  onUnitChange,
+  onUnitPriceChange,
+  onWeightPriceChange,
+  setDefaultValue,
+} from "./InvoiceController";
 export default function Invoice() {
+  const userId = localStorage.getItem("userID");
   const navigate = useNavigate();
-
   const [isOpen, setIsOpen] = useState(false);
   const [paymentList, setPaymentList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -75,17 +56,66 @@ export default function Invoice() {
   const [paymentType, setPaymentType] = useState("");
   const [amount, setAmount] = useState(0);
   const [note, setNote] = useState("");
+  const [IMG, setIMG] = useState([]);
   const [date, setDate] = useState(new Date().toString().substring(0, 15));
+
   //useEffect for reload page
+  useEffect(() => {
+    getAllData();
+    getPaymentList();
+  }, []);
   useEffect(() => {
     setTotal();
   }, [render]);
 
-  const userId = localStorage.getItem("userID");
-  const onItemDelete = (item, index) => {
-    setInvoiceItems([]);
-    const arr = InvoiceItems.filter((item) => item.id != index + 1);
+  const getAllData = async () => {
+    setLoading(true);
+    const invoiceImages = await getData(
+      `/INVOICE_IMAGES/User:${1}/customer:${1}/invoice:${"4a3cb6fc-a8b9-908e-bb97-8c5d46216b66"}`
+    );
+    const invoiceListData = await getData(
+      `/INVOICE_LIST/${"4a3cb6fc-a8b9-908e-bb97-8c5d46216b66"}`
+    );
+    setAmount(invoiceListData.Amount);
+    setPaymentType(invoiceListData.paymentType.toString());
+    setNote(invoiceListData.note);
+    setDate(invoiceListData.invoiceDate.toString().substring(0, 15));
+    const invoiceData = await getData(
+      `/INVOICE/${"4a3cb6fc-a8b9-908e-bb97-8c5d46216b66"}`
+    );
+    let arr = [];
+    ArrayConverter(invoiceData).map((item, index) => {
+      console.log(item.WeightType);
+      arr.push({
+        id: item.ID,
+        IMG: invoiceImages[`item:${index + 1}`]
+          ? invoiceImages[`item:${index + 1}`]
+          : [],
+        WeightType: item.WeightType == "Unit" ? "Unit" : "Weight",
+        ItemName: item.itemName,
+        details: {
+          GrossWeight: item.grossWeight,
+          TareWeight: item.tareWeight,
+          NetWeight: item.netWeight,
+          Unit: item.unit,
+          UnitPrice: item.price,
+          WeightPrice: item.price,
+          Total: item.Total,
+        },
+      });
+    });
     setInvoiceItems(arr);
+    setLoading(false);
+  };
+  const onItemDelete = (item, index) => {
+    console.log("before filter", InvoiceItems);
+    if (InvoiceItems.length == 1) {
+      setInvoiceItems([]);
+    } else {
+      const arr = InvoiceItems.filter((item1) => item1.id != index + 1);
+      console.log("after filter", arr);
+      setInvoiceItems(arr);
+    }
     setRender(!render);
   };
   const setTotal = () => {
@@ -139,6 +169,7 @@ export default function Invoice() {
           IMG: [],
         },
       ]);
+      console.log(InvoiceItems);
       setTotal();
     }
   };
@@ -166,65 +197,13 @@ export default function Invoice() {
       setLoading(false);
     }
   };
-  const onGrossChange = (e, item) => {
-    item.details.GrossWeight = e.target.value;
-    item.details.NetWeight =
-      parseFloat(item.details.GrossWeight) -
-      parseFloat(item.details.TareWeight);
-    item.details.Total =
-      parseFloat(item.details.NetWeight) * parseFloat(item.details.WeightPrice);
+  const callbackFunc = () => {
     setRender(!render);
-    setTotal();
-  };
-  const onTareChange = (e, item) => {
-    item.details.TareWeight = e.target.value;
-    item.details.NetWeight =
-      parseFloat(item.details.GrossWeight) -
-      parseFloat(item.details.TareWeight);
-    item.details.Total =
-      parseFloat(item.details.NetWeight) * parseFloat(item.details.WeightPrice);
-    setRender(!render);
-    setTotal();
-  };
-  const onWeightPriceChange = (e, item) => {
-    item.details.WeightPrice = e.target.value;
-    item.details.Total =
-      parseFloat(item.details.NetWeight) * parseFloat(item.details.WeightPrice);
-    setRender(!render);
-    setTotal();
-  };
-  const onUnitChange = (e, item) => {
-    item.details.Unit = e.target.value;
-    item.details.Total =
-      parseFloat(item.details.Unit) * parseFloat(item.details.UnitPrice);
-    setRender(!render);
-    setTotal();
-  };
-  const onUnitPriceChange = (e, item) => {
-    item.details.UnitPrice = e.target.value;
-    item.details.Total =
-      parseFloat(item.details.Unit) * parseFloat(item.details.UnitPrice);
-    setRender(!render);
-    setTotal();
-  };
-  const setDefaultValue = (item) => {
-    item.details.GrossWeight = 0;
-    item.details.TareWeight = 0;
-    item.details.NetWeight = 0;
-    item.details.Unit = 0;
-    item.details.GrossPrice = 0;
-    item.details.UnitPrice = 0;
-    item.details.WeightPrice = 0;
-    item.details.Total = 0;
-    setRender(!render);
-    setTotal();
   };
   const onWeightTypeChange = (item) => {
     item.WeightType = item.WeightType == "Unit" ? "Weight" : "Unit";
-    setDefaultValue(item);
-    setTotal();
+    setDefaultValue(item, callbackFunc);
   };
-
   const sendInvoice = async (InvoiceId) => {};
   const invoiceImageUpload = (InvoiceId) => {
     InvoiceItems.map((item, index) => {
@@ -302,9 +281,6 @@ export default function Invoice() {
       }
     }
   };
-  useEffect(() => {
-    getPaymentList();
-  }, []);
 
   const re = /^-?\d*\.?\d*$/;
   return (
@@ -361,10 +337,10 @@ export default function Invoice() {
               WeightPrice,
               Total,
             } = item.details;
-            console.log(item.WeightType);
+            console.log(item.ItemName);
             return (
               <InvoiceItem
-                key={index + 1 + "#"}
+                key={index + 1 + ""}
                 IMG={item.IMG}
                 index={index + 1}
                 onDelete={() => onItemDelete(item, index)}
@@ -378,11 +354,15 @@ export default function Invoice() {
                 WeightPrice={WeightPrice}
                 Total={Total}
                 onWeightTypeChange={() => onWeightTypeChange(item)}
-                onGrossChange={(e) => onGrossChange(e, item)}
-                onTareChange={(e) => onTareChange(e, item)}
-                onUnitChange={(e) => onUnitChange(e, item)}
-                onWeightPriceChange={(e) => onWeightPriceChange(e, item)}
-                onUnitPriceChange={(e) => onUnitPriceChange(e, item)}
+                onGrossChange={(e) => onGrossChange(e, item, callbackFunc)}
+                onTareChange={(e) => onTareChange(e, item, callbackFunc)}
+                onUnitChange={(e) => onUnitChange(e, item, callbackFunc)}
+                onWeightPriceChange={(e) =>
+                  onWeightPriceChange(e, item, callbackFunc)
+                }
+                onUnitPriceChange={(e) =>
+                  onUnitPriceChange(e, item, callbackFunc)
+                }
                 onItemChange={(e, value) =>
                   (item.ItemName = value.label) + setRender(!render)
                 }
@@ -402,9 +382,7 @@ export default function Invoice() {
           minDate={new Date()}
           headerBackgroundColor="black"
           onChange={(date) =>
-            console.log(date.toString().substring(0, 15)) +
-            setIsOpen(false) +
-            setDate(date.toString().substring(0, 15))
+            setIsOpen(false) + setDate(date.toString().substring(0, 15))
           }
         />
         <InvoiceView2>
@@ -440,7 +418,6 @@ export default function Invoice() {
                 color="black"
                 width="48%"
                 onClick={() => createData("draft")}
-                // onClick={() => navigate("/subproduct")}
               />
               <Button title="Downlaod" background="lightblue" width="48%" />
             </Row>

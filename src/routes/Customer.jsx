@@ -24,8 +24,8 @@ import { toastAlert } from "../utils/toastAlert";
 import { uniqueId } from "../utils/uniqueId";
 import { uploadCustomerImage } from "../utils/firebase/firebaseStorage";
 import LoaderSpinner from "../components/Loader";
-import { useNavigate } from "react-router";
 import { emailReg } from "../utils/constants/commonConst";
+import { useNavigate } from "react-router-dom";
 
 export default function Customer() {
   const navigate = useNavigate();
@@ -159,9 +159,7 @@ export default function Customer() {
   }, []);
   const onStartInvoice = () => {
     console.log("sdf");
-    navigate("/subproduct", {
-      state: { productList: ArrayConverter(item.SUB_PRODUCT) },
-    });
+    navigate("/");
   };
   return (
     <Wrapper>
