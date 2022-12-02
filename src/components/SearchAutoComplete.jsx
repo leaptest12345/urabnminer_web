@@ -12,6 +12,7 @@ export default function SearchAutoComplete({
   width,
   searchOptions,
   clearIcon,
+  placeholder,
 }) {
   return (
     <Autocomplete
@@ -24,6 +25,7 @@ export default function SearchAutoComplete({
         backgroundColor: "white",
         borderRadius: "3px",
       }}
+      placeholder={placeholder}
       clearIcon={clearIcon}
       defaultValue={defaultValue}
       ListboxProps={ListBoxProps}

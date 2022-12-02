@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import {
@@ -7,9 +7,9 @@ import {
   InputContainer,
   SignUpContainer,
   SignUpWrapper,
+  ImageProfileView,
 } from "../styles/SignUp.styles";
-import { FaGoogle, FaFacebook, FaApple } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PhotoCapture from "../components/PhotoCapture";
 import { RowView } from "../styles/Invoice.styles";
 import ImageModal from "../components/ImageModal";
@@ -19,6 +19,9 @@ import { uniqueId } from "../utils/uniqueId";
 import { setData, SignUpAuth } from "../utils/firebase/firebaseApi";
 import { uploadProfileImage } from "../utils/firebase/firebaseStorage";
 import { toastAlert } from "../utils/toastAlert";
+import { AuthContext } from "../utils/AuthContext";
+import { ForgotLink } from "../styles/Login.styles";
+import { Text_reg } from "../utils/GlobalStyles";
 
 export default function SignUp() {
   const [photo, setPhoto] = useState("");
@@ -30,6 +33,8 @@ export default function SignUp() {
   const [pass, setPass] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { signIn } = useContext(AuthContext);
   const userId = uniqueId;
   const data = {
     ID: userId,
@@ -82,10 +87,15 @@ export default function SignUp() {
           isApproved: false,
           token: "",
         });
+        signIn(userId + "");
+        navigate("/");
       } else {
+        await SignUpAuth(email, pass);
         await setData(`USERS/${userId}`, data);
+        signIn(userId + "");
+        navigate("/");
       }
-      await SignUpAuth(email, pass);
+      setLoading(false);
     } catch (error) {
       setLoading(false);
       toastAlert(0, error);
@@ -95,8 +105,18 @@ export default function SignUp() {
     <Wrapper>
       <LoaderSpinner isCenter={true} visible={loading} />
       <SignUpWrapper>
-        <PhotoCapture handleChange={(e) => setPhoto(e.target.files[0])} />
-        <ImageModal url={photo || defautlUrl} disable={true} />
+        <PhotoCapture
+          width={"50px"}
+          title="+"
+          handleChange={(e) => setPhoto(e.target.files[0])}
+        />
+        <ImageProfileView>
+          <ImageModal
+            style={{ marginBottom: photo ? null : "10px" }}
+            url={photo || defautlUrl}
+            disable={true}
+          />
+        </ImageProfileView>
         <SignUpContainer>
           <Input
             label="FirstName"
@@ -116,13 +136,25 @@ export default function SignUp() {
             error={phone ? !phoneReg.test(phone) : false}
             onChange={(e) => setPhone(e.target.value)}
           />
-          <Input label="Password" onChange={(e) => setPass(e.target.value)} />
           <Input
+            label="Password"
+            type="password"
+            onChange={(e) => setPass(e.target.value)}
+          />
+          <Input
+            type="password"
             label="ConfirmPassword"
             onChange={(e) => setConfirmPass(e.target.value)}
           />
+          <Button
+            title="Register"
+            width="30%"
+            onClick={() => validateDetail()}
+          />
+          <Text_reg style={{ alignSelf: "center" }}>
+            Already Have Account? <ForgotLink to="/login">Login</ForgotLink>
+          </Text_reg>
         </SignUpContainer>
-        <Button title="Register" width="50%" onClick={() => validateDetail()} />
       </SignUpWrapper>
     </Wrapper>
   );

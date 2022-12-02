@@ -27,15 +27,16 @@ import {
 import Button from "../components/Button";
 import SearchAutoComplete from "../components/SearchAutoComplete";
 import LoaderSpinner from "../components/Loader";
-import { getData, setData } from "../utils/firebase/firebaseApi";
+import { getData, setData, updateData } from "../utils/firebase/firebaseApi";
 import { ArrayConverter } from "../utils/ArrayConverter";
 import { toastAlert } from "../utils/toastAlert";
 import { convertIntoDoller } from "../utils/ConvertIntoDoller";
-import { DatePicker } from "react-responsive-datepicker";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import "react-responsive-datepicker/dist/index.css";
 import { uniqueId } from "../utils/uniqueId";
 import { uploadInvoiceImages } from "../utils/firebase/firebaseStorage";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   onGrossChange,
   onTareChange,
@@ -45,8 +46,9 @@ import {
   setDefaultValue,
 } from "./InvoiceController";
 export default function Invoice() {
-  const userId = localStorage.getItem("userID");
+  const userID = localStorage.getItem("userID");
   const navigate = useNavigate();
+  const { state } = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const [paymentList, setPaymentList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -55,57 +57,108 @@ export default function Invoice() {
   const [customerList, setCustomerList] = useState([]);
   const [paymentType, setPaymentType] = useState("");
   const [amount, setAmount] = useState(0);
+  const [customerDetail, setCustomerDetail] = useState(null);
   const [note, setNote] = useState("");
   const [IMG, setIMG] = useState([]);
   const [date, setDate] = useState(new Date().toString().substring(0, 15));
-
-  //useEffect for reload page
+  const customerID =
+    state?.invoiceDetail?.customerId ||
+    state?.customerDetail?.ID ||
+    customerDetail?.ID;
+  const invoiceID = state?.invoiceDetail?.ID || uniqueId;
+  const isEditable = state?.invoiceDetail?.ID ? true : false;
+  const customer = state?.customerDetail || customerDetail;
   useEffect(() => {
-    getAllData();
+    if (state?.invoiceDetail?.ID) {
+      getAllData();
+    }
+    getCustomerList();
     getPaymentList();
   }, []);
   useEffect(() => {
     setTotal();
   }, [render]);
-
-  const getAllData = async () => {
-    setLoading(true);
-    const invoiceImages = await getData(
-      `/INVOICE_IMAGES/User:${1}/customer:${1}/invoice:${"4a3cb6fc-a8b9-908e-bb97-8c5d46216b66"}`
-    );
-    const invoiceListData = await getData(
-      `/INVOICE_LIST/${"4a3cb6fc-a8b9-908e-bb97-8c5d46216b66"}`
-    );
-    setAmount(invoiceListData.Amount);
-    setPaymentType(invoiceListData.paymentType.toString());
-    setNote(invoiceListData.note);
-    setDate(invoiceListData.invoiceDate.toString().substring(0, 15));
-    const invoiceData = await getData(
-      `/INVOICE/${"4a3cb6fc-a8b9-908e-bb97-8c5d46216b66"}`
-    );
-    let arr = [];
-    ArrayConverter(invoiceData).map((item, index) => {
-      console.log(item.WeightType);
-      arr.push({
-        id: item.ID,
-        IMG: invoiceImages[`item:${index + 1}`]
-          ? invoiceImages[`item:${index + 1}`]
-          : [],
-        WeightType: item.WeightType == "Unit" ? "Unit" : "Weight",
-        ItemName: item.itemName,
-        details: {
-          GrossWeight: item.grossWeight,
-          TareWeight: item.tareWeight,
-          NetWeight: item.netWeight,
-          Unit: item.unit,
-          UnitPrice: item.price,
-          WeightPrice: item.price,
-          Total: item.Total,
-        },
+  const email = {
+    invoiceID,
+    date,
+    customer,
+    InvoiceItems,
+    amount,
+    paymentType,
+  };
+  const getCustomerList = async () => {
+    try {
+      const customerDetail = await getData(`USER_CUSTOMER/${userID}/CUSTOMER`);
+      let arr = [];
+      ArrayConverter(customerDetail).map((item) => {
+        arr.push({
+          ...item,
+          label:
+            item.UserFirstName +
+            " " +
+            item.UserLastName +
+            `(${item.BusinessName})`,
+        });
       });
-    });
-    setInvoiceItems(arr);
-    setLoading(false);
+      setCustomerList(arr);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const addCustomerDetails = (value) => {
+    if (value == null) {
+      setCustomerDetail(null);
+    } else {
+      console.log("customerdaetails", value);
+      setCustomerDetail(value);
+    }
+  };
+  const getAllData = async () => {
+    try {
+      setLoading(true);
+      const invoiceImages = await getData(
+        `/INVOICE_IMAGES/User:${userID}/customer:${customerID}/invoice:${invoiceID}`
+      );
+      console.log(
+        "total invoice images",
+        ArrayConverter(invoiceImages["item:1"])[0].url
+      );
+      const invoiceListData = await getData(`/INVOICE_LIST/${invoiceID}`);
+      console.log("detial of the vakle", invoiceImages);
+      setAmount(invoiceListData.Amount);
+      setPaymentType(invoiceListData.paymentType.toString());
+      setNote(invoiceListData.note);
+      setDate(invoiceListData.invoiceDate.toString().substring(0, 15));
+      const invoiceData = await getData(`/INVOICE/${invoiceID}`);
+      let arr = [];
+      ArrayConverter(invoiceData).map((item, index) => {
+        console.log(item.WeightType);
+        arr.push({
+          id: item.ID,
+          IMG: invoiceImages
+            ? invoiceImages[`item:${index + 1}`]
+              ? invoiceImages[`item:${index + 1}`]
+              : []
+            : [],
+          WeightType: item.WeightType == "Unit" ? "Unit" : "Weight",
+          ItemName: item.itemName,
+          details: {
+            GrossWeight: item.grossWeight,
+            TareWeight: item.tareWeight,
+            NetWeight: item.netWeight,
+            Unit: item.unit,
+            UnitPrice: item.price,
+            WeightPrice: item.price,
+            Total: item.Total,
+          },
+        });
+      });
+      setInvoiceItems(arr);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
   };
   const onItemDelete = (item, index) => {
     console.log("before filter", InvoiceItems);
@@ -165,7 +218,15 @@ export default function Invoice() {
           id: InvoiceItems.length + 1,
           ItemName: "",
           WeightType: "Weight",
-          details: {},
+          details: {
+            GrossWeight: 0,
+            NetWeight: 0,
+            TareWeight: 0,
+            Total: 0,
+            Unit: 0,
+            UnitPrice: 0,
+            WeightPrice: 0,
+          },
           IMG: [],
         },
       ]);
@@ -204,48 +265,56 @@ export default function Invoice() {
     item.WeightType = item.WeightType == "Unit" ? "Weight" : "Unit";
     setDefaultValue(item, callbackFunc);
   };
-  const sendInvoice = async (InvoiceId) => {};
-  const invoiceImageUpload = (InvoiceId) => {
+  const sendInvoice = async () => {};
+  const invoiceImageUpload = async () => {
     InvoiceItems.map((item, index) => {
       if (item.IMG) {
         ArrayConverter(item.IMG).map(async (imageDetail, imageIndex) => {
-          const uploadUrl = await uploadInvoiceImages(
-            imageDetail.url,
-            userId,
-            1,
-            InvoiceId,
-            imageIndex + 1
-          );
-          await setData(
-            `/INVOICE_IMAGES/User:${userId}/customer:${1}/invoice:${InvoiceId}/item:${
-              index + 1
-            }/${imageIndex + 1}`,
-            {
-              photoName: uploadUrl[1],
-              url: uploadUrl[0],
-            }
-          );
+          if (!imageDetail.url.toString().includes("http")) {
+            const uploadUrl = await uploadInvoiceImages(
+              imageDetail.url,
+              userID,
+              customerID,
+              invoiceID,
+              imageIndex + 1
+            );
+            console.log("imagedetails", imageDetail.url, uploadUrl[0]);
+            setData(
+              `/INVOICE_IMAGES/User:${userID}/customer:${customerID}/invoice:${invoiceID}/item:${
+                index + 1
+              }/${imageIndex + 1}`,
+              {
+                photoName: (uploadUrl[0] + "").split("token=")[1],
+                url: uploadUrl[0],
+              }
+            );
+          }
         });
       }
     });
   };
-  const createInvoiceList = async (InvoiceId) => {
-    await setData(`INVOICE_LIST/${InvoiceId}`, {
-      ID: InvoiceId,
-      userId: userId,
-      customerId: 1,
+  const createInvoiceList = async (type) => {
+    // await setData(`INVOICE_LIST/${invoiceID}`, null);
+    const setInvoiceList = isEditable ? updateData : setData;
+    await setInvoiceList(`INVOICE_LIST/${invoiceID}`, {
+      ID: invoiceID,
+      userId: userID,
+      customerId: customerID,
       totalItems: InvoiceItems.length,
       UserName: "urbanminer",
       invoiceDate: date.toString(),
-      type: "draft",
+      type: type,
       paymentType: paymentType,
       Amount: amount,
       note: note,
     });
   };
-  const createInvoice = (InvoiceId) => {
+  const createInvoice = async () => {
+    // await setData(`INVOICE_LIST/${invoiceID}`, null);
+    const setInvoiceDetail = isEditable ? updateData : setData;
     InvoiceItems.map(async (item, index) => {
-      await setData(`/INVOICE/${InvoiceId}/${index + 1}`, {
+      console.log(item);
+      await setInvoiceDetail(`/INVOICE/${invoiceID}/${index + 1}`, {
         ID: index + 1,
         unit: item.details.Unit,
         itemName: item.ItemName,
@@ -256,32 +325,45 @@ export default function Invoice() {
           item.WeightType == "Unit"
             ? item.details.UnitPrice
             : item.details.WeightPrice,
-        userId: userId,
-        customerID: 1,
+        userId: userID,
+        customerID: customerID,
         Total: item.details.Total,
         WeightType: item.WeightType,
       });
     });
-    setLoading(false);
+    toastAlert(
+      1,
+      isEditable
+        ? "Invoice successfully Edit!"
+        : "Invoice Successfully Created!"
+    );
   };
-  const createData = (type) => {
-    const InvoiceId = uniqueId;
-    if (InvoiceItems.length != 0 && isItemDetailValid()) {
-      if (!paymentType || !amount) {
-        toastAlert(0, "Please Fill the payment Info filed!");
-      } else {
-        try {
-          setLoading(true);
-          invoiceImageUpload(InvoiceId);
-          createInvoiceList(InvoiceId);
-          createInvoice(InvoiceId);
-        } catch (error) {
-          setLoading(false);
+  const createData = async (type) => {
+    if (customerID) {
+      if (InvoiceItems.length != 0) {
+        if (isItemDetailValid()) {
+          if (!paymentType || !amount) {
+            toastAlert(0, "Please Fill the payment Info filed!");
+          } else {
+            try {
+              setLoading(true);
+              await invoiceImageUpload();
+              await createInvoiceList(type);
+              await createInvoice();
+              setLoading(false);
+              navigate("/draft");
+            } catch (error) {
+              setLoading(false);
+            }
+          }
         }
+      } else {
+        toastAlert(0, "Please Add Atleast One Item!");
       }
+    } else {
+      toastAlert(0, "Please Select Customer!");
     }
   };
-
   const re = /^-?\d*\.?\d*$/;
   return (
     <Wrapper>
@@ -289,7 +371,10 @@ export default function Invoice() {
       <Title>New Invoice</Title>
       <View_6>
         <Text_reg>Choose Customer:</Text_reg>
-        <SearchAutoComplete />
+        <SearchAutoComplete
+          searchOptions={customerList}
+          onChange={(e, value) => addCustomerDetails(value)}
+        />
       </View_6>
       <InvoiceContainer>
         <InvoiceView1>
@@ -315,12 +400,15 @@ export default function Invoice() {
               <SenderSubbox>
                 <TextSmall>
                   <SmallBold>Email: </SmallBold>
+                  {customer?.BusinessEmail}
                 </TextSmall>
                 <TextSmall>
                   <SmallBold>Name: </SmallBold>
+                  {customer?.BusinessName}
                 </TextSmall>
                 <TextSmall>
                   <SmallBold>Address: </SmallBold>
+                  {customer?.BusinessAddress}
                 </TextSmall>
               </SenderSubbox>
             </SenderBox>
@@ -375,16 +463,15 @@ export default function Invoice() {
             <Button title="Add" width="20%" onClick={() => onAddItem()} />
           </div>
         </InvoiceView1>
+
+        {/* 
         <DatePicker
           isOpen={isOpen}
           onClose={() => setIsOpen(false)}
           defaultValue={new Date()}
           minDate={new Date()}
           headerBackgroundColor="black"
-          onChange={(date) =>
-            setIsOpen(false) + setDate(date.toString().substring(0, 15))
-          }
-        />
+        /> */}
         <InvoiceView2>
           <InvoiceClient>
             <Bold_1>Note:</Bold_1>
@@ -399,9 +486,17 @@ export default function Invoice() {
             />
             <InfoView>
               <Bold_1>Date:</Bold_1>
-              <DateView onClick={() => setIsOpen(true)}>
-                <SmallBold>{date}</SmallBold>
-              </DateView>
+              {/* <DateView onClick={() => setIsOpen(true)}> */}
+              {/* <SmallBold>{date}</SmallBold>
+               */}
+              <DatePicker
+                selected={new Date()}
+                isClearable
+                onChange={(date) =>
+                  setIsOpen(false) + setDate(date.toString().substring(0, 15))
+                }
+              />
+              {/* </DateView> */}
             </InfoView>
             <InfoView>
               <Bold_1>Amount:</Bold_1>
@@ -418,7 +513,12 @@ export default function Invoice() {
                 width="48%"
                 onClick={() => createData("draft")}
               />
-              <Button title="Downlaod" background="lightblue" width="48%" />
+              <Button
+                title="Downlaod"
+                background="lightblue"
+                width="48%"
+                onClick={() => navigate("/email1", { state: { data: email } })}
+              />
             </Row>
           </InvoiceClient>
         </InvoiceView2>

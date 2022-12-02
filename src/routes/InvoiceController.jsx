@@ -37,7 +37,6 @@ export const setDefaultValue = (item, func) => {
   item.details.TareWeight = 0;
   item.details.NetWeight = 0;
   item.details.Unit = 0;
-  item.details.GrossPrice = 0;
   item.details.UnitPrice = 0;
   item.details.WeightPrice = 0;
   item.details.Total = 0;

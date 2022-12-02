@@ -25,6 +25,7 @@ import { Toaster } from "react-hot-toast";
 import Settings from "./routes/Settings";
 import TermConditions from "./routes/TermConditions";
 import SubProduct from "./routes/subProduct";
+import Email1 from "./utils/html/Email1";
 
 const MainContainer = styled.div`
   display: flex;
@@ -68,6 +69,7 @@ function App() {
             {user ? (
               <>
                 <Route exact path="/" element={<Product />} />
+                <Route exact path="*" element={<Product />} />
                 <Route exact path="/product" element={<Product />} />
                 <Route exact path="/profile" element={<Profile />} />
                 <Route exact path="/customer" element={<Customer />} />
@@ -76,14 +78,17 @@ function App() {
                 <Route exact path="/draft" element={<Invoice_Draft_Sent />} />
                 <Route exact path="/settings" element={<Settings />} />
                 <Route exact path="/subproduct" element={<SubProduct />} />
+                <Route exact path="/email1" element={<Email1 />} />
               </>
             ) : (
               <>
                 <Route exact path="/" element={<Login />} />
                 <Route exact path="/login" element={<Login />} />
                 <Route exact path="/signup" element={<SignUp />} />
+                <Route exact path="*" element={<Login />} />
               </>
             )}
+
             <Route exact path="/privacy" element={<PrivacyPolicy />} />
             <Route exact path="/resetpassword" element={<ResetPassword />} />
             <Route exact path="/term" element={<TermConditions />} />

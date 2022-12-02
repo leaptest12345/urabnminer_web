@@ -8,7 +8,7 @@ export const Container = styled.div`
   flex-direction: column;
   box-shadow: 3px 0 5px -2px #888;
   :hover {
-    background-color: lightgrey;
+    background-color: ${({ notHover }) => (notHover ? "" : "lightgrey")};
     cursor: pointer;
   }
 `;

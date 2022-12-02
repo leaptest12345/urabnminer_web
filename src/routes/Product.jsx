@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from "react";
 import LoaderSpinner from "../components/Loader";
 import ProductCard from "../components/ProductCard";
-import { ProductContainer } from "../styles/Product.styles";
+import {
+  ProductContainer,
+  ProductDetailContainer,
+} from "../styles/Product.styles";
 import { ArrayConverter } from "../utils/ArrayConverter";
 import { getData } from "../utils/firebase/firebaseApi";
 import { Title, Wrapper } from "../utils/GlobalStyles";
-import { useLocation, useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router-dom";
 export default function Product() {
   const [productList, setProductList] = useState([]);
   const [loading, setLoading] = useState(false);
   // const navigate=
-  const {state}=useLocation()
-  console.log(state)
+  const { state } = useLocation();
+  console.log(state);
   const navigate = useNavigate();
   const getProductList = async () => {
     try {
@@ -39,23 +42,27 @@ export default function Product() {
       <Title>Product</Title>
       <ProductContainer>
         {productList.map((item, index) => {
+          const length = ArrayConverter(item.SUB_PRODUCT).length;
           return (
             <ProductCard
+              notHover={length > 0 ? false : true}
               key={index + 1 + "@"}
-              // onClick={() => setSubProduct(ArrayConverter(item.SUB_PRODUCT))}
               onClick={() =>
-                navigate("/customer", {
-                  state: { productList: ArrayConverter(item.SUB_PRODUCT) },
-                })
+                length > 0
+                  ? navigate("/subproduct", {
+                      state: { productList: ArrayConverter(item.SUB_PRODUCT) },
+                    })
+                  : null
               }
               desc={item.prodductDescription}
               title={item.productName}
               url={item.productImage}
-              subProduct={ArrayConverter(item.SUB_PRODUCT).length}
+              subProduct={length}
             />
           );
         })}
       </ProductContainer>
+      <ProductDetailContainer></ProductDetailContainer>
     </Wrapper>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router";
+import { useLocation } from "react-router-dom";
 import LoaderSpinner from "../components/Loader";
 import ProductCard from "../components/ProductCard";
 import { ProductContainer } from "../styles/Product.styles";
@@ -21,14 +21,16 @@ export default function SubProduct({}) {
       <LoaderSpinner visible={loading} isCenter={true} />
       <Title>Sub Products</Title>
       <ProductContainer>
-        {productList.map((item) => {
+        {productList.map((item, index) => {
+          const length = ArrayConverter(item.SUB_PRODUCT).length;
           return (
             <ProductCard
+              notHover={length > 0 ? false : true}
               key={index + 1 + "!"}
               desc={item.prodductDescription}
               title={item.productName}
               url={item.productImage}
-              subProduct={ArrayConverter(item.SUB_PRODUCT).length}
+              subProduct={length}
             />
           );
         })}

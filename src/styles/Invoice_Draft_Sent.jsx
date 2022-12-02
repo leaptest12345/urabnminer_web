@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-export const InvoiceDraftSentBox = styled(Link)`
+export const InvoiceDraftSentBox = styled.div`
   display: flex;
   flex-direction: row;
   background-color: #f5f5f5;

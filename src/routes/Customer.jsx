@@ -28,7 +28,6 @@ import { emailReg } from "../utils/constants/commonConst";
 import { useLocation, useNavigate } from "react-router-dom";
 export default function Customer() {
   const navigate = useNavigate();
-
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -40,13 +39,15 @@ export default function Customer() {
   const [customerList, setCustomerList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [custId, setCustId] = useState(null);
+  const [customerDetail, setCustomerDetail] = useState(null);
   const id = localStorage.getItem("userID");
 
-  const {state}=useLocation()
+  const { state } = useLocation();
 
   const getCustomerDetail = async (value) => {
     try {
       console.log("valie", value);
+      setCustomerDetail(value);
       if (value == null) {
         clearDetail();
       } else {
@@ -160,10 +161,10 @@ export default function Customer() {
     getCustomerList();
   }, []);
 
-  const onStartInvoice =() =>{
-    console.log("abcd vivek")
-    navigate('/invoice');
-  }
+  const onStartInvoice = () => {
+    console.log("abcd vivek");
+    navigate("/invoice");
+  };
 
   return (
     <Wrapper>
@@ -231,7 +232,7 @@ export default function Customer() {
         onClick={() => {
           if (custId != null) {
             console.log("inside invigation");
-            navigate("/invoice");
+            navigate("/invoice", { state: { customerDetail: customerDetail } });
           } else {
             console.log("outside");
             if (!alredyExist()) {

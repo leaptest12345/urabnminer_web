@@ -7,6 +7,7 @@ export const Wrapper = styled.div`
   width: 100vw;
   background-color: #dcdee1;
   overflow-y: scroll;
+  position: relative;
   transition: all 0.3s ease-in-out;
   @media (max-width: 900px) {
     margin-top: 10vh;

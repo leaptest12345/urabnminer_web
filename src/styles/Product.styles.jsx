@@ -18,3 +18,19 @@ export const ProductContainer = styled.div`
     grid-template-columns: 100%;
   }
 `;
+
+export const ProductDetailContainer = styled.div`
+  height: 100vh;
+  background-color: red;
+  /* position: absolute; */
+  position: sticky;
+  opacity: 0;
+  width: 30vw;
+  transform: translate3d(+150px, 0, 0); /* ADDED - start x position as -50px */
+  cursor: pointer;
+  transition: 0.25s all ease-in-out;
+  :hover {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+`;

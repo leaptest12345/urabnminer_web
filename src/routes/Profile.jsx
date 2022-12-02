@@ -80,20 +80,19 @@ export default function Profile({}) {
               phoneNumber: phoneNumber,
               email: email,
               countryCode: countryCode,
-              countryName: countryName,
             });
           } else {
+            console.log("not dvh");
             await updateData(`USERS/${id}`, {
               firstName: firstName,
               lastName: lastName,
               phoneNumber: phoneNumber,
               email: email,
               countryCode: countryCode,
-              countryName: countryName,
             });
           }
-          const result = await changeEmail(email);
-          console.log(result);
+          // const result = await changeEmail(email);
+          // console.log(result);
           toastAlert(1, "Profile has been updated!");
           setLoading(false);
         } else {
