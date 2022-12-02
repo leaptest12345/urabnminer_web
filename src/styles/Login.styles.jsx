@@ -19,7 +19,7 @@ export const LoginBox = styled.div`
   border-radius: 10px;
   background-color: whitesmoke;
   grid-template-columns: repeat(2, 50%);
-  height: 90%;
+  /* height: 90%; */
   box-shadow: 3px 0 5px -2px #888;
   width: 80%;
   overflow: visible;

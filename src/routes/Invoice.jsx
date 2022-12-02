@@ -11,6 +11,7 @@ import {
   SenderSubbox,
   TouchView,
   DateView,
+  RowView,
 } from "../styles/Invoice.styles";
 import {
   Bold_1,
@@ -33,7 +34,6 @@ import { toastAlert } from "../utils/toastAlert";
 import { convertIntoDoller } from "../utils/ConvertIntoDoller";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import "react-responsive-datepicker/dist/index.css";
 import { uniqueId } from "../utils/uniqueId";
 import { uploadInvoiceImages } from "../utils/firebase/firebaseStorage";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -45,6 +45,7 @@ import {
   onWeightPriceChange,
   setDefaultValue,
 } from "./InvoiceController";
+import { Input } from "@mui/material";
 export default function Invoice() {
   const userID = localStorage.getItem("userID");
   const navigate = useNavigate();
@@ -61,6 +62,7 @@ export default function Invoice() {
   const [note, setNote] = useState("");
   const [IMG, setIMG] = useState([]);
   const [date, setDate] = useState(new Date().toString().substring(0, 15));
+  const [user,setUser]=useState(null)
   const customerID =
     state?.invoiceDetail?.customerId ||
     state?.customerDetail?.ID ||
@@ -74,10 +76,21 @@ export default function Invoice() {
     }
     getCustomerList();
     getPaymentList();
+    getUserDetail()
   }, []);
   useEffect(() => {
     setTotal();
   }, [render]);
+
+  const getUserDetail=async()=>{
+    try{
+        const userDetail=await getData(`USERS/${userID}`)
+        setUser(userDetail)
+    }catch(error)
+    {
+      console.log(error)
+    }
+  }
   const email = {
     invoiceID,
     date,
@@ -119,12 +132,7 @@ export default function Invoice() {
       const invoiceImages = await getData(
         `/INVOICE_IMAGES/User:${userID}/customer:${customerID}/invoice:${invoiceID}`
       );
-      console.log(
-        "total invoice images",
-        ArrayConverter(invoiceImages["item:1"])[0].url
-      );
       const invoiceListData = await getData(`/INVOICE_LIST/${invoiceID}`);
-      console.log("detial of the vakle", invoiceImages);
       setAmount(invoiceListData.Amount);
       setPaymentType(invoiceListData.paymentType.toString());
       setNote(invoiceListData.note);
@@ -160,15 +168,24 @@ export default function Invoice() {
       setLoading(false);
     }
   };
-  const onItemDelete = (item, index) => {
+  const onItemDelete =async (item, index) => {
     console.log("before filter", InvoiceItems);
+    setLoading(true)
+    setInvoiceItems([]);
     if (InvoiceItems.length == 1) {
       setInvoiceItems([]);
+      await setData(`/INVOICE_IMAGES/User:${userID}/customer:${customerID}/invoice:${invoiceID}`,null)
+      await setData(`INVOICE_LIST/${invoiceID}`, null);
+      await setData(`INVOICE/${invoiceID}`, null);
+      toastAlert(0,'Invoice has been deleted!')
     } else {
       const arr = InvoiceItems.filter((item1) => item1.id != index + 1);
       console.log("after filter", arr);
+     setTimeout(() => {
       setInvoiceItems(arr);
+     }, 1000);
     }
+    setLoading(false)
     setRender(!render);
   };
   const setTotal = () => {
@@ -267,6 +284,7 @@ export default function Invoice() {
   };
   const sendInvoice = async () => {};
   const invoiceImageUpload = async () => {
+    await  setData(`/INVOICE_IMAGES/User:${userID}/customer:${customerID}/invoice:${invoiceID}`,null)
     InvoiceItems.map((item, index) => {
       if (item.IMG) {
         ArrayConverter(item.IMG).map(async (imageDetail, imageIndex) => {
@@ -289,12 +307,24 @@ export default function Invoice() {
               }
             );
           }
+          else
+          {
+            setData(
+              `/INVOICE_IMAGES/User:${userID}/customer:${customerID}/invoice:${invoiceID}/item:${
+                index + 1
+              }/${imageIndex + 1}`,
+              {
+                photoName: (imageDetail.url + "").split("token=")[1],
+                url: imageDetail.url,
+              }
+            );
+          }
         });
       }
     });
   };
   const createInvoiceList = async (type) => {
-    // await setData(`INVOICE_LIST/${invoiceID}`, null);
+    await setData(`INVOICE_LIST/${invoiceID}`, null);
     const setInvoiceList = isEditable ? updateData : setData;
     await setInvoiceList(`INVOICE_LIST/${invoiceID}`, {
       ID: invoiceID,
@@ -310,7 +340,7 @@ export default function Invoice() {
     });
   };
   const createInvoice = async () => {
-    // await setData(`INVOICE_LIST/${invoiceID}`, null);
+    await setData(`INVOICE/${invoiceID}`, null);
     const setInvoiceDetail = isEditable ? updateData : setData;
     InvoiceItems.map(async (item, index) => {
       console.log(item);
@@ -384,14 +414,13 @@ export default function Invoice() {
               <SenderSubbox>
                 <TextSmall color="white">
                   <SmallBold color="white">Email: </SmallBold>
-                  sutharbipinn25899@gmail.com
+                  {user?.email}
                 </TextSmall>
                 <TextSmall color="white">
-                  <SmallBold color="white">Name: </SmallBold>SutharBipin
+                  <SmallBold color="white">Name: </SmallBold>{user?.firstName}
                 </TextSmall>
                 <TextSmall color="white">
                   <SmallBold color="white">Address: </SmallBold>katra(samal)
-                  patan gujrat india
                 </TextSmall>
               </SenderSubbox>
             </SenderBox>
@@ -486,17 +515,28 @@ export default function Invoice() {
             />
             <InfoView>
               <Bold_1>Date:</Bold_1>
-              {/* <DateView onClick={() => setIsOpen(true)}> */}
-              {/* <SmallBold>{date}</SmallBold>
-               */}
+              <DateView > 
               <DatePicker
-                selected={new Date()}
-                isClearable
+              closeOnScroll={true}
+                selected={new Date(date)}
+                disabled={false}
                 onChange={(date) =>
-                  setIsOpen(false) + setDate(date.toString().substring(0, 15))
+                   setDate(date.toString().substring(0, 15))
                 }
+                customInput={<Input />}
+                renderCustomHeader={({
+                  decreaseMonth,
+                  increaseMonth,
+                }) => (
+                 <Row style={{
+                  paddingInline:"10px",
+                 }}>
+                    <Button color="black" background="transparent"  width="15%"  onClick={decreaseMonth} title="<"/>
+                   <Button  color="black" width="15%" background="transparent"  onClick={increaseMonth} title=">"/>
+                   </Row>
+                )}
               />
-              {/* </DateView> */}
+              </DateView>
             </InfoView>
             <InfoView>
               <Bold_1>Amount:</Bold_1>

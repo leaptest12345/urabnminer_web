@@ -27,7 +27,7 @@ export const SideBarContainer = styled.nav`
 `;
 
 export const SideBarHeader = styled.div`
-  height: 15vh;
+ padding:5px;
   display: flex;
   /* padding: 25px; */
   flex-direction:column;
@@ -37,8 +37,8 @@ export const SideBarHeader = styled.div`
 `;
 
 export const SideBarContent = styled.div`
-  height: 7vh;
   margin-bottom: 10px;
+  padding:5px;
   display: flex;
   border-radius: 6px;
   color: ${({ background }) => (background ? "black" : "white")};
@@ -89,20 +89,17 @@ export const SideBarTitle = styled.span`
 
 // #1d1b31 lightblue
 export const SideBarContentView1 = styled.div`
-  height: 65%;
+  height: auto;
   overflow: visible;
   @media (max-width: 900px) {
-    height: 100%;
     margin-top: 10px;
   }
 `;
 export const SideBarContentView2 = styled.div`
-  height: 65%;
+  height: auto;
   overflow: visible;
   @media (max-width: 900px) {
     display: flex;
-    height: 75%;
-    width: 65%;
     justify-content: space-between;
   }
 `;

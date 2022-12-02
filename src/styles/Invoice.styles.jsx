@@ -154,14 +154,13 @@ export const DeleteBtn = styled(Delete)`
 `;
 
 export const DateView = styled.div`
-  background-color: lightgray;
   width: 70%;
   border-radius: 4px;
-  height: 4vh;
   justify-content: center;
   align-items: center;
   display: flex;
-  :hover {
+  z-index:1111;
+  /* :hover {
     background-color: #2a547e;
     cursor: pointer;
   }
@@ -169,5 +168,5 @@ export const DateView = styled.div`
     :hover {
       color: white;
     }
-  }
+  } */
 `;
