@@ -174,10 +174,13 @@ export default function Invoice() {
     setInvoiceItems([]);
     if (InvoiceItems.length == 1) {
       setInvoiceItems([]);
-      await setData(`/INVOICE_IMAGES/User:${userID}/customer:${customerID}/invoice:${invoiceID}`,null)
+      if(isEditable)
+      {
+        await setData(`/INVOICE_IMAGES/User:${userID}/customer:${customerID}/invoice:${invoiceID}`,null)
       await setData(`INVOICE_LIST/${invoiceID}`, null);
       await setData(`INVOICE/${invoiceID}`, null);
       toastAlert(0,'Invoice has been deleted!')
+      }
     } else {
       const arr = InvoiceItems.filter((item1) => item1.id != index + 1);
       console.log("after filter", arr);
@@ -185,6 +188,7 @@ export default function Invoice() {
       setInvoiceItems(arr);
      }, 1000);
     }
+    setTotal()
     setLoading(false)
     setRender(!render);
   };
@@ -296,8 +300,7 @@ export default function Invoice() {
               invoiceID,
               imageIndex + 1
             );
-            console.log("imagedetails", imageDetail.url, uploadUrl[0]);
-            setData(
+            await setData(
               `/INVOICE_IMAGES/User:${userID}/customer:${customerID}/invoice:${invoiceID}/item:${
                 index + 1
               }/${imageIndex + 1}`,
