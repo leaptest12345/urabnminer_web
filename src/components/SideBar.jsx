@@ -20,10 +20,10 @@ import { RowView } from "../styles/Invoice.styles";
 
 export default function SideBar() {
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [sideBardId, setSideBarId] = useState(1);
   const { signOut } = React.useContext(AuthContext);
-  const [user,setUser]=useState(null)
+  const [user, setUser] = useState(null);
   const location = useLocation();
   const path = location.pathname;
 
@@ -33,36 +33,49 @@ export default function SideBar() {
     navigate("/");
     signOut();
   };
- 
-  const getuserDetail=async()=>{
-    try{
-      const id=localStorage.getItem('userID')
-      const detail=await getData(`/USERS/${id}`)
-      setUser(detail)
+
+  const getuserDetail = async () => {
+    try {
+      const id = localStorage.getItem("userID");
+      const detail = await getData(`/USERS/${id}`);
+      setUser(detail);
+    } catch (error) {
+      console.log(error);
     }
-    catch(error)
-    {
-      console.log(error)
-    }
-  }
+  };
   useEffect(() => {
-   getuserDetail()
+    getuserDetail();
   }, []);
   const img = { background: "none", width: 20, height: 20 };
 
   return (
     <SideBarContainer isOpen={isOpen}>
       <SideBarHeader onClick={() => setIsOpen(!isOpen)}>
-      <img src={user?.photo} style={{
-          width:'50px',
-          heigth:'100px',
-          borderRadius:'100%',
-        }}/>
-      <RowView>
-      <FaBars style={{ width: "20px", height: "20px" }} />
-        <SideBarTitle isOpen={isOpen}>{user?.firstName}</SideBarTitle>
-      </RowView>
+        <SideBarContent isOpen={isOpen} background={false}>
+          <FaBars style={{ width: "20px", height: "20px" }} />
+          <SideBarTitle isOpen={isOpen}>UrbanMiner</SideBarTitle>
+        </SideBarContent>
       </SideBarHeader>
+      {/* <RowView
+        style={{
+          width: "100%",
+          borderBottom: "1px solid grey",
+          justifyContent: "space-around",
+        }}
+      >
+        <img
+          src={user?.photo}
+          style={{
+            width: "50px",
+            heigth: "100px",
+            borderRadius: "100%",
+          }}
+        />
+        <SideBarTitle isOpen={isOpen}>
+          {user?.firstName + "".substring(0, 10)}
+        </SideBarTitle>
+      </RowView> */}
+
       <SideBarContentView>
         {SIDEBAR.map((item, index) => {
           return (

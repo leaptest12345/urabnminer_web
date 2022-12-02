@@ -46,7 +46,7 @@ export default function InvoiceItem({
   WeightType,
   onDelete,
 }) {
-  const re = /(^[0-9]+$|^$)/;
+  const re = /^[0-9]+$/;
   const [itemList, setItemList] = useState([]);
   const getItemList = async () => {
     try {
@@ -72,12 +72,12 @@ export default function InvoiceItem({
   const Touch2_color = WeightType == "Weight" ? "#2a547e" : null;
   const textColor1 = WeightType == "Unit" ? "white" : "black";
   const textColor2 = WeightType == "Weight" ? "white" : "black";
-  const unitError = Unit ? !re.test(parseFloat(Unit)) : false;
-  const unitPriceError = UnitPrice ? !re.test(parseFloat(UnitPrice)) : false;
-  const grossError = GrossWeight ? !re.test(parseFloat(GrossWeight)) : false;
-  const tareError = TareWeight ? !re.test(parseFloat(TareWeight)) : false;
+  const unitError = Unit ? !re.test(Unit.toString()) : false;
+  const unitPriceError = UnitPrice ? !re.test(UnitPrice.toString()) : false;
+  const grossError = GrossWeight ? !re.test(GrossWeight.toString()) : false;
+  const tareError = TareWeight ? !re.test(TareWeight.toString()) : false;
   const WeightPriceError = WeightPrice
-    ? !re.test(parseFloat(WeightPrice))
+    ? !re.test(WeightPrice.toString())
     : null;
 
   return (

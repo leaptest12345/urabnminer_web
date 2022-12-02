@@ -27,18 +27,18 @@ export const SideBarContainer = styled.nav`
 `;
 
 export const SideBarHeader = styled.div`
- padding:5px;
+  padding: 15px;
   display: flex;
   /* padding: 25px; */
-  flex-direction:column;
-  align-items:center;
-  justify-content:space-around;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
   border-bottom: 1px solid grey;
 `;
 
 export const SideBarContent = styled.div`
   margin-bottom: 10px;
-  padding:5px;
+  padding: 5px;
   display: flex;
   border-radius: 6px;
   color: ${({ background }) => (background ? "black" : "white")};
@@ -89,16 +89,18 @@ export const SideBarTitle = styled.span`
 
 // #1d1b31 lightblue
 export const SideBarContentView1 = styled.div`
-  height: auto;
+  height: 65vh;
   overflow: visible;
   @media (max-width: 900px) {
     margin-top: 10px;
   }
 `;
 export const SideBarContentView2 = styled.div`
-  height: auto;
+  height: 65vh;
   overflow: visible;
   @media (max-width: 900px) {
+    height: 10vh;
+    align-items: center;
     display: flex;
     justify-content: space-between;
   }
@@ -109,7 +111,7 @@ export const SideBarFooter1 = styled.div`
   margin-top: 25px;
 `;
 export const SideBarFooter2 = styled.div`
-margin-top: 25px;
+  margin-top: 25px;
   border-top: 1px solid grey;
   @media (max-width: 900px) {
     display: flex;

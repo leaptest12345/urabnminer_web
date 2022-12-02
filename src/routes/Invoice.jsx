@@ -62,7 +62,7 @@ export default function Invoice() {
   const [note, setNote] = useState("");
   const [IMG, setIMG] = useState([]);
   const [date, setDate] = useState(new Date().toString().substring(0, 15));
-  const [user,setUser]=useState(null)
+  const [user, setUser] = useState(null);
   const customerID =
     state?.invoiceDetail?.customerId ||
     state?.customerDetail?.ID ||
@@ -76,21 +76,20 @@ export default function Invoice() {
     }
     getCustomerList();
     getPaymentList();
-    getUserDetail()
+    getUserDetail();
   }, []);
   useEffect(() => {
     setTotal();
   }, [render]);
 
-  const getUserDetail=async()=>{
-    try{
-        const userDetail=await getData(`USERS/${userID}`)
-        setUser(userDetail)
-    }catch(error)
-    {
-      console.log(error)
+  const getUserDetail = async () => {
+    try {
+      const userDetail = await getData(`USERS/${userID}`);
+      setUser(userDetail);
+    } catch (error) {
+      console.log(error);
     }
-  }
+  };
   const email = {
     invoiceID,
     date,
@@ -168,28 +167,30 @@ export default function Invoice() {
       setLoading(false);
     }
   };
-  const onItemDelete =async (item, index) => {
+  const onItemDelete = async (item, index) => {
     console.log("before filter", InvoiceItems);
-    setLoading(true)
+    setLoading(true);
     setInvoiceItems([]);
     if (InvoiceItems.length == 1) {
       setInvoiceItems([]);
-      if(isEditable)
-      {
-        await setData(`/INVOICE_IMAGES/User:${userID}/customer:${customerID}/invoice:${invoiceID}`,null)
-      await setData(`INVOICE_LIST/${invoiceID}`, null);
-      await setData(`INVOICE/${invoiceID}`, null);
-      toastAlert(0,'Invoice has been deleted!')
+      if (isEditable) {
+        await setData(
+          `/INVOICE_IMAGES/User:${userID}/customer:${customerID}/invoice:${invoiceID}`,
+          null
+        );
+        await setData(`INVOICE_LIST/${invoiceID}`, null);
+        await setData(`INVOICE/${invoiceID}`, null);
+        toastAlert(0, "Invoice has been deleted!");
       }
     } else {
       const arr = InvoiceItems.filter((item1) => item1.id != index + 1);
       console.log("after filter", arr);
-     setTimeout(() => {
-      setInvoiceItems(arr);
-     }, 1000);
+      setTimeout(() => {
+        setInvoiceItems(arr);
+      }, 1000);
     }
-    setTotal()
-    setLoading(false)
+    setTotal();
+    setLoading(false);
     setRender(!render);
   };
   const setTotal = () => {
@@ -288,7 +289,10 @@ export default function Invoice() {
   };
   const sendInvoice = async () => {};
   const invoiceImageUpload = async () => {
-    await  setData(`/INVOICE_IMAGES/User:${userID}/customer:${customerID}/invoice:${invoiceID}`,null)
+    await setData(
+      `/INVOICE_IMAGES/User:${userID}/customer:${customerID}/invoice:${invoiceID}`,
+      null
+    );
     InvoiceItems.map((item, index) => {
       if (item.IMG) {
         ArrayConverter(item.IMG).map(async (imageDetail, imageIndex) => {
@@ -309,9 +313,7 @@ export default function Invoice() {
                 url: uploadUrl[0],
               }
             );
-          }
-          else
-          {
+          } else {
             setData(
               `/INVOICE_IMAGES/User:${userID}/customer:${customerID}/invoice:${invoiceID}/item:${
                 index + 1
@@ -397,7 +399,6 @@ export default function Invoice() {
       toastAlert(0, "Please Select Customer!");
     }
   };
-  const re = /^-?\d*\.?\d*$/;
   return (
     <Wrapper>
       <LoaderSpinner visible={loading} isCenter={true} />
@@ -420,7 +421,8 @@ export default function Invoice() {
                   {user?.email}
                 </TextSmall>
                 <TextSmall color="white">
-                  <SmallBold color="white">Name: </SmallBold>{user?.firstName}
+                  <SmallBold color="white">Name: </SmallBold>
+                  {user?.firstName}
                 </TextSmall>
                 <TextSmall color="white">
                   <SmallBold color="white">Address: </SmallBold>katra(samal)
@@ -518,27 +520,36 @@ export default function Invoice() {
             />
             <InfoView>
               <Bold_1>Date:</Bold_1>
-              <DateView > 
-              <DatePicker
-              closeOnScroll={true}
-                selected={new Date(date)}
-                disabled={false}
-                onChange={(date) =>
-                   setDate(date.toString().substring(0, 15))
-                }
-                customInput={<Input />}
-                renderCustomHeader={({
-                  decreaseMonth,
-                  increaseMonth,
-                }) => (
-                 <Row style={{
-                  paddingInline:"10px",
-                 }}>
-                    <Button color="black" background="transparent"  width="15%"  onClick={decreaseMonth} title="<"/>
-                   <Button  color="black" width="15%" background="transparent"  onClick={increaseMonth} title=">"/>
-                   </Row>
-                )}
-              />
+              <DateView>
+                <DatePicker
+                  closeOnScroll={true}
+                  selected={new Date(date)}
+                  disabled={false}
+                  onChange={(date) => setDate(date.toString().substring(0, 15))}
+                  customInput={<Input />}
+                  renderCustomHeader={({ decreaseMonth, increaseMonth }) => (
+                    <Row
+                      style={{
+                        paddingInline: "10px",
+                      }}
+                    >
+                      <Button
+                        color="black"
+                        background="transparent"
+                        width="15%"
+                        onClick={decreaseMonth}
+                        title="<"
+                      />
+                      <Button
+                        color="black"
+                        width="15%"
+                        background="transparent"
+                        onClick={increaseMonth}
+                        title=">"
+                      />
+                    </Row>
+                  )}
+                />
               </DateView>
             </InfoView>
             <InfoView>
@@ -556,12 +567,7 @@ export default function Invoice() {
                 width="48%"
                 onClick={() => createData("draft")}
               />
-              <Button
-                title="Downlaod"
-                background="lightblue"
-                width="48%"
-                onClick={() => navigate("/email1", { state: { data: email } })}
-              />
+              <Button title="Downlaod" background="lightblue" width="48%" />
             </Row>
           </InvoiceClient>
         </InvoiceView2>

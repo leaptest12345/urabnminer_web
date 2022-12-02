@@ -15,6 +15,7 @@
     "@mui/material": "^5.10.15",
     "add": "^2.0.6",
     "firebase": "^9.14.0",
+    "html-to-pdf": "^0.1.11",
     "react": "^18.2.0",
     "react-datepicker": "^4.8.0",
     "react-dom": "^18.2.0",
