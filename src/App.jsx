@@ -1,21 +1,14 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "./App.css";
 import SideBar from "./components/SideBar";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  useNavigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import SignUp from "./routes/SignUp";
 import styled from "styled-components";
 import Profile from "./routes/Profile";
-import { ProfileImg } from "./styles/Profile.styles";
 import Customer from "./routes/Customer";
 import Invoice_Draft_Sent from "./routes/Invoice_Draft_Sent";
 import Invoice from "./routes/Invoice";
 import PrivacyPolicy from "./routes/PrivacyPolicy";
-import Header from "./components/Header";
 import Product from "./routes/Product";
 import Login from "./routes/Login";
 import Feedback from "./routes/Feedback";
@@ -90,7 +83,6 @@ function App() {
                 <Route exact path="*" element={<Login />} />
               </>
             )}
-
             <Route exact path="/privacy" element={<PrivacyPolicy />} />
             <Route exact path="/resetpassword" element={<ResetPassword />} />
             <Route exact path="/term" element={<TermConditions />} />

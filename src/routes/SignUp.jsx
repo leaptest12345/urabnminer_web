@@ -101,6 +101,11 @@ export default function SignUp() {
       toastAlert(0, error);
     }
   };
+  const photoCapture = (e) => {
+    if (e.target.files.length !== 0) {
+      setPhoto(e.target.files[0]);
+    }
+  };
   return (
     <Wrapper>
       <LoaderSpinner isCenter={true} visible={loading} />
@@ -108,7 +113,7 @@ export default function SignUp() {
         <PhotoCapture
           width={"50px"}
           title="+"
-          handleChange={(e) => setPhoto(e.target.files[0])}
+          handleChange={(e) => photoCapture(e)}
         />
         <ImageProfileView>
           <ImageModal

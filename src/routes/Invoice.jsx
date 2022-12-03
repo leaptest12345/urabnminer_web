@@ -258,11 +258,13 @@ export default function Invoice() {
     }
   };
   const onImagePic = (e, item) => {
-    item.IMG.push({
-      id: item.IMG.length + 1,
-      url: e.target.files[0],
-    });
-    setRender(!render);
+    if (e.target.files.length !== 0) {
+      item.IMG.push({
+        id: item.IMG.length + 1,
+        url: e.target.files[0],
+      });
+      setRender(!render);
+    }
   };
   const getPaymentList = async () => {
     try {

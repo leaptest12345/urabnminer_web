@@ -165,7 +165,21 @@ export default function Customer() {
     console.log("abcd vivek");
     navigate("/invoice");
   };
-
+  const capturePhoto = (e) => {
+    if (e.target.files.length !== 0) {
+      setPhoto(e.target.files[0]);
+    }
+  };
+  const capturePhoto1 = (e) => {
+    if (e.target.files.length !== 0) {
+      setPhoto1(e.target.files[0]);
+    }
+  };
+  const capturePhoto2 = (e) => {
+    if (e.target.files.length !== 0) {
+      setPhoto2(e.target.files[0]);
+    }
+  };
   return (
     <Wrapper>
       <LoaderSpinner visible={loading} isCenter={true} />
@@ -208,21 +222,21 @@ export default function Customer() {
         <CustomerPhotoView>
           <Text_reg>Capture on ID or Business Card for your records</Text_reg>
           <Row>
-            <PhotoCapture handleChange={(e) => setPhoto(e.target.files[0])} />
+            <PhotoCapture handleChange={(e) => capturePhoto(e)} />
             <ImageModal url={photo} />
           </Row>
         </CustomerPhotoView>
         <CustomerPhotoView>
           <Text_reg>Capture on ID or Business Card for your records</Text_reg>
           <Row>
-            <PhotoCapture handleChange={(e) => setPhoto1(e.target.files[0])} />
+            <PhotoCapture handleChange={(e) => capturePhoto1(e)} />
             <ImageModal url={photo1} />
           </Row>
         </CustomerPhotoView>
         <CustomerPhotoView>
           <Text_reg>Capture on ID or Business Card for your records</Text_reg>
           <Row>
-            <PhotoCapture handleChange={(e) => setPhoto2(e.target.files[0])} />
+            <PhotoCapture handleChange={(e) => capturePhoto2(e)} />
             <ImageModal url={photo2} />
           </Row>
         </CustomerPhotoView>

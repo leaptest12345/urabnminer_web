@@ -112,8 +112,10 @@ export default function Profile({}) {
     getUserDetail();
   }, []);
   const handlePhoto = (e) => {
-    setPhoto(e.target.files[0]);
-    setChangePhoto(e.target.files[0]);
+    if (e.target.files.length !== 0) {
+      setPhoto(e.target.files[0]);
+      setChangePhoto(e.target.files[0]);
+    }
   };
   const onSearchChange = (e, value) => {
     console.log(value.label);
