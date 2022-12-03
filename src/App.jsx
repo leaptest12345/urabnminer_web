@@ -26,6 +26,7 @@ import Settings from "./routes/Settings";
 import TermConditions from "./routes/TermConditions";
 import SubProduct from "./routes/subProduct";
 import Email1 from "./utils/html/Email1";
+import GeneratePdf from "./utils/generatePdf";
 
 const MainContainer = styled.div`
   display: flex;
@@ -79,6 +80,7 @@ function App() {
                 <Route exact path="/settings" element={<Settings />} />
                 <Route exact path="/subproduct" element={<SubProduct />} />
                 <Route exact path="/email1" element={<Email1 />} />
+                <Route exact path="/generatepdf" element={<GeneratePdf />} />
               </>
             ) : (
               <>

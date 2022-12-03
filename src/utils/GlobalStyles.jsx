@@ -72,7 +72,6 @@ export const InputContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
   margin-top: 5px;
-
 `;
 export const Row = styled.div`
   display: flex;

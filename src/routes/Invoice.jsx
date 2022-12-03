@@ -46,6 +46,7 @@ import {
   setDefaultValue,
 } from "./InvoiceController";
 import { Input } from "@mui/material";
+import GeneratePdf from "../utils/generatePdf";
 export default function Invoice() {
   const userID = localStorage.getItem("userID");
   const navigate = useNavigate();
@@ -399,10 +400,20 @@ export default function Invoice() {
       toastAlert(0, "Please Select Customer!");
     }
   };
+  const body = `<strong>Invoice Pdf1</strong><br/><p>invoice 1 url</p><br/><br/>
+  <strong>Invoice Pdf2</strong><br/><p>invoice2 url</p>`;
+  const subject = "UrbanMiner";
   return (
     <Wrapper>
       <LoaderSpinner visible={loading} isCenter={true} />
       <Title>New Invoice</Title>
+
+      <a
+        href={`mailto:sutharbipinn25899@gmail.com?subject=${subject}&body=${body}`}
+      >
+        Click to Send an Email
+      </a>
+
       <View_6>
         <Text_reg>Choose Customer:</Text_reg>
         <SearchAutoComplete
@@ -567,7 +578,14 @@ export default function Invoice() {
                 width="48%"
                 onClick={() => createData("draft")}
               />
-              <Button title="Downlaod" background="lightblue" width="48%" />
+              <Button
+                title="Preview"
+                onClick={() =>
+                  navigate("/generatepdf", { state: { data: email } })
+                }
+                background="lightblue"
+                width="48%"
+              />
             </Row>
           </InvoiceClient>
         </InvoiceView2>
