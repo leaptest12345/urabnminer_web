@@ -26,11 +26,11 @@ export const ProductDetailContainer = styled.div`
   position: sticky;
   opacity: 0;
   width: 30vw;
-  transform: translate3d(+150px, 0, 0); /* ADDED - start x position as -50px */
+  /* transform: translate3d(+150px, 0, 0);  */
   cursor: pointer;
   transition: 0.25s all ease-in-out;
-  :hover {
+  /* :hover {
     opacity: 1;
     transform: translate3d(0, 0, 0);
-  }
+  } */
 `;

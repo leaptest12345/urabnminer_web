@@ -9,18 +9,21 @@ import { Bold_1, Row, SmallBold } from "./GlobalStyles";
 import ImageModal from "../components/ImageModal";
 import { InvoiceImage } from "../styles/Invoice.styles";
 import { convertIntoDoller } from "./ConvertIntoDoller";
+import Button from "../components/Button";
 
 export default function GeneratePdf() {
   function printDocument() {
     //const input = document.getElementById('divToPrint');
     const doc = new jsPDF();
-    //get table html
+    //get table html'
+
     const pdfTable = document.getElementById("divToPrint");
     //html to pdf format
     var html = htmlToPdfmake(pdfTable.innerHTML);
 
     const documentDefinition = { content: html };
     const result = pdfMake.createPdf(documentDefinition).open();
+    console.log(result);
   }
   const { state } = useLocation();
   const { invoiceID, date, customer, InvoiceItems, amount, paymentType } =
@@ -40,9 +43,6 @@ export default function GeneratePdf() {
     background-color: lightsteelblue;
   `;
 
-  useEffect(() => {
-    // printDocument();
-  }, []);
   return (
     <PdfContainer id="divToPrint">
       <ItemContainer>
@@ -108,6 +108,7 @@ export default function GeneratePdf() {
           );
         })}
       </ItemContainer>
+      <Button title="generate" onClick={() => printDocument()} />
     </PdfContainer>
   );
 }

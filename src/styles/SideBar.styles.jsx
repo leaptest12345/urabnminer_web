@@ -48,8 +48,9 @@ export const SideBarContent = styled.div`
   align-items: center;
   justify-content: ${({ isOpen }) => (isOpen ? "" : "center")};
   :hover {
-    background-color: #ffffff;
-    color: black;
+    background-color: ${({ background }) =>
+      background != null ? " #ffffff" : null};
+    color: ${({ background }) => (background != null ? "black" : "white")};
     /* ::after {
       content: "name";
       position: absolute;

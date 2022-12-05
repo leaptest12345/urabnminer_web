@@ -51,7 +51,7 @@ export default function SideBar() {
   return (
     <SideBarContainer isOpen={isOpen}>
       <SideBarHeader onClick={() => setIsOpen(!isOpen)}>
-        <SideBarContent isOpen={isOpen} background={false}>
+        <SideBarContent isOpen={isOpen} background={null}>
           <FaBars style={{ width: "20px", height: "20px" }} />
           <SideBarTitle isOpen={isOpen}>UrbanMiner</SideBarTitle>
         </SideBarContent>

@@ -110,11 +110,6 @@ export default function SignUp() {
     <Wrapper>
       <LoaderSpinner isCenter={true} visible={loading} />
       <SignUpWrapper>
-        <PhotoCapture
-          width={"50px"}
-          title="+"
-          handleChange={(e) => photoCapture(e)}
-        />
         <ImageProfileView>
           <ImageModal
             style={{ marginBottom: photo ? null : "10px" }}
@@ -122,6 +117,13 @@ export default function SignUp() {
             disable={true}
           />
         </ImageProfileView>
+        <div>
+          <PhotoCapture
+            width={"50px"}
+            title="+"
+            handleChange={(e) => photoCapture(e)}
+          />
+        </div>
         <SignUpContainer>
           <Input
             label="FirstName"

@@ -29,8 +29,9 @@ export const LoginBox = styled.div`
   }
 `;
 export const LoginBoxLeft = styled.div`
-  padding: 12%;
+  padding: 10%;
   display: flex;
+  height: 80vh;
   flex-direction: column;
   justify-content: space-around;
   @media (max-width: 900px) {

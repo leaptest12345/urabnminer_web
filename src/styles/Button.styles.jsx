@@ -7,8 +7,7 @@ export const StyledButton = styled.button`
   color: ${({ color }) => color || "#ffffff"};
   text-align: center;
   font-size: 15px;
-  /* height: 45px; */
- 
+  height: ${({ height }) => height || ""};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -25,7 +24,7 @@ export const StyledButton = styled.button`
     outline: none;
     border: none;
   }
-  span{
+  span {
     color: ${({ color }) => color || "#ffffff"};
   }
   /* @media (max-width: 700px) {

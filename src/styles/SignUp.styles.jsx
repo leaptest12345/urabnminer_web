@@ -1,5 +1,6 @@
 import styled, { keyframes } from "styled-components";
-
+const BackImg =
+  "https://c4.wallpaperflare.com/wallpaper/665/162/516/tunnel-tracks-light-trees-wallpaper-preview.jpg";
 export const InputText = styled.span`
   font-size: 1em;
   color: black;
@@ -15,6 +16,7 @@ export const InputContainer = styled.div`
   margin-inline: 10px;
 `;
 export const Wrapper = styled.div`
+  /* background-image: url(${BackImg}); */
   display: flex;
   height: 100vh;
   width: 100vw;

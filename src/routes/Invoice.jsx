@@ -46,7 +46,6 @@ import {
   setDefaultValue,
 } from "./InvoiceController";
 import { Input } from "@mui/material";
-import GeneratePdf from "../utils/generatePdf";
 export default function Invoice() {
   const userID = localStorage.getItem("userID");
   const navigate = useNavigate();
@@ -72,7 +71,7 @@ export default function Invoice() {
   const isEditable = state?.invoiceDetail?.ID ? true : false;
   const customer = state?.customerDetail || customerDetail;
   useEffect(() => {
-    if (state?.invoiceDetail?.ID) {
+    if (isEditable) {
       getAllData();
     }
     getCustomerList();
@@ -409,7 +408,6 @@ export default function Invoice() {
     <Wrapper>
       <LoaderSpinner visible={loading} isCenter={true} />
       <Title>New Invoice</Title>
-
       <a
         href={`mailto:sutharbipinn25899@gmail.com?subject=${subject}&body=${body}`}
       >
@@ -589,6 +587,7 @@ export default function Invoice() {
                 width="48%"
               />
             </Row>
+            {isEditable ? <Button title="ResendMail" width="100%" /> : null}
           </InvoiceClient>
         </InvoiceView2>
       </InvoiceContainer>
