@@ -38,7 +38,8 @@ export const SideBarHeader = styled.div`
 
 export const SideBarContent = styled.div`
   margin-bottom: 10px;
-  padding: 5px;
+  padding: 10px;
+  padding-inline: 5px;
   display: flex;
   border-radius: 6px;
   color: ${({ background }) => (background ? "black" : "white")};
@@ -115,6 +116,7 @@ export const SideBarFooter2 = styled.div`
   margin-top: 25px;
   border-top: 1px solid grey;
   @media (max-width: 900px) {
+    margin-top: 0;
     display: flex;
     border: 0;
     justify-content: space-between;

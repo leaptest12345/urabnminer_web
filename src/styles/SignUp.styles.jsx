@@ -61,7 +61,7 @@ export const ImageProfileView = styled.div`
   background-color: white;
   border-radius: 100%;
   display: flex;
-  height: 21vh;
+  /* height: 21vh; */
   align-items: center;
   justify-content: center;
   margin: 1%;

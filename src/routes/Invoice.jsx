@@ -408,11 +408,11 @@ export default function Invoice() {
     <Wrapper>
       <LoaderSpinner visible={loading} isCenter={true} />
       <Title>New Invoice</Title>
-      <a
+      {/* <a
         href={`mailto:sutharbipinn25899@gmail.com?subject=${subject}&body=${body}`}
       >
         Click to Send an Email
-      </a>
+      </a> */}
 
       <View_6>
         <Text_reg>Choose Customer:</Text_reg>
@@ -581,7 +581,9 @@ export default function Invoice() {
               <Button
                 title="Preview"
                 onClick={() =>
-                  navigate("/generatepdf", { state: { data: email } })
+                  InvoiceItems.length != 0
+                    ? navigate("/generatepdf", { state: { data: email } })
+                    : null
                 }
                 background="lightblue"
                 width="48%"

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Button from "../components/Button";
 import LoaderSpinner from "../components/Loader";
-import SearchAutoComplete from "../components/SearchAutoComplete";
 import { getData, setData } from "../utils/firebase/firebaseApi";
 import { TextArea, Title, Wrapper } from "../utils/GlobalStyles";
 import { toastAlert } from "../utils/toastAlert";
@@ -45,7 +44,6 @@ export default function Feedback() {
       <LoaderSpinner isCenter={true} visible={loading} />
       <Title>Feedback</Title>
       <FeedbackContainer>
-        {/* <SearchAutoComplete /> */}
         <TextArea
           value={feedback}
           style={textAreaStyle}

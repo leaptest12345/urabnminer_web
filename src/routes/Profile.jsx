@@ -135,20 +135,6 @@ export default function Profile({}) {
           <PhotoCapture handleChange={handlePhoto} />
         </ProfileImgView>
         <ProfileInput>
-          <InputText>PhoneNumber:</InputText>
-          <Row>
-            <SearchAutoComplete
-              defaultValue={countryName + ""}
-              width="30%"
-              onChange={onSearchChange}
-            />
-            <StyledInput
-              width="67%"
-              value={phoneNumber}
-              error={phoneNumber ? !phoneReg.test(phoneNumber) : false}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-            />
-          </Row>
           <Input
             value={firstName}
             label="FirstName"
@@ -159,6 +145,21 @@ export default function Profile({}) {
             label="LastName"
             onChange={(e) => setLastName(e.target.value)}
           />
+          <InputText>PhoneNumber:</InputText>
+          {/* <Row> */}
+          {/* <SearchAutoComplete
+              defaultValue={countryName + ""}
+              width="30%"
+              onChange={onSearchChange}
+            /> */}
+          <StyledInput
+            // width="67%"
+            value={phoneNumber}
+            error={phoneNumber ? !phoneReg.test(phoneNumber) : false}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+          />
+          {/* </Row> */}
+
           <Input
             value={email}
             label="Email"

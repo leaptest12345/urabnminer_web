@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
 import jsPDF from "jspdf";
 import pdfMake from "pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
 import htmlToPdfmake from "html-to-pdfmake";
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
@@ -10,105 +11,63 @@ import ImageModal from "../components/ImageModal";
 import { InvoiceImage } from "../styles/Invoice.styles";
 import { convertIntoDoller } from "./ConvertIntoDoller";
 import Button from "../components/Button";
-
+import ReportTemplate from "./ReportTemplate";
 export default function GeneratePdf() {
+  const reportTemplateRef = useRef(null);
+
+  // const getPDF = async () => {
+  //   const htmlToPDF = new HTMLToPDF(`
+  //     <div>Hello world</div>
+  //   `);
+  //   try {
+  //     const pdf = await htmlToPDF.convert();
+  //     console.log("new Pdf", pdf);
+  //     // do something with the PDF file buffer
+  //   } catch (err) {
+  //     // do something on error
+  //   }
+  // };
   function printDocument() {
     //const input = document.getElementById('divToPrint');
-    const doc = new jsPDF();
-    //get table html'
-
+    // const doc = new jsPDF();
+    // doc.html(reportTemplateRef.current, {
+    //   async callback(doc) {
+    //     console.log("new generated pdf", doc);
+    //     await doc.save("document.pdf");
+    //   },
+    // });
+    // get table html
     const pdfTable = document.getElementById("divToPrint");
-    //html to pdf format
+    // //html to pdf format
     var html = htmlToPdfmake(pdfTable.innerHTML);
-
     const documentDefinition = { content: html };
-    const result = pdfMake.createPdf(documentDefinition).open();
-    console.log(result);
+    pdfMake.vfs = pdfFonts.pdfMake.vfs;
+    var pdf = pdfMake.createPdf(documentDefinition);
+    pdf.open();
   }
+
   const { state } = useLocation();
   const { invoiceID, date, customer, InvoiceItems, amount, paymentType } =
     state.data;
   console.log(state.data);
   const PdfContainer = styled.div`
     margin: 0;
-    background-color: rebeccapurple;
+    background-color: whitesmoke;
     height: 100vh;
     width: 100vw;
     padding: 5%;
   `;
-  const ItemContainer = styled.div`
-    background-color: blue;
-  `;
+  const ItemContainer = styled.div``;
   const ItemProduct = styled.div`
-    background-color: lightsteelblue;
+    width: 80%;
   `;
 
   return (
-    <PdfContainer id="divToPrint">
-      <ItemContainer>
-        {InvoiceItems.map((item, index) => {
-          return (
-            <>
-              <ItemProduct>
-                <Row>
-                  <Bold_1>Item</Bold_1>
-                  <SmallBold>{item.ItemName}</SmallBold>
-                </Row>
-                {item.WeightType == "Unit" ? (
-                  <>
-                    <Row>
-                      <Bold_1>Unit</Bold_1>
-                      <SmallBold>{item.details.Unit}</SmallBold>
-                    </Row>
-                    <Row>
-                      <Bold_1>Price</Bold_1>
-                      <SmallBold>{item.details.UnitPrice}</SmallBold>
-                    </Row>
-                  </>
-                ) : (
-                  <>
-                    <Row>
-                      <Bold_1>GrossWeight</Bold_1>
-                      <SmallBold>{item.details.GrossWeight}</SmallBold>
-                    </Row>
-                    <Row>
-                      <Bold_1>TareWeight</Bold_1>
-                      <SmallBold>{item.details.TareWeight}</SmallBold>
-                    </Row>
-                    <Row>
-                      <Bold_1>NetWeight</Bold_1>
-                      <SmallBold>{item.details.NetWeight}</SmallBold>
-                    </Row>
-                    <Row>
-                      <Bold_1>Price</Bold_1>
-                      <SmallBold>{item.details.WeightPrice}</SmallBold>
-                    </Row>
-                  </>
-                )}
-                <Row>
-                  <Bold_1>Total</Bold_1>
-                  <SmallBold>{convertIntoDoller(item.details.Total)}</SmallBold>
-                </Row>
-                <InvoiceImage>
-                  {item.IMG &&
-                    item.IMG.map((item, index) => {
-                      return (
-                        <>
-                          <ImageModal
-                            url={item.url}
-                            margin={true}
-                            key={index + 1 + "?"}
-                          />
-                        </>
-                      );
-                    })}
-                </InvoiceImage>
-              </ItemProduct>
-            </>
-          );
-        })}
-      </ItemContainer>
-      <Button title="generate" onClick={() => printDocument()} />
-    </PdfContainer>
+    <div id="divToPrint">
+      <div ref={reportTemplateRef}>
+        <ReportTemplate invoiceItems={InvoiceItems} />
+      </div>
+      <button onClick={() => printDocument()}>generate Pdf</button>
+    </div>
   );
 }

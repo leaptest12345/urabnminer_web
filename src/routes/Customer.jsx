@@ -26,6 +26,7 @@ import { uploadCustomerImage } from "../utils/firebase/firebaseStorage";
 import LoaderSpinner from "../components/Loader";
 import { emailReg } from "../utils/constants/commonConst";
 import { useLocation, useNavigate } from "react-router-dom";
+import { RouteName } from "../utils/constants/routeNavigate";
 export default function Customer() {
   const navigate = useNavigate();
   const [firstName, setFirstName] = useState("");
@@ -245,8 +246,9 @@ export default function Customer() {
         title="Start Invoice"
         onClick={() => {
           if (custId != null) {
-            console.log("inside invigation");
-            navigate("/invoice", { state: { customerDetail: customerDetail } });
+            navigate("/invoice", {
+              state: { customerDetail: customerDetail },
+            });
           } else {
             console.log("outside");
             if (!alredyExist()) {

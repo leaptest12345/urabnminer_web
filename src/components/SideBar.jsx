@@ -20,7 +20,7 @@ import { RowView } from "../styles/Invoice.styles";
 
 export default function SideBar() {
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [sideBardId, setSideBarId] = useState(1);
   const { signOut } = React.useContext(AuthContext);
   const [user, setUser] = useState(null);
@@ -105,7 +105,11 @@ export default function SideBar() {
             <SideBarTitle isOpen={isOpen}>Settigs</SideBarTitle>
           </SideBarContent>
         </Link>
-        <SideBarContent isOpen={isOpen} onClick={() => signOutUser()}>
+        <SideBarContent
+          isOpen={isOpen}
+          onClick={() => signOutUser()}
+          background={path == "/logout" ? true : false}
+        >
           <LogoutIcon style={img} />
           <SideBarTitle isOpen={isOpen}>LogOut</SideBarTitle>
         </SideBarContent>
