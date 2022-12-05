@@ -9,6 +9,7 @@ export default function Button({
   background,
   color,
   to,
+  height,
 }) {
   return (
     <StyledButton
@@ -17,6 +18,7 @@ export default function Button({
       color={color}
       onClick={onClick}
       width={width}
+      height={height}
     >
       <ButtonText>{title}</ButtonText>
     </StyledButton>
