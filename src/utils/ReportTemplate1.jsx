@@ -2,7 +2,6 @@ import { convertIntoDoller } from "./ConvertIntoDoller";
 
 const ReportTemplate1 = ({ data }) => {
   const { invoiceID, date, customer, InvoiceItems, amount, paymentType } = data;
-  console.log(customer);
 
   const styles = {
     page: {

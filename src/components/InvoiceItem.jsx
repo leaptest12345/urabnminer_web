@@ -59,9 +59,7 @@ export default function InvoiceItem({
         });
       });
       setItemList(arr);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   useEffect(() => {
     getItemList();

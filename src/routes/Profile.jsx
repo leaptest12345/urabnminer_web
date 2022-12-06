@@ -47,7 +47,6 @@ export default function Profile({}) {
     try {
       const id = localStorage.getItem("userID");
       const userDetail = await getData(`USERS/${id}`);
-      console.log(userDetail);
       setFirstName(userDetail?.firstName);
       setLastName(userDetail?.lastName);
       setEmail(userDetail?.email);
@@ -65,11 +64,8 @@ export default function Profile({}) {
       if (emailReg.test(email)) {
         if (phoneReg.test(phoneNumber)) {
           if (changePhoto) {
-            console.log("inside changephotot");
             if (photoName) {
-              console.log("inside 123");
               const value = await deleteProfileImage(photoName);
-              console.log(value);
             }
             const uploadProfile = await uploadProfileImage(changePhoto);
             await updateData(`USERS/${id}`, {
@@ -82,7 +78,6 @@ export default function Profile({}) {
               countryCode: countryCode,
             });
           } else {
-            console.log("not dvh");
             await updateData(`USERS/${id}`, {
               firstName: firstName,
               lastName: lastName,
@@ -91,8 +86,6 @@ export default function Profile({}) {
               countryCode: countryCode,
             });
           }
-          // const result = await changeEmail(email);
-          // console.log(result);
           toastAlert(1, "Profile has been updated!");
           setLoading(false);
         } else {
@@ -104,7 +97,6 @@ export default function Profile({}) {
         setLoading(false);
       }
     } catch (error) {
-      console.log(error);
       setLoading(false);
     }
   };
@@ -118,7 +110,6 @@ export default function Profile({}) {
     }
   };
   const onSearchChange = (e, value) => {
-    console.log(value.label);
     setCountryCode(value.phone);
     setCountryName(value.label);
   };

@@ -23,7 +23,6 @@ export default function Product() {
   const [pdfData1, setPdfData1] = useState("");
   // const navigate=
   const { state } = useLocation();
-  console.log(state);
   const navigate = useNavigate();
   const getProductList = async () => {
     try {
@@ -31,7 +30,6 @@ export default function Product() {
       setProductList(ArrayConverter(list));
       setLoading(false);
     } catch (error) {
-      console.log(error);
       setLoading(false);
     }
   };

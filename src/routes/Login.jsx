@@ -49,11 +49,9 @@ export default function Login() {
       const loginResult = await LoginAuth(email, pass);
       if (loginResult) {
         const user = userInDatabase();
-        console.log("user deta", user);
         if (user) {
           if (user.isApproved) {
             signIn(user.ID + "");
-            console.log(user);
             toastAlert(1, "Login successfully!");
           } else {
             toastAlert(0, "User Haven't Aprroved From The Admin!");
@@ -65,7 +63,6 @@ export default function Login() {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      console.log(error);
       toastAlert(0, error);
     }
   };

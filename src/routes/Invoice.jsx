@@ -82,7 +82,7 @@ export default function Invoice() {
     }
     setTimeout(() => {
       CalculateSameItems();
-    }, 2000);
+    }, 5000);
     getCustomerList();
     getPaymentList();
     getUserDetail();
@@ -133,7 +133,6 @@ export default function Invoice() {
     if (value == null) {
       setCustomerDetail(null);
     } else {
-      console.log("customerdaetails", value);
       setCustomerDetail(value);
     }
   };
@@ -151,7 +150,6 @@ export default function Invoice() {
       const invoiceData = await getData(`/INVOICE/${invoiceID}`);
       let arr = [];
       ArrayConverter(invoiceData).map((item, index) => {
-        console.log(item.WeightType);
         arr.push({
           id: item.ID,
           IMG: invoiceImages
@@ -175,12 +173,10 @@ export default function Invoice() {
       setInvoiceItems(arr);
       setLoading(false);
     } catch (error) {
-      console.log(error);
       setLoading(false);
     }
   };
   const onItemDelete = async (item, index) => {
-    console.log("before filter", InvoiceItems);
     setLoading(true);
     setInvoiceItems([]);
     if (InvoiceItems.length == 1) {
@@ -196,7 +192,6 @@ export default function Invoice() {
       }
     } else {
       const arr = InvoiceItems.filter((item1) => item1.id != index + 1);
-      console.log("after filter", arr);
       setTimeout(() => {
         setInvoiceItems(arr);
       }, 1000);
@@ -264,7 +259,6 @@ export default function Invoice() {
           IMG: [],
         },
       ]);
-      console.log(InvoiceItems);
       setTotal();
     }
   };
@@ -425,9 +419,7 @@ export default function Invoice() {
       });
       return temp;
     };
-    const data = [...InvoiceItems];
     InvoiceItems.map((item) => {
-      console.log(item);
       if (alredyExist(item.ItemName, item.WeightType)) {
         const index = emailItems.findIndex(
           (value) =>
@@ -543,7 +535,6 @@ export default function Invoice() {
               WeightPrice,
               Total,
             } = item.details;
-            console.log(item.ItemName);
             return (
               <InvoiceItem
                 key={index + 1 + ""}

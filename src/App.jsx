@@ -47,9 +47,7 @@ function App() {
     try {
       const user = localStorage.getItem("userID");
       setUser(user);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   useEffect(() => {
     getLocalDetail();

@@ -21,7 +21,6 @@ export default function ResetPassword() {
         setEmail("");
       }
     } catch (error) {
-      console.log("email", error);
       toastAlert(0, error);
     }
   };

@@ -47,7 +47,6 @@ export default function Customer() {
 
   const getCustomerDetail = async (value) => {
     try {
-      console.log("valie", value);
       setCustomerDetail(value);
       if (value == null) {
         clearDetail();
@@ -63,7 +62,6 @@ export default function Customer() {
         `CUSTOMER_IMG/user:${id}/customer:${value.ID}`
       );
       const images = ArrayConverter(imagesDetail);
-      console.log(images);
       if (images.length != 0) {
         setPhoto(images[0]?.url);
         setPhoto1(images[1]?.url);
@@ -106,7 +104,6 @@ export default function Customer() {
   const alredyExist = () => {
     let result = false;
     customerList.map((item) => {
-      console.log(item.BusinessEmail, email, item.BusinessEmail == email);
       if (item.BusinessEmail == email) result = true;
     });
     return result;
@@ -163,7 +160,6 @@ export default function Customer() {
   }, []);
 
   const onStartInvoice = () => {
-    console.log("abcd vivek");
     navigate("/invoice");
   };
   const capturePhoto = (e) => {
@@ -188,7 +184,7 @@ export default function Customer() {
       <View_6>
         <SearchAutoComplete
           searchOptions={customerList}
-          onChange={(e, value) => console.log(value) + getCustomerDetail(value)}
+          onChange={(e, value) => getCustomerDetail(value)}
         />
       </View_6>
       <CustomerBox>
@@ -250,7 +246,6 @@ export default function Customer() {
               state: { customerDetail: customerDetail },
             });
           } else {
-            console.log("outside");
             if (!alredyExist()) {
               if (emailReg.test(email)) createCustomer();
               else toastAlert(0, "Please Enter Valid Email Address!");
