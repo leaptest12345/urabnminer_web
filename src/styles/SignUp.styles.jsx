@@ -36,7 +36,7 @@ export const SignUpWrapper = styled.div`
   flex-wrap: wrap;
   padding: 2em;
   width: 80%;
-  height: 85vh;
+  height: 90vh;
   background-color: whitesmoke;
   border-radius: 10px;
   overflow: "scroll";
@@ -50,7 +50,6 @@ export const SignUpContainer = styled.div`
   width: 70vw;
   grid-template-columns: 48% 48%;
   grid-column-gap: 2%;
-  height: 50vh;
   @media (max-width: 800px) {
     grid-template-columns: auto;
     height: auto;
@@ -61,8 +60,8 @@ export const ImageProfileView = styled.div`
   background-color: white;
   border-radius: 100%;
   display: flex;
-  /* height: 21vh; */
+  width: 150px;
+  height: 150px;
   align-items: center;
   justify-content: center;
-  margin: 1%;
 `;

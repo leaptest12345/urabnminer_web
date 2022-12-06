@@ -38,7 +38,7 @@ export default function Login() {
   const userInDatabase = () => {
     let result = null;
     users.map((item) => {
-      if (item.email == email) result = item.ID;
+      if (item.email == email) result = item;
     });
     return result;
   };
@@ -49,10 +49,15 @@ export default function Login() {
       const loginResult = await LoginAuth(email, pass);
       if (loginResult) {
         const user = userInDatabase();
+        console.log("user deta", user);
         if (user) {
-          signIn(user + "");
-          console.log(user);
-          toastAlert(1, "Login successfully!");
+          if (user.isApproved) {
+            signIn(user.ID + "");
+            console.log(user);
+            toastAlert(1, "Login successfully!");
+          } else {
+            toastAlert(0, "User Haven't Aprroved From The Admin!");
+          }
         } else {
           toastAlert(0, "User Doen't Exist!");
         }

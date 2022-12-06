@@ -1,11 +1,6 @@
-import React from "react";
-import { useLocation } from "react-router-dom";
 import { convertIntoDoller } from "../ConvertIntoDoller";
 
-export default function Email1() {
-  const {
-    state: { data },
-  } = useLocation();
+export default function Email1(data) {
   const { invoiceID, date, customer, InvoiceItems, amount, paymentType } = data;
   return `<!DOCTYPE html>
     <html>
@@ -241,13 +236,11 @@ export default function Email1() {
             amount &&
             `<table class="meta" >
           <tr >
-           
             <th class='th_'><span contenteditable>PaymentType</span></th>
             <th class='th_'><span contenteditable>Date</span></th>
             <th class='th_'><span contenteditable>amount Due</span></th>
           </tr>
             <tr>
-           
             <td class="td_">${paymentType}</td>
             <td class="td_">${(date + "").split("GMT")[0]}</td>
             <td class="td_">${convertIntoDoller(amount)}</td>

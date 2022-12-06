@@ -3,6 +3,7 @@ import {
   getDownloadURL,
   ref,
   uploadBytesResumable,
+  uploadString,
 } from "firebase/storage";
 import { storage } from "./firebaseConfig";
 
@@ -125,13 +126,19 @@ export const deleteProfileImage = async (name) => {
       });
   });
 };
-export const uploadPdf = async (imgfile, user, customer, invoice, name) => {
+export const uploadPdf = async (imgfile) => {
   return new Promise((resolve, reject) => {
+    const metadata = {
+      contentType: "application/pdf",
+    };
     const storageRef = ref(
       storage,
-      `/PDF/user:${user}/customer:${customer}/invoice:${invoice}/${name}`
+      `/PDF/user:${25}/customer:${25}/invoice:${25}/${"invoice.pdf"}`
     );
-    const uploadTask = uploadBytesResumable(storageRef, imgfile);
+    // uploadString(storageRef, imgfile, "data_url", metadata).then((value) => {
+    //   resolve(value);
+    // });
+    const uploadTask = uploadBytesResumable(storageRef, imgfile, metadata);
     uploadTask.on(
       "state_changed",
       (snapshot) => {

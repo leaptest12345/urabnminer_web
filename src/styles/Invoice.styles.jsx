@@ -23,6 +23,7 @@ export const InvoiceView1 = styled.div`
 `;
 export const InvoiceView2 = styled.div`
   display: grid;
+  /* display: none; */
   position: fixed;
   right: 0;
   top: 7%;
@@ -159,7 +160,7 @@ export const DateView = styled.div`
   justify-content: center;
   align-items: center;
   display: flex;
-  z-index:1111;
+  z-index: 1111;
   /* :hover {
     background-color: #2a547e;
     cursor: pointer;

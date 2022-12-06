@@ -1,6 +1,6 @@
 import { convertIntoDoller } from "./ConvertIntoDoller";
 
-const ReportTemplate = ({ data }) => {
+const ReportTemplate1 = ({ data }) => {
   const { invoiceID, date, customer, InvoiceItems, amount, paymentType } = data;
   console.log(customer);
 
@@ -10,15 +10,11 @@ const ReportTemplate = ({ data }) => {
       marginRight: "5rem",
       color: "black",
       padding: "2%",
-      // backgroundColor: "red",
     },
-
     columnLayout: {
       display: "flex",
       justifyContent: "space-between",
-      // backgroundColor: "green",
     },
-
     column: {
       display: "flex",
       flexDirection: "column",
@@ -29,14 +25,12 @@ const ReportTemplate = ({ data }) => {
       display: "flex",
       flexDirection: "column",
       color: "black",
-      // backgroundColor: "lightblue",
       width: "49%",
     },
     spacer2: {
       height: "2rem",
       color: "black",
     },
-
     marginb0: {
       marginBottom: 10,
       color: "black",
@@ -104,6 +98,20 @@ const ReportTemplate = ({ data }) => {
       marginBottom: "30px",
     },
   };
+
+  function toDataUrl(url, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+      var reader = new FileReader();
+      reader.onloadend = function () {
+        callback(reader.result);
+      };
+      reader.readAsDataURL(xhr.response);
+    };
+    xhr.open("GET", url);
+    xhr.responseType = "blob";
+    xhr.send();
+  }
 
   return (
     <>
@@ -181,12 +189,14 @@ const ReportTemplate = ({ data }) => {
               </div>
               <div style={styles.wrapView}>
                 {item.IMG.map((item, index) => {
-                  return (
-                    <img
-                      style={styles.img}
-                      src={`data:image/png;base64,${item.url}`}
-                    />
-                  );
+                  toDataUrl(item.url, function (myBase64) {
+                    return (
+                      <img
+                        style={styles.img}
+                        src={`data:image/png;base64,${myBase64}`}
+                      />
+                    );
+                  });
                 })}
               </div>
             </div>
@@ -213,4 +223,4 @@ const ReportTemplate = ({ data }) => {
   );
 };
 
-export default ReportTemplate;
+export default ReportTemplate1;

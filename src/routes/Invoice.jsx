@@ -35,7 +35,10 @@ import { convertIntoDoller } from "../utils/ConvertIntoDoller";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { uniqueId } from "../utils/uniqueId";
-import { uploadInvoiceImages } from "../utils/firebase/firebaseStorage";
+import {
+  uploadInvoiceImages,
+  uploadPdf,
+} from "../utils/firebase/firebaseStorage";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   onGrossChange,
@@ -46,6 +49,8 @@ import {
   setDefaultValue,
 } from "./InvoiceController";
 import { Input } from "@mui/material";
+import PdfContainer from "../utils/PdfContainer";
+import { ContactUs } from "../utils/sendMail";
 export default function Invoice() {
   const userID = localStorage.getItem("userID");
   const navigate = useNavigate();
@@ -63,6 +68,7 @@ export default function Invoice() {
   const [IMG, setIMG] = useState([]);
   const [date, setDate] = useState(new Date().toString().substring(0, 15));
   const [user, setUser] = useState(null);
+  const [emailItems, setEmailItems] = useState([]);
   const customerID =
     state?.invoiceDetail?.customerId ||
     state?.customerDetail?.ID ||
@@ -74,6 +80,9 @@ export default function Invoice() {
     if (isEditable) {
       getAllData();
     }
+    setTimeout(() => {
+      CalculateSameItems();
+    }, 2000);
     getCustomerList();
     getPaymentList();
     getUserDetail();
@@ -103,6 +112,9 @@ export default function Invoice() {
       const customerDetail = await getData(`USER_CUSTOMER/${userID}/CUSTOMER`);
       let arr = [];
       ArrayConverter(customerDetail).map((item) => {
+        if (item.ID == customerID) {
+          setCustomerDetail(item);
+        }
         arr.push({
           ...item,
           label:
@@ -389,6 +401,7 @@ export default function Invoice() {
               await createInvoice();
               setLoading(false);
               navigate("/draft");
+              CalculateSameItems();
             } catch (error) {
               setLoading(false);
             }
@@ -401,6 +414,68 @@ export default function Invoice() {
       toastAlert(0, "Please Select Customer!");
     }
   };
+  const CalculateSameItems = () => {
+    setEmailItems([]);
+    const alredyExist = (itemname, WeightType) => {
+      let temp = false;
+      emailItems.map((item) => {
+        if (item.ItemName == itemname && item.WeightType == WeightType) {
+          temp = true;
+        }
+      });
+      return temp;
+    };
+    const data = [...InvoiceItems];
+    InvoiceItems.map((item) => {
+      console.log(item);
+      if (alredyExist(item.ItemName, item.WeightType)) {
+        const index = emailItems.findIndex(
+          (value) =>
+            value.itemName == item.ItemName &&
+            value.WeightType == item.WeightType
+        );
+        if (emailItems[index].WeightType == "unit") {
+          const itemUnit = item.details.Unit;
+          const itemTotal = item.details.Total;
+          const emailUnit = emailItems[index].details.Unit;
+          const emailTotal = emailItems[index].details.Total;
+          const unit = parseFloat(emailUnit) + parseFloat(itemUnit);
+          const total = parseFloat(emailTotal) + parseFloat(itemTotal);
+          emailItems[index].details.Unit = unit;
+          emailItems[index].details.Total = total;
+          invoiceItem1.push({
+            index: index,
+            Unit: emailUnit,
+            Total: emailTotal,
+            NetWeight: 0,
+          });
+        } else {
+          const itemNetWeight = item.details.NetWeight;
+          const itemTotal1 = item.details.Total;
+          const emailNetWeight = emailItems[index].details.NetWeight;
+          const emailTotal1 = emailItems[index].details.Total;
+          const netWeight =
+            parseFloat(itemNetWeight) + parseFloat(emailNetWeight);
+          const total1 = parseFloat(itemTotal1) + parseFloat(emailTotal1);
+          emailItems[index].details.NetWeight = netWeight;
+          emailItems[index].details.Total = total1;
+          invoiceItem1.push({
+            index: index,
+            Unit: 0,
+            Total: emailTotal1,
+            NetWeight: emailNetWeight,
+          });
+        }
+      } else {
+        emailItems.push({
+          ItemName: item.ItemName,
+          WeightType: item.WeightType,
+          details: item.details,
+        });
+      }
+    });
+    console.log("emailItems", emailItems);
+  };
   const body = `<strong>Invoice Pdf1</strong><br/><p>invoice 1 url</p><br/><br/>
   <strong>Invoice Pdf2</strong><br/><p>invoice2 url</p>`;
   const subject = "UrbanMiner";
@@ -408,12 +483,10 @@ export default function Invoice() {
     <Wrapper>
       <LoaderSpinner visible={loading} isCenter={true} />
       <Title>New Invoice</Title>
-      {/* <a
-        href={`mailto:sutharbipinn25899@gmail.com?subject=${subject}&body=${body}`}
-      >
-        Click to Send an Email
-      </a> */}
-
+      {/* <div style={{ marginLeft: "-10px" }}>
+        <PdfContainer data={email} />
+      </div> */}
+      <ContactUs />
       <View_6>
         <Text_reg>Choose Customer:</Text_reg>
         <SearchAutoComplete
@@ -581,9 +654,7 @@ export default function Invoice() {
               <Button
                 title="Preview"
                 onClick={() =>
-                  InvoiceItems.length != 0
-                    ? navigate("/generatepdf", { state: { data: email } })
-                    : null
+                  navigate("pdfcontainer", { state: { data: email } })
                 }
                 background="lightblue"
                 width="48%"
