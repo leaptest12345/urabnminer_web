@@ -1,7 +1,7 @@
 import styled from "styled-components";
 export const StyledInput = styled.input`
   background-color: white;
-  height: 40px;
+  height: 35px;
   color: black;
   border-radius: 4px;
   padding-inline: 10px;

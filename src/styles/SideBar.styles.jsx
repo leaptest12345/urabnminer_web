@@ -38,7 +38,7 @@ export const SideBarHeader = styled.div`
 
 export const SideBarContent = styled.div`
   margin-bottom: 10px;
-  padding: 10px;
+  padding: 8px;
   padding-inline: 5px;
   display: flex;
   border-radius: 6px;
