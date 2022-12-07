@@ -42,6 +42,6 @@ const DEFAULT_ASSETS_RE = new RegExp(
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  // base: "/urabnminer_web/",
+  base: "/urabnminer_web/",
   assetsInclude: DEFAULT_ASSETS_RE,
 });
