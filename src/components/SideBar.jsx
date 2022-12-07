@@ -16,7 +16,6 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { AuthContext } from "../utils/AuthContext";
 import { getData } from "../utils/firebase/firebaseApi";
-import { RowView } from "../styles/Invoice.styles";
 
 export default function SideBar() {
   const navigate = useNavigate();
@@ -26,9 +25,9 @@ export default function SideBar() {
   const [user, setUser] = useState(null);
   const location = useLocation();
   const path = location.pathname;
-
   const SideBarContentView = isOpen ? SideBarContentView1 : SideBarContentView2;
   const SideBarFooter = isOpen ? SideBarFooter1 : SideBarFooter2;
+
   const signOutUser = () => {
     navigate("/");
     signOut();
@@ -43,9 +42,11 @@ export default function SideBar() {
       console.log(error);
     }
   };
+
   useEffect(() => {
     getuserDetail();
   }, []);
+
   const img = { background: "none", width: 20, height: 20 };
 
   return (
@@ -75,7 +76,6 @@ export default function SideBar() {
           {user?.firstName + "".substring(0, 10)}
         </SideBarTitle>
       </RowView> */}
-
       <SideBarContentView>
         {SIDEBAR.map((item, index) => {
           return (

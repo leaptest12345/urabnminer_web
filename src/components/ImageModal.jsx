@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Lightbox } from "react-modal-image";
 import { ModalImage } from "../styles/ModalImage.styles";
-
 export default function ImageModal({
   url,
   style,
@@ -27,9 +26,9 @@ export default function ImageModal({
         style={style}
         src={src}
       />
-      {imageModal && !disable && url ? (
+      {imageModal && !disable && src ? (
         <Lightbox
-          large={url}
+          large={src}
           alt="UrbanMiner"
           onClose={() => setImageModal(false)}
         />

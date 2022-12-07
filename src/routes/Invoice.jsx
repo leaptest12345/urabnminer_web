@@ -50,6 +50,7 @@ import {
 } from "./InvoiceController";
 import { Input } from "@mui/material";
 import { ContactUs } from "../utils/sendMail";
+import { toDataURL } from "../utils/toDataURL";
 export default function Invoice() {
   const userID = localStorage.getItem("userID");
   const navigate = useNavigate();
@@ -83,9 +84,7 @@ export default function Invoice() {
       getAllData();
     }
     console.log("invoicedtyep", invoiceType);
-    setTimeout(() => {
-      CalculateSameItems();
-    }, 10000);
+
     getCustomerList();
     getPaymentList();
     getUserDetail();
@@ -187,7 +186,6 @@ export default function Invoice() {
           },
         });
       });
-      CalculateSameItems(arr);
       setInvoiceItems(arr);
       setLoading(false);
     } catch (error) {
@@ -280,20 +278,7 @@ export default function Invoice() {
       setTotal();
     }
   };
-  function toDataURL(url, callback) {
-    let xhRequest = new XMLHttpRequest();
-    xhRequest.onload = function () {
-      let reader = new FileReader();
-      reader.onloadend = function () {
-        callback(reader.result);
-        console.log(reader.result);
-      };
-      reader.readAsDataURL(xhRequest.response);
-    };
-    xhRequest.open("GET", url);
-    xhRequest.responseType = "blob";
-    xhRequest.send();
-  }
+
   const onImagePic = (e, item) => {
     if (e.target.files.length !== 0) {
       toDataURL(URL.createObjectURL(e.target.files[0]), function (value) {

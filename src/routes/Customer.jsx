@@ -28,6 +28,7 @@ import LoaderSpinner from "../components/Loader";
 import { emailReg } from "../utils/constants/commonConst";
 import { useLocation, useNavigate } from "react-router-dom";
 import { RouteName } from "../utils/constants/routeNavigate";
+import { toDataURL } from "../utils/toDataURL";
 export default function Customer() {
   const navigate = useNavigate();
   const [firstName, setFirstName] = useState("");
@@ -64,9 +65,15 @@ export default function Customer() {
       );
       const images = ArrayConverter(imagesDetail);
       if (images.length != 0) {
-        setPhoto(images[0]?.url);
-        setPhoto1(images[1]?.url);
-        setPhoto2(images[2]?.url);
+        setPhoto({
+          url: images[0]?.url,
+        });
+        setPhoto1({
+          url: images[1]?.url,
+        });
+        setPhoto2({
+          url: images[2]?.url,
+        });
       }
     } catch (error) {
       console.log(error);
@@ -118,17 +125,17 @@ export default function Customer() {
         toastAlert(0, "Customer photos are required!");
       else {
         const customerID = uniqueId;
-        const PhotoUrl = await uploadCustomerImage(photo, id, customerID);
+        const PhotoUrl = await uploadCustomerImage(photo.url, id, customerID);
         await setData(`CUSTOMER_IMG/user:${id}/customer:${customerID}/1`, {
           photoName: "BUSINESS_CARD",
           url: PhotoUrl,
         });
-        const PhotoUrl1 = await uploadCustomerImage(photo1, id, customerID);
+        const PhotoUrl1 = await uploadCustomerImage(photo1.url, id, customerID);
         await setData(`CUSTOMER_IMG/user:${id}/customer:${customerID}/2`, {
           photoName: "SCRAP_PERMIT",
           url: PhotoUrl1,
         });
-        const PhotoUrl2 = await uploadCustomerImage(photo2, id, customerID);
+        const PhotoUrl2 = await uploadCustomerImage(photo2.url, id, customerID);
         await setData(`CUSTOMER_IMG/user:${id}/customer:${customerID}/3`, {
           photoName: "THUMB_PRINT",
           url: PhotoUrl2,
@@ -143,13 +150,13 @@ export default function Customer() {
           userID: id,
         });
         toastAlert(1, "Customer Successfully Created!");
-        navigate("/product", {
-          state: {
-            customerDetail: {
-              ID: uniqueId,
-            },
-          },
-        });
+        // navigate("/product", {
+        //   state: {
+        //     customerDetail: {
+        //       ID: uniqueId,
+        //     },
+        //   },
+        // });
       }
       setLoading(false);
     } catch (error) {
@@ -165,17 +172,32 @@ export default function Customer() {
   };
   const capturePhoto = (e) => {
     if (e.target.files.length !== 0) {
-      setPhoto(e.target.files[0]);
+      toDataURL(URL.createObjectURL(e.target.files[0]), function (value) {
+        setPhoto({
+          url: e.target.files[0],
+          base64: value,
+        });
+      });
     }
   };
   const capturePhoto1 = (e) => {
     if (e.target.files.length !== 0) {
-      setPhoto1(e.target.files[0]);
+      toDataURL(URL.createObjectURL(e.target.files[0]), function (value) {
+        setPhoto1({
+          url: e.target.files[0],
+          base64: value,
+        });
+      });
     }
   };
   const capturePhoto2 = (e) => {
     if (e.target.files.length !== 0) {
-      setPhoto2(e.target.files[0]);
+      toDataURL(URL.createObjectURL(e.target.files[0]), function (value) {
+        setPhoto2({
+          url: e.target.files[0],
+          base64: value,
+        });
+      });
     }
   };
   return (
@@ -229,21 +251,21 @@ export default function Customer() {
           <Text_reg>Capture on ID or Business Card for your records</Text_reg>
           <Row>
             <PhotoCapture handleChange={(e) => capturePhoto(e)} />
-            <ImageModal url={photo} />
+            <ImageModal url={photo?.base64 ? photo.base64 : photo.url} />
           </Row>
         </CustomerPhotoView>
         <CustomerPhotoView>
           <Text_reg>Capture on ID or Business Card for your records</Text_reg>
           <Row>
             <PhotoCapture handleChange={(e) => capturePhoto1(e)} />
-            <ImageModal url={photo1} />
+            <ImageModal url={photo1?.base64 ? photo1.base64 : photo1.url} />
           </Row>
         </CustomerPhotoView>
         <CustomerPhotoView>
           <Text_reg>Capture on ID or Business Card for your records</Text_reg>
           <Row>
             <PhotoCapture handleChange={(e) => capturePhoto2(e)} />
-            <ImageModal url={photo2} />
+            <ImageModal url={photo2?.base64 ? photo2.base64 : photo2.url} />
           </Row>
         </CustomerPhotoView>
       </CustomerBox>

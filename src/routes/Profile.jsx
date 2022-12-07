@@ -31,6 +31,7 @@ import {
   Text_reg,
 } from "../utils/GlobalStyles";
 import { toastAlert } from "../utils/toastAlert";
+import { toDataURL } from "../utils/toDataURL";
 export default function Profile({}) {
   const [photo, setPhoto] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -50,7 +51,9 @@ export default function Profile({}) {
       setFirstName(userDetail?.firstName);
       setLastName(userDetail?.lastName);
       setEmail(userDetail?.email);
-      setPhoto(userDetail?.photo);
+      setPhoto({
+        url: userDetail?.photo,
+      });
       setPhotoName(userDetail?.photoName);
       setPhoneNumber(userDetail?.phoneNumber);
       setCountryName(userDetail?.countryName);
@@ -64,10 +67,7 @@ export default function Profile({}) {
       if (emailReg.test(email)) {
         if (phoneReg.test(phoneNumber)) {
           if (changePhoto) {
-            if (photoName) {
-              const value = await deleteProfileImage(photoName);
-            }
-            const uploadProfile = await uploadProfileImage(changePhoto);
+            const uploadProfile = await uploadProfileImage(changePhoto.url);
             await updateData(`USERS/${id}`, {
               photo: uploadProfile[0],
               photoName: uploadProfile[1],
@@ -88,6 +88,9 @@ export default function Profile({}) {
           }
           toastAlert(1, "Profile has been updated!");
           setLoading(false);
+          if (photoName) {
+            const value = await deleteProfileImage(photoName);
+          }
         } else {
           toastAlert(0, "Please Enter Valid Phone Number!");
           setLoading(false);
@@ -105,8 +108,10 @@ export default function Profile({}) {
   }, []);
   const handlePhoto = (e) => {
     if (e.target.files.length !== 0) {
-      setPhoto(e.target.files[0]);
-      setChangePhoto(e.target.files[0]);
+      toDataURL(URL.createObjectURL(e.target.files[0]), function (value) {
+        setPhoto({ url: e.target.files[0], base64: value });
+        setChangePhoto({ url: e.target.files[0], base64: value });
+      });
     }
   };
   const onSearchChange = (e, value) => {
@@ -121,7 +126,10 @@ export default function Profile({}) {
         <Text_reg>your profile photo</Text_reg>
         <ProfileImgView>
           <ImageView>
-            <ImageModal circle={true} url={photo || defautlUrl} />
+            <ImageModal
+              circle={true}
+              url={photo?.base64 ? photo.base64 : photo.url || defautlUrl}
+            />
           </ImageView>
           <PhotoCapture handleChange={handlePhoto} />
         </ProfileImgView>

@@ -22,6 +22,7 @@ import { toastAlert } from "../utils/toastAlert";
 import { AuthContext } from "../utils/AuthContext";
 import { ForgotLink } from "../styles/Login.styles";
 import { Text_reg } from "../utils/GlobalStyles";
+import { toDataURL } from "../utils/toDataURL";
 
 export default function SignUp() {
   const [photo, setPhoto] = useState("");
@@ -72,7 +73,7 @@ export default function SignUp() {
     try {
       setLoading(true);
       if (photo != "") {
-        const photoUrl = await uploadProfileImage(photo);
+        const photoUrl = await uploadProfileImage(photo.url);
         await setData(`USERS/${userId}`, {
           ID: userId,
           photo: photoUrl[0],
@@ -103,7 +104,12 @@ export default function SignUp() {
   };
   const photoCapture = (e) => {
     if (e.target.files.length !== 0) {
-      setPhoto(e.target.files[0]);
+      toDataURL(URL.createObjectURL(e.target.files[0]), function (value) {
+        setPhoto({
+          url: e.target.files[0],
+          base64: value,
+        });
+      });
     }
   };
   return (
@@ -113,7 +119,7 @@ export default function SignUp() {
         <ImageProfileView>
           <ImageModal
             style={{ marginBottom: photo ? null : "10px" }}
-            url={photo || defautlUrl}
+            url={photo?.base64 ? photo.base64 : photo.url || defautlUrl}
             disable={true}
           />
         </ImageProfileView>

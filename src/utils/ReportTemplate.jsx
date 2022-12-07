@@ -87,6 +87,7 @@ const ReportTemplate = ({ data }) => {
       height: "100px",
       borderRadius: "6px",
       marginRight: "20px",
+      marginTop: "20px",
     },
     footerSubView: {
       display: "flex",
