@@ -114,14 +114,14 @@ export const deleteProfileImage = async (name) => {
       });
   });
 };
-export const uploadPdf = async (imgfile) => {
+export const uploadPdf = async (imgfile,userID,customerID,invoiceID,name) => {
   return new Promise((resolve, reject) => {
     const metadata = {
       contentType: "application/pdf",
     };
     const storageRef = ref(
       storage,
-      `/PDF/user:${25}/customer:${25}/invoice:${25}/${"invoice.pdf"}`
+      `/PDF/user:${userID}/customer:${customerID}/invoice:${invoiceID}/${name}`
     );
     const uploadTask = uploadBytesResumable(storageRef, imgfile, metadata);
     uploadTask.on(

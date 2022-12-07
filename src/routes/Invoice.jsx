@@ -49,7 +49,6 @@ import {
   setDefaultValue,
 } from "./InvoiceController";
 import { Input } from "@mui/material";
-import PdfContainer from "../utils/PdfContainer";
 import { ContactUs } from "../utils/sendMail";
 export default function Invoice() {
   const userID = localStorage.getItem("userID");
@@ -272,13 +271,32 @@ export default function Invoice() {
       setTotal();
     }
   };
+  function toDataURL(url, callback) {
+    let xhRequest = new XMLHttpRequest();
+    xhRequest.onload = function () {
+      let reader = new FileReader();
+      reader.onloadend = function () {
+        callback(reader.result);
+        console.log(reader.result);
+      };
+      reader.readAsDataURL(xhRequest.response);
+    };
+    xhRequest.open("GET", url);
+    xhRequest.responseType = "blob";
+    xhRequest.send();
+  }
   const onImagePic = (e, item) => {
     if (e.target.files.length !== 0) {
-      item.IMG.push({
-        id: item.IMG.length + 1,
-        url: e.target.files[0],
-      });
-      setRender(!render);
+     
+      toDataURL(URL.createObjectURL(e.target.files[0]),function(value){
+        item.IMG.push({
+          id: item.IMG.length + 1,
+          url: e.target.files[0],
+          base64:value
+        });
+        setRender(!render);
+      })
+      
     }
   };
   const getPaymentList = async () => {
@@ -329,6 +347,7 @@ export default function Invoice() {
               {
                 photoName: (uploadUrl[0] + "").split("token=")[1],
                 url: uploadUrl[0],
+                base64:imageDetail.base64
               }
             );
           } else {
@@ -339,6 +358,7 @@ export default function Invoice() {
               {
                 photoName: (imageDetail.url + "").split("token=")[1],
                 url: imageDetail.url,
+                base64:imageDetail.base64
               }
             );
           }
@@ -487,9 +507,6 @@ export default function Invoice() {
     <Wrapper>
       <LoaderSpinner visible={loading} isCenter={true} />
       <Title>New Invoice</Title>
-      <div style={{ marginLeft: "-10px" }}>
-        <PdfContainer data={email} />
-      </div>
       <View_6>
         <Text_reg>Choose Customer:</Text_reg>
         <SearchAutoComplete
@@ -644,7 +661,7 @@ export default function Invoice() {
                 {isNaN(parseFloat(amount)) ? "0" : convertIntoDoller(amount)}
               </Bold_1>
             </InfoView>
-            <Button title="Send Invoice" width="100%" />
+            {/* <Button title="Send Invoice" width="100%" /> */}
             <Row>
               <Button
                 title="Save"
@@ -654,11 +671,15 @@ export default function Invoice() {
                 onClick={() => createData("draft")}
               />
               <Button
-                title="Preview"
+                title="SendInvoice"
                 onClick={() =>
-                  navigate("pdfcontainer", { state: { data: email } })
+                  navigate("/container", { state: { data: email ,details:{
+                    userID,
+                    customerID,
+                    invoiceID
+                  }} })
                 }
-                background="lightblue"
+                // background="lightblue"
                 width="48%"
               />
             </Row>

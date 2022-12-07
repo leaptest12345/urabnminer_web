@@ -203,17 +203,12 @@ const ReportTemplate = ({ data }) => {
               </div>
               <div style={styles.wrapView}>
                 {item.IMG.map((item, index) => {
-                  toDataURL(
-                    "https://www.avatar.com/avatar/d50c83cc0c6523b4d3f6085295c953e0",
-                    function (dataUrl) {
                       return (
                         <img
                           style={styles.img}
-                          src={`data:image/png;base64,${dataUrl}`}
+                          src={item.base64}
                         />
                       );
-                    }
-                  );
                 })}
               </div>
             </div>

@@ -63,7 +63,7 @@ function App() {
                 <Route exact path="/" element={<Product />} />
                 <Route exact path="*" element={<Product />} />
                 <Route exact path="/product" element={<Product />} />
-                <Route exact path="/pdfcontainer" element={<PdfContainer />} />
+                <Route exact path="/container" element={<PdfContainer />} />
                 <Route exact path="/profile" element={<Profile />} />
                 <Route exact path="/customer" element={<Customer />} />
                 <Route exact path="/feedback" element={<Feedback />} />
@@ -93,5 +93,3 @@ function App() {
 }
 
 export default App;
-{
-}
