@@ -69,6 +69,7 @@ export default function Invoice() {
   const [date, setDate] = useState(new Date().toString().substring(0, 15));
   const [user, setUser] = useState(null);
   const [emailItems, setEmailItems] = useState([]);
+  const [invoiceItem1, setInvoiceItem1] = useState([]);
   const customerID =
     state?.invoiceDetail?.customerId ||
     state?.customerDetail?.ID ||
@@ -82,7 +83,7 @@ export default function Invoice() {
     }
     setTimeout(() => {
       CalculateSameItems();
-    }, 5000);
+    }, 10000);
     getCustomerList();
     getPaymentList();
     getUserDetail();
@@ -104,6 +105,14 @@ export default function Invoice() {
     date,
     customer,
     InvoiceItems,
+    amount,
+    paymentType,
+  };
+  const email1 = {
+    invoiceID,
+    date,
+    customer,
+    emailItems,
     amount,
     paymentType,
   };
@@ -170,6 +179,7 @@ export default function Invoice() {
           },
         });
       });
+      CalculateSameItems(arr);
       setInvoiceItems(arr);
       setLoading(false);
     } catch (error) {
@@ -408,7 +418,8 @@ export default function Invoice() {
       toastAlert(0, "Please Select Customer!");
     }
   };
-  const CalculateSameItems = () => {
+  const CalculateSameItems = (arr) => {
+    console.log("inside", arr);
     setEmailItems([]);
     const alredyExist = (itemname, WeightType) => {
       let temp = false;
@@ -419,14 +430,15 @@ export default function Invoice() {
       });
       return temp;
     };
-    InvoiceItems.map((item) => {
+    console.log(InvoiceItems);
+    arr.map((item) => {
       if (alredyExist(item.ItemName, item.WeightType)) {
         const index = emailItems.findIndex(
           (value) =>
-            value.itemName == item.ItemName &&
+            value.ItemName == item.ItemName &&
             value.WeightType == item.WeightType
         );
-        if (emailItems[index].WeightType == "unit") {
+        if (emailItems[index].WeightType == "Unit") {
           const itemUnit = item.details.Unit;
           const itemTotal = item.details.Total;
           const emailUnit = emailItems[index].details.Unit;
@@ -475,10 +487,9 @@ export default function Invoice() {
     <Wrapper>
       <LoaderSpinner visible={loading} isCenter={true} />
       <Title>New Invoice</Title>
-      {/* <div style={{ marginLeft: "-10px" }}>
+      <div style={{ marginLeft: "-10px" }}>
         <PdfContainer data={email} />
-      </div> */}
-      <ContactUs />
+      </div>
       <View_6>
         <Text_reg>Choose Customer:</Text_reg>
         <SearchAutoComplete

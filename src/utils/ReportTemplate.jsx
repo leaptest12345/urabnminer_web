@@ -103,7 +103,20 @@ const ReportTemplate = ({ data }) => {
       marginBottom: "30px",
     },
   };
-
+  function toDataURL(url, callback) {
+    let xhRequest = new XMLHttpRequest();
+    xhRequest.onload = function () {
+      let reader = new FileReader();
+      reader.onloadend = function () {
+        callback(reader.result);
+        console.log(reader.result);
+      };
+      reader.readAsDataURL(xhRequest.response);
+    };
+    xhRequest.open("GET", url);
+    xhRequest.responseType = "blob";
+    xhRequest.send();
+  }
   return (
     <>
       <div style={styles.page}>
@@ -120,6 +133,16 @@ const ReportTemplate = ({ data }) => {
             </p>
           </div>
         </div>
+        {/* <img
+          src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUA
+    AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
+        9TXL0Y4OHwAAAABJRU5ErkJggg=="
+          alt="Red dot"
+          style={{
+            width: "100px",
+            height: "100px",
+          }}
+        /> */}
         <div style={styles.secondTopView}>
           <div>
             <p>639 Woodlyn Rd</p>
@@ -180,11 +203,16 @@ const ReportTemplate = ({ data }) => {
               </div>
               <div style={styles.wrapView}>
                 {item.IMG.map((item, index) => {
-                  return (
-                    <img
-                      style={styles.img}
-                      src={`data:image/png;base64,${item.url}`}
-                    />
+                  toDataURL(
+                    "https://www.avatar.com/avatar/d50c83cc0c6523b4d3f6085295c953e0",
+                    function (dataUrl) {
+                      return (
+                        <img
+                          style={styles.img}
+                          src={`data:image/png;base64,${dataUrl}`}
+                        />
+                      );
+                    }
                   );
                 })}
               </div>

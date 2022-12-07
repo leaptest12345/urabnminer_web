@@ -61,7 +61,7 @@ function App() {
             {user ? (
               <>
                 <Route exact path="/" element={<Product />} />
-                {/* <Route exact path="*" element={<Product />} /> */}
+                <Route exact path="*" element={<Product />} />
                 <Route exact path="/product" element={<Product />} />
                 <Route exact path="/pdfcontainer" element={<PdfContainer />} />
                 <Route exact path="/profile" element={<Profile />} />

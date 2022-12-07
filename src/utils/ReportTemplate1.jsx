@@ -1,8 +1,8 @@
 import { convertIntoDoller } from "./ConvertIntoDoller";
 
 const ReportTemplate1 = ({ data }) => {
-  const { invoiceID, date, customer, InvoiceItems, amount, paymentType } = data;
-
+  const { invoiceID, date, customer, emailItems, amount, paymentType } = data;
+  console.log("report template", emailItems);
   const styles = {
     page: {
       marginLeft: "5rem",
@@ -142,7 +142,7 @@ const ReportTemplate1 = ({ data }) => {
           </div>
         </div>
         <div style={styles.spacer2}></div>
-        {InvoiceItems.map((item, index) => {
+        {emailItems.map((item, index) => {
           return (
             <div style={styles.invoiceView}>
               <div style={styles.columnLayout}>

@@ -7,6 +7,7 @@ import { uploadPdf } from "./firebase/firebaseStorage";
 import ReportTemplate1 from "./ReportTemplate1";
 
 function PdfContainer({ data }) {
+  console.log("pdfcontainer", data);
   const { state } = useLocation();
   const reportTemplateRef = useRef(null);
   const handleGeneratePdf = () => {
@@ -17,7 +18,8 @@ function PdfContainer({ data }) {
     doc.html(reportTemplateRef.current, {
       async callback(doc) {
         const result = await doc.output("blob");
-        const resultData = await uploadPdf(result);
+        // const resultData = await uploadPdf(result);
+        window.open(doc.output("bloburl"));
       },
     });
   };
@@ -36,7 +38,7 @@ function PdfContainer({ data }) {
           Download Invoice
         </button>
         <div ref={reportTemplateRef} id="toPdf">
-          <ReportTemplate1 data={data ? data : state?.data} />
+          <ReportTemplate data={data ? data : state?.data} />
         </div>
       </div>
     </Wrapper>
