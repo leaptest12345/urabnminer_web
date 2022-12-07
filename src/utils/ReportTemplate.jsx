@@ -1,3 +1,4 @@
+import { ArrayConverter } from "./ArrayConverter";
 import { convertIntoDoller } from "./ConvertIntoDoller";
 
 const ReportTemplate = ({ data }) => {
@@ -157,7 +158,7 @@ const ReportTemplate = ({ data }) => {
           </div>
         </div>
         <div style={styles.spacer2}></div>
-        {InvoiceItems.map((item, index) => {
+        {ArrayConverter(InvoiceItems).map((item, index) => {
           return (
             <div style={styles.invoiceView}>
               <div style={styles.columnLayout}>
@@ -203,12 +204,7 @@ const ReportTemplate = ({ data }) => {
               </div>
               <div style={styles.wrapView}>
                 {item.IMG.map((item, index) => {
-                      return (
-                        <img
-                          style={styles.img}
-                          src={item.base64}
-                        />
-                      );
+                  return <img style={styles.img} src={item.base64} />;
                 })}
               </div>
             </div>

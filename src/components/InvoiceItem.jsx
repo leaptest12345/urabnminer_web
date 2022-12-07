@@ -45,6 +45,7 @@ export default function InvoiceItem({
   onWeightTypeChange,
   WeightType,
   onDelete,
+  disabled,
 }) {
   const re = /^[0-9]+$/;
   const [itemList, setItemList] = useState([]);
@@ -85,20 +86,20 @@ export default function InvoiceItem({
           <ItemTitle>
             {index}) {ItemName}
           </ItemTitle>
-          <DeleteBtn onClick={onDelete} />
+          {!disabled ? <DeleteBtn onClick={onDelete} /> : null}
         </RowView>
         <RowView style={{ marginTop: "20px" }}>
           <Bold_1>WeightType </Bold_1>
           <View_6_Row>
             <TouchView
-              onClick={Touch1_click}
+              onClick={disabled ? null : Touch1_click}
               background={Touch1_color}
               color={textColor1}
             >
               <Bold_1>Unit</Bold_1>
             </TouchView>
             <TouchView
-              onClick={Touch2_click}
+              onClick={disabled ? null : Touch2_click}
               background={Touch2_color}
               color={textColor2}
             >
@@ -110,6 +111,7 @@ export default function InvoiceItem({
           <Bold_1>ItemName :</Bold_1>
           <View_6>
             <SearchAutoComplete
+              disabled={disabled}
               clearIcon={false}
               searchOptions={itemList}
               onChange={onItemChange}
@@ -123,6 +125,7 @@ export default function InvoiceItem({
               <Bold_1>Unit :</Bold_1>
 
               <StyledInput
+                disabled={disabled}
                 error={unitError}
                 width="60%"
                 value={Unit}
@@ -133,6 +136,7 @@ export default function InvoiceItem({
               <Bold_1>Price :</Bold_1>
               <DollerSymbol>$</DollerSymbol>
               <StyledInput
+                disabled={disabled}
                 error={unitPriceError}
                 width="60%"
                 value={UnitPrice}
@@ -152,6 +156,7 @@ export default function InvoiceItem({
             <RowView>
               <Bold_1>Gross Weight :</Bold_1>
               <StyledInput
+                disabled={disabled}
                 width="60%"
                 error={grossError}
                 value={GrossWeight}
@@ -161,6 +166,7 @@ export default function InvoiceItem({
             <RowView>
               <Bold_1>Tare Weight :</Bold_1>
               <StyledInput
+                disabled={disabled}
                 width="60%"
                 error={tareError}
                 value={TareWeight}
@@ -177,6 +183,7 @@ export default function InvoiceItem({
               <Bold_1>Price :</Bold_1>
               <DollerSymbol>$</DollerSymbol>
               <StyledInput
+                disabled={disabled}
                 width="60%"
                 error={WeightPriceError}
                 value={WeightPrice}
@@ -194,9 +201,11 @@ export default function InvoiceItem({
         )}
         <RowView style={{ marginTop: "20px" }}>
           <Bold_1>Photo: </Bold_1>
-          <View_6>
-            <PhotoCapture width="15%" title="+" handleChange={onImagePic} />
-          </View_6>
+          {!disabled ? (
+            <View_6>
+              <PhotoCapture width="15%" title="+" handleChange={onImagePic} />
+            </View_6>
+          ) : null}
         </RowView>
         {/* {IMG && IMG.length != 0 ? (
           <Bold_1 style={{ marginTop: "10px" }}>Photo:</Bold_1>

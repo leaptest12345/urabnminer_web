@@ -13,9 +13,11 @@ export default function SearchAutoComplete({
   searchOptions,
   clearIcon,
   placeholder,
+  disabled,
 }) {
   return (
     <Autocomplete
+      disabled={disabled}
       style={{ zIndex: 111 }}
       disablePortal
       id="combo-box-demo"

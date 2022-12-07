@@ -69,6 +69,7 @@ export default function Invoice() {
   const [user, setUser] = useState(null);
   const [emailItems, setEmailItems] = useState([]);
   const [invoiceItem1, setInvoiceItem1] = useState([]);
+  const [invoiceType, setInvoiceType] = useState("");
   const customerID =
     state?.invoiceDetail?.customerId ||
     state?.customerDetail?.ID ||
@@ -76,10 +77,12 @@ export default function Invoice() {
   const invoiceID = state?.invoiceDetail?.ID || uniqueId;
   const isEditable = state?.invoiceDetail?.ID ? true : false;
   const customer = state?.customerDetail || customerDetail;
+  const paymentTypeConst = paymentType;
   useEffect(() => {
     if (isEditable) {
       getAllData();
     }
+    console.log("invoicedtyep", invoiceType);
     setTimeout(() => {
       CalculateSameItems();
     }, 10000);
@@ -152,8 +155,14 @@ export default function Invoice() {
       );
       const invoiceListData = await getData(`/INVOICE_LIST/${invoiceID}`);
       setAmount(invoiceListData.Amount);
-      setPaymentType(invoiceListData.paymentType.toString());
+      console.log(
+        "payemntname",
+        invoiceListData.paymentType,
+        typeof invoiceListData.paymentType
+      );
+      setPaymentType(invoiceListData.paymentType);
       setNote(invoiceListData.note);
+      setInvoiceType(invoiceListData.type);
       setDate(invoiceListData.invoiceDate.toString().substring(0, 15));
       const invoiceData = await getData(`/INVOICE/${invoiceID}`);
       let arr = [];
@@ -287,16 +296,14 @@ export default function Invoice() {
   }
   const onImagePic = (e, item) => {
     if (e.target.files.length !== 0) {
-     
-      toDataURL(URL.createObjectURL(e.target.files[0]),function(value){
+      toDataURL(URL.createObjectURL(e.target.files[0]), function (value) {
         item.IMG.push({
           id: item.IMG.length + 1,
           url: e.target.files[0],
-          base64:value
+          base64: value,
         });
         setRender(!render);
-      })
-      
+      });
     }
   };
   const getPaymentList = async () => {
@@ -347,7 +354,7 @@ export default function Invoice() {
               {
                 photoName: (uploadUrl[0] + "").split("token=")[1],
                 url: uploadUrl[0],
-                base64:imageDetail.base64
+                base64: imageDetail.base64,
               }
             );
           } else {
@@ -358,7 +365,7 @@ export default function Invoice() {
               {
                 photoName: (imageDetail.url + "").split("token=")[1],
                 url: imageDetail.url,
-                base64:imageDetail.base64
+                base64: imageDetail.base64,
               }
             );
           }
@@ -424,8 +431,11 @@ export default function Invoice() {
               await createInvoiceList(type);
               await createInvoice();
               setLoading(false);
-              navigate("/draft");
-              CalculateSameItems();
+              if (type == "sent") {
+                sendInvoiceClick();
+              } else {
+                navigate("/draft");
+              }
             } catch (error) {
               setLoading(false);
             }
@@ -451,7 +461,7 @@ export default function Invoice() {
       return temp;
     };
     console.log(InvoiceItems);
-    arr.map((item) => {
+    ArrayConverter(arr).map((item) => {
       if (alredyExist(item.ItemName, item.WeightType)) {
         const index = emailItems.findIndex(
           (value) =>
@@ -500,6 +510,19 @@ export default function Invoice() {
     });
     console.log("emailItems", emailItems);
   };
+  const sendInvoiceClick = () => {
+    navigate("/container", {
+      state: {
+        data: email,
+        data1: email1,
+        details: {
+          userID,
+          customerID,
+          invoiceID,
+        },
+      },
+    });
+  };
   const body = `<strong>Invoice Pdf1</strong><br/><p>invoice 1 url</p><br/><br/>
   <strong>Invoice Pdf2</strong><br/><p>invoice2 url</p>`;
   const subject = "UrbanMiner";
@@ -507,13 +530,15 @@ export default function Invoice() {
     <Wrapper>
       <LoaderSpinner visible={loading} isCenter={true} />
       <Title>New Invoice</Title>
-      <View_6>
-        <Text_reg>Choose Customer:</Text_reg>
-        <SearchAutoComplete
-          searchOptions={customerList}
-          onChange={(e, value) => addCustomerDetails(value)}
-        />
-      </View_6>
+      {invoiceType == "sent" ? null : (
+        <View_6>
+          <Text_reg>Choose Customer:</Text_reg>
+          <SearchAutoComplete
+            searchOptions={customerList}
+            onChange={(e, value) => addCustomerDetails(value)}
+          />
+        </View_6>
+      )}
       <InvoiceContainer>
         <InvoiceView1>
           <BoxView>
@@ -565,6 +590,7 @@ export default function Invoice() {
             } = item.details;
             return (
               <InvoiceItem
+                disabled={invoiceType == "sent" ? true : false}
                 key={index + 1 + ""}
                 IMG={item.IMG}
                 index={index + 1}
@@ -596,9 +622,11 @@ export default function Invoice() {
               />
             );
           })}
-          <div style={{ marginBottom: "20px" }}>
-            <Button title="Add" width="20%" onClick={() => onAddItem()} />
-          </div>
+          {invoiceType != "sent" ? (
+            <div style={{ marginBottom: "20px" }}>
+              <Button title="Add" width="20%" onClick={() => onAddItem()} />
+            </div>
+          ) : null}
         </InvoiceView1>
 
         {/* 
@@ -612,13 +640,21 @@ export default function Invoice() {
         <InvoiceView2>
           <InvoiceClient>
             <Bold_1>Note:</Bold_1>
-            <TextArea onChange={(e) => setNote(e.target.value)} />
+            <TextArea
+              value={note}
+              disabled={InvoiceItems == "sent" ? true : false}
+              contentEditable={InvoiceItems == "sent" ? true : false}
+              onChange={(e) =>
+                InvoiceItems == "sent" ? null : setNote(e.target.value)
+              }
+            />
           </InvoiceClient>
           <InvoiceClient>
             <Bold_1>PaymentType:</Bold_1>
             <SearchAutoComplete
+              disabled={invoiceType == "sent" ? true : false}
               searchOptions={paymentList}
-              defaultValue={paymentType}
+              defaultValue={paymentTypeConst}
               onChange={(e, value) => setPaymentType(value.label)}
             />
             <InfoView>
@@ -627,7 +663,7 @@ export default function Invoice() {
                 <DatePicker
                   closeOnScroll={true}
                   selected={new Date(date)}
-                  disabled={false}
+                  disabled={invoiceType == "sent" ? true : false}
                   onChange={(date) => setDate(date.toString().substring(0, 15))}
                   customInput={<Input />}
                   renderCustomHeader={({ decreaseMonth, increaseMonth }) => (
@@ -661,29 +697,24 @@ export default function Invoice() {
                 {isNaN(parseFloat(amount)) ? "0" : convertIntoDoller(amount)}
               </Bold_1>
             </InfoView>
-            {/* <Button title="Send Invoice" width="100%" /> */}
-            <Row>
-              <Button
-                title="Save"
-                background="lightgreen"
-                color="black"
-                width="48%"
-                onClick={() => createData("draft")}
-              />
-              <Button
-                title="SendInvoice"
-                onClick={() =>
-                  navigate("/container", { state: { data: email ,details:{
-                    userID,
-                    customerID,
-                    invoiceID
-                  }} })
-                }
-                // background="lightblue"
-                width="48%"
-              />
-            </Row>
-            {isEditable ? <Button title="ResendMail" width="100%" /> : null}
+            {invoiceType != "sent" ? (
+              <Row>
+                <Button
+                  title={"Save"}
+                  background="lightgreen"
+                  color="black"
+                  width="48%"
+                  onClick={() => createData("draft")}
+                />
+              </Row>
+            ) : null}
+            <Button
+              title="Send|Download Invoice"
+              width="100%"
+              onClick={() =>
+                invoiceType == "sent" ? sendInvoiceClick() : createData("sent")
+              }
+            />
           </InvoiceClient>
         </InvoiceView2>
       </InvoiceContainer>

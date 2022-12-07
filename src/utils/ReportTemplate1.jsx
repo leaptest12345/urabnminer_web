@@ -1,3 +1,4 @@
+import { ArrayConverter } from "./ArrayConverter";
 import { convertIntoDoller } from "./ConvertIntoDoller";
 
 const ReportTemplate1 = ({ data }) => {
@@ -142,7 +143,7 @@ const ReportTemplate1 = ({ data }) => {
           </div>
         </div>
         <div style={styles.spacer2}></div>
-        {emailItems.map((item, index) => {
+        {ArrayConverter(emailItems).map((item, index) => {
           return (
             <div style={styles.invoiceView}>
               <div style={styles.columnLayout}>
