@@ -13,16 +13,7 @@ export default function ImageModal({
 }) {
   const [imageModal, setImageModal] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  const src = url
-    ? url.toString().includes("http")
-      ? url
-      : url.toString().includes("/src/assets")
-      ? url
-      : URL.createObjectURL(url)
-    : null;
-  // const src = url.toString().includes("http") ? url : URL.createObjectURL(url);
-  // const src = url;
+  const src = url;
   return (
     <>
       <ModalImage

@@ -10,18 +10,14 @@ const ReportTemplate1 = ({ data }) => {
       marginRight: "5rem",
       color: "black",
       padding: "2%",
+      backgroundColor: "white",
+      borderRadius: "6px",
     },
     columnLayout: {
       display: "flex",
       justifyContent: "space-between",
     },
     column: {
-      display: "flex",
-      flexDirection: "column",
-      color: "black",
-      width: "49%",
-    },
-    column1: {
       display: "flex",
       flexDirection: "column",
       color: "black",
@@ -42,12 +38,17 @@ const ReportTemplate1 = ({ data }) => {
       paddingInline: "10px",
       width: "100%",
     },
-
-    wrapView: {
-      flexWrap: "wrap",
+    marginb1: {
+      marginBottom: 10,
+      color: "black",
+      height: "40px",
+      backgroundColor: "lightgray",
       display: "flex",
-      flexDirection: "row",
+      alignItems: "center",
+      paddingInline: "10px",
+      width: "22%",
     },
+
     text: {
       fontWeight: "bold",
       fontSize: "20px",
@@ -75,12 +76,7 @@ const ReportTemplate1 = ({ data }) => {
       backgroundColor: "whitesmoke",
       borderRadius: "6px",
     },
-    img: {
-      width: "100px",
-      height: "100px",
-      borderRadius: "6px",
-      marginRight: "20px",
-    },
+
     footerSubView: {
       display: "flex",
       flexDirection: "row",
@@ -96,6 +92,17 @@ const ReportTemplate1 = ({ data }) => {
     invoiceView: {
       width: "90%",
       marginBottom: "30px",
+    },
+    row: {
+      display: "flex",
+      flexDirection: "row",
+      width: "100%",
+    },
+    smallText: {
+      width: "25%",
+    },
+    smallText1: {
+      width: "50%",
     },
   };
 
@@ -143,65 +150,57 @@ const ReportTemplate1 = ({ data }) => {
           </div>
         </div>
         <div style={styles.spacer2}></div>
-        {ArrayConverter(emailItems).map((item, index) => {
-          return (
-            <div style={styles.invoiceView}>
-              <div style={styles.columnLayout}>
-                {item.WeightType == "Unit" ? (
-                  <>
-                    <div style={styles.column}>
-                      <h3 style={styles.marginb0}>
-                        {index + 1}) {item.ItemName}
-                      </h3>
-                      <h4>Unit</h4>
-                      <h4>UnitPrice</h4>
-                      <h4>Total</h4>
-                    </div>
-                    <div style={styles.column1}>
-                      <h4 style={styles.marginb0}></h4>
-                      <p>{item.details.Unit}</p>
-                      <p>${item.details.UnitPrice}</p>
-                      <p>{convertIntoDoller(item.details.Total)}</p>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div style={styles.column}>
-                      <h3 style={styles.marginb0}>
-                        {index + 1}) {item.ItemName}
-                      </h3>
-                      <h4>GrossWeight</h4>
-                      <h4>TareWeight</h4>
-                      <h4>NetWeight</h4>
-                      <h4>Price</h4>
-                      <h4>Total</h4>
-                    </div>
-                    <div style={styles.column1}>
-                      <h4 style={styles.marginb0}></h4>
-                      <p>{item.details.GrossWeight}</p>
-                      <p>{item.details.TareWeight}</p>
-                      <p>{item.details.NetWeight}</p>
-                      <p>${item.details.WeightPrice}</p>
-                      <p>{convertIntoDoller(item.details.Total)}</p>
-                    </div>
-                  </>
-                )}
+        <div style={styles.row}>
+          <h3 style={styles.marginb1}>
+            <p style={styles.smallText1}>ItemName</p>
+          </h3>
+          <h3 style={styles.marginb1}>
+            <p style={styles.smallText1}>QTY</p>
+          </h3>
+          <h3 style={styles.marginb1}>
+            <p style={styles.smallText1}>Price</p>
+          </h3>
+          <h3 style={styles.marginb1}>
+            <p style={styles.smallText1}>Amount</p>
+          </h3>
+        </div>
+        {emailItems &&
+          ArrayConverter(emailItems).map((item, index) => {
+            return (
+              <div style={styles.invoiceView}>
+                <div style={styles.columnLayout}>
+                  {item.WeightType == "Unit" ? (
+                    <>
+                      <div style={styles.row}>
+                        <p style={styles.smallText}>{item.ItemName}</p>
+                        <p style={styles.smallText}>{item.details.Unit}</p>
+                        <p style={styles.smallText}>
+                          ${item.details.UnitPrice}
+                        </p>
+                        <p style={styles.smallText}>
+                          {convertIntoDoller(item.details.Total)}
+                        </p>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div style={styles.row}>
+                        <p style={styles.smallText}>{item.ItemName}</p>
+                        <p style={styles.smallText}>{item.details.NetWeight}</p>
+                        <p style={styles.smallText}>
+                          ${item.details.WeightPrice}
+                        </p>
+                        <p style={styles.smallText}>
+                          {convertIntoDoller(item.details.Total)}
+                        </p>
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
-              <div style={styles.wrapView}>
-                {item.IMG.map((item, index) => {
-                  toDataUrl(item.url, function (myBase64) {
-                    return (
-                      <img
-                        style={styles.img}
-                        src={`data:image/png;base64,${myBase64}`}
-                      />
-                    );
-                  });
-                })}
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
+
         <div style={styles.footerView}>
           <div style={styles.footerSubView}>
             <div style={styles.view}>

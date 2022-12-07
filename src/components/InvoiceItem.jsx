@@ -216,7 +216,7 @@ export default function InvoiceItem({
               return (
                 <>
                   <ImageModal
-                    url={item.url}
+                    url={item?.base64 ? item.base64 : item.url}
                     margin={true}
                     key={index + 1 + "?"}
                   />

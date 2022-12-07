@@ -14,6 +14,7 @@ import { ArrayConverter } from "../utils/ArrayConverter";
 import { getData, setData } from "../utils/firebase/firebaseApi";
 import {
   InputText,
+  ItemTitle,
   Row,
   Text_reg,
   Title,
@@ -180,13 +181,21 @@ export default function Customer() {
   return (
     <Wrapper>
       <LoaderSpinner visible={loading} isCenter={true} />
-      <Title>Create Invoice</Title>
+      <Title>Select Customer</Title>
       <View_6>
         <SearchAutoComplete
           searchOptions={customerList}
           onChange={(e, value) => getCustomerDetail(value)}
         />
       </View_6>
+      <ItemTitle
+        style={{
+          marginTop: "5%",
+        }}
+      >
+        Create New Customer:
+      </ItemTitle>
+
       <CustomerBox>
         <Input
           value={firstName}

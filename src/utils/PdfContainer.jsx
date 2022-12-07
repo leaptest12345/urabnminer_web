@@ -2,11 +2,29 @@ import React, { useEffect, useRef, useState } from "react";
 import jsPDF from "jspdf";
 import ReportTemplate from "./ReportTemplate";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Wrapper } from "./GlobalStyles";
+import { Title, Wrapper } from "./GlobalStyles";
 import { uploadPdf } from "./firebase/firebaseStorage";
 import ReportTemplate1 from "./ReportTemplate1";
 import { setData } from "./firebase/firebaseApi";
 import LoaderSpinner from "../components/Loader";
+
+const spacerView = {
+  marginTop: "40px",
+};
+const divStyle = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  flexDirection: "row",
+  maringLeft: "15",
+  paddingInline: "10%",
+};
+const btnStyle = {
+  backgroundColor: "black",
+  padding: "10px",
+  borderRadius: "6px",
+  color: "white",
+};
 
 export default function PdfContainer() {
   const navigate = useNavigate();
@@ -21,6 +39,7 @@ export default function PdfContainer() {
   useEffect(() => {
     handleGeneratePdf("sent");
   }, []);
+
   const handleGeneratePdf = (type) => {
     setLoading(true);
     const doc = new jsPDF({
@@ -91,20 +110,7 @@ export default function PdfContainer() {
       },
     });
   };
-  const divStyle = {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    flexDirection: "row",
-    width: "90%",
-    alignSelf: "center",
-  };
-  const btnStyle = {
-    backgroundColor: "black",
-    padding: "10px",
-    borderRadius: "6px",
-    color: "white",
-  };
+
   var formattedBody = `Invoice PDF1 \n\n${url} \n\n\n Invoice PDF2\n\n${url1} \n `;
 
   return (
@@ -129,16 +135,15 @@ export default function PdfContainer() {
               }?subject=${"UrbanMiner"}&body=${encodeURIComponent(
                 formattedBody
               )}`}
-              onClick={() => navigate("/draft")}
             >
               Send Invoice
             </a>
           )}
         </div>
-        <div ref={reportTemplateRef} id="toPdf">
+        <div ref={reportTemplateRef} style={spacerView}>
           <ReportTemplate data={state?.data} />
         </div>
-        <div ref={reportTemplateRef1} id="toPdf">
+        <div ref={reportTemplateRef1} style={spacerView}>
           <ReportTemplate1 data={state?.data1} />
         </div>
       </div>

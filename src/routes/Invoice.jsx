@@ -434,7 +434,9 @@ export default function Invoice() {
               if (type == "sent") {
                 sendInvoiceClick();
               } else {
-                navigate("/draft");
+                setTimeout(() => {
+                  navigate("/draft");
+                }, 2000);
               }
             } catch (error) {
               setLoading(false);
@@ -461,7 +463,7 @@ export default function Invoice() {
       return temp;
     };
     console.log(InvoiceItems);
-    ArrayConverter(arr).map((item) => {
+    arr.map((item) => {
       if (alredyExist(item.ItemName, item.WeightType)) {
         const index = emailItems.findIndex(
           (value) =>
@@ -704,16 +706,19 @@ export default function Invoice() {
                   background="lightgreen"
                   color="black"
                   width="48%"
-                  onClick={() => createData("draft")}
+                  onClick={() =>
+                    CalculateSameItems(InvoiceItems) + createData("draft")
+                  }
                 />
               </Row>
             ) : null}
             <Button
               title="Send|Download Invoice"
               width="100%"
-              onClick={() =>
-                invoiceType == "sent" ? sendInvoiceClick() : createData("sent")
-              }
+              onClick={() => {
+                CalculateSameItems(InvoiceItems);
+                invoiceType == "sent" ? sendInvoiceClick() : createData("sent");
+              }}
             />
           </InvoiceClient>
         </InvoiceView2>

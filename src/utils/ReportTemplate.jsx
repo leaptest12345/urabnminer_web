@@ -10,7 +10,8 @@ const ReportTemplate = ({ data }) => {
       marginRight: "5rem",
       color: "black",
       padding: "2%",
-      // backgroundColor: "red",
+      backgroundColor: "white",
+      borderRadius: "6px",
     },
 
     columnLayout: {
@@ -204,7 +205,12 @@ const ReportTemplate = ({ data }) => {
               </div>
               <div style={styles.wrapView}>
                 {item.IMG.map((item, index) => {
-                  return <img style={styles.img} src={item.base64} />;
+                  return (
+                    <img
+                      style={styles.img}
+                      src={item?.base64 ? item.base64 : item.url}
+                    />
+                  );
                 })}
               </div>
             </div>

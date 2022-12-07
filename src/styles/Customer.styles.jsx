@@ -4,7 +4,6 @@ export const CustomerBox = styled.div`
   display: grid;
   grid-template-columns: 37% 37%;
   grid-column-gap: 2%;
-  margin-top: 5%;
   @media (max-width: 700px) {
     grid-template-columns: 100%;
   }
