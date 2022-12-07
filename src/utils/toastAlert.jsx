@@ -8,7 +8,7 @@ export const toastAlert = (type, message) => {
       //   backgroundColor: type == 0 ? "#ffcccb" : "lightgreen",
       backgroundColor: "#FFFAEE",
       fontWeight: "600",
-      fontSize: "20px",
+      fontSize: "1rem",
     },
     iconTheme: {
       secondary: "#FFFAEE",

@@ -15,19 +15,19 @@ export const Wrapper = styled.div`
 `;
 
 export const Title = styled.span`
-  font-size: 1.7rem;
+  font-size: 1.5rem;
   color: black;
   font-weight: 600;
   line-height: 50px;
 `;
 export const ItemTitle = styled.span`
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   color: black;
   font-weight: 600;
   line-height: 50px;
 `;
 export const MediumText = styled.span`
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   color: ${({ color }) => color || "black"};
   font-weight: 400;
 `;

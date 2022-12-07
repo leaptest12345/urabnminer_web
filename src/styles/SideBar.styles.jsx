@@ -45,7 +45,7 @@ export const SideBarContent = styled.div`
   color: ${({ background }) => (background ? "black" : "white")};
   background-color: ${({ background }) => (background ? "white" : "")};
   padding-inline: ${({ isOpen }) => (isOpen ? "10px" : "0px")};
-  font-size: 1em;
+  /* font-size: 1em; */
   align-items: center;
   justify-content: ${({ isOpen }) => (isOpen ? "" : "center")};
   :hover {
@@ -86,7 +86,7 @@ export const SideBarTitle = styled.span`
   margin-left: ${({ isOpen }) => (isOpen ? "25px" : "none")};
   animation: ${fadeInUp} 0.8s ease-in-out 0s;
   font-weight: 600;
-  font-size: 15px;
+  font-size: 0.8rem;
 `;
 
 // #1d1b31 lightblue

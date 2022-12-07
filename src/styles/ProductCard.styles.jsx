@@ -13,7 +13,7 @@ export const Container = styled.div`
   }
 `;
 export const ProductDesc = styled.span`
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: black;
   display: -webkit-box;
   -webkit-box-orient: vertical;

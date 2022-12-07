@@ -6,7 +6,7 @@ export const StyledButton = styled.button`
   border: none;
   color: ${({ color }) => color || "#ffffff"};
   text-align: center;
-  font-size: 15px;
+  font-size: 0.9rem;
   height: ${({ height }) => height || ""};
   display: flex;
   align-items: center;
@@ -33,6 +33,6 @@ export const StyledButton = styled.button`
 `;
 
 export const ButtonText = styled.span`
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: white;
 `;
