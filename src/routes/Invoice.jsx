@@ -516,7 +516,7 @@ export default function Invoice() {
   return (
     <Wrapper>
       <LoaderSpinner visible={loading} isCenter={true} />
-      <Title>{invoiceType == "sent" ?"Send Invoice":"New Invoice"}</Title>
+      <Title>{invoiceType == "sent" ? "Send Invoice" : "New Invoice"}</Title>
       {invoiceType == "sent" ? null : (
         <View_6>
           <Text_reg>Choose Customer:</Text_reg>
@@ -538,10 +538,11 @@ export default function Invoice() {
                 </TextSmall>
                 <TextSmall color="white">
                   <SmallBold color="white">Name: </SmallBold>
-                  {user?.firstName+' '+user?.lastName}
+                  {user?.firstName + " " + user?.lastName}
                 </TextSmall>
                 <TextSmall color="white">
-                  <SmallBold color="white">Phone: </SmallBold>{user?.phoneNumber}
+                  <SmallBold color="white">Phone: </SmallBold>
+                  {user?.phoneNumber}
                 </TextSmall>
               </SenderSubbox>
             </SenderBox>
@@ -638,12 +639,16 @@ export default function Invoice() {
           </InvoiceClient>
           <InvoiceClient>
             <Bold_1>PaymentType:</Bold_1>
-            <SearchAutoComplete
-              disabled={invoiceType == "sent" ? true : false}
-              searchOptions={paymentList}
-              defaultValue={paymentTypeConst}
-              onChange={(e, value) => setPaymentType(value.label)}
-            />
+            {invoiceType == "sent" ? (
+              <Input value={paymentType} />
+            ) : (
+              <SearchAutoComplete
+                disabled={invoiceType == "sent" ? true : false}
+                searchOptions={paymentList}
+                defaultValue={paymentTypeConst}
+                onChange={(e, value) => setPaymentType(value.label)}
+              />
+            )}
             <InfoView>
               <Bold_1>Date:</Bold_1>
               <DateView>
