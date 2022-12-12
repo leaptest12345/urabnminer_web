@@ -7,6 +7,7 @@ import { uploadPdf } from "./firebase/firebaseStorage";
 import ReportTemplate1 from "./ReportTemplate1";
 import { setData } from "./firebase/firebaseApi";
 import LoaderSpinner from "../components/Loader";
+import Button from "../components/Button";
 
 const spacerView = {
   marginTop: "40px",
@@ -28,19 +29,21 @@ const btnStyle = {
 
 export default function PdfContainer() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [url, setUrl] = useState("");
   const [url1, setUrl1] = useState("");
   const { state } = useLocation();
   const { customer } = state.data;
   const { userID, customerID, invoiceID } = state.details;
-  const reportTemplateRef = useRef(null);
-  const reportTemplateRef1 = useRef(null);
-  useEffect(() => {
-    handleGeneratePdf("sent");
-  }, []);
+  const reportTemplateRef = useRef("");
+  const reportTemplateRef1 = useRef("");
 
-  const handleGeneratePdf = (type) => {
+  useEffect(() => {
+    handleGeneratePdf("sent", false);
+  }, []);
+  var formattedBody = `Invoice PDF1 \n\n${url} \n\n\n Invoice PDF2\n\n${url1} \n `;
+
+  const handleGeneratePdf = (type, open) => {
     setLoading(true);
     const doc = new jsPDF({
       format: "a1",
@@ -64,14 +67,11 @@ export default function PdfContainer() {
                 photoName: "UrbanMiner1.pdf",
               }
             );
-            // toastAlert(1, "Pdf Successfully Generated!");
             setUrl1(result[0]);
           } else {
             doc.save("UrbanMiner1.pdf");
           }
-          setTimeout(() => {
-            setLoading(false);
-          }, 1000);
+          // setLoading(false);
         } catch (error) {
           setLoading(false);
         }
@@ -98,20 +98,27 @@ export default function PdfContainer() {
             // toastAlert(1, "Pdf Successfully Generated!");
             setUrl(result[0]);
             console.log(result[0]);
+            if (open) {
+              window.open(
+                `mailto:${
+                  customer.BusinessEmail
+                }?subject=${"UrbanMiner"}&body=${encodeURIComponent(
+                  formattedBody,
+                  "_blank",
+                  "noopener,noreferrer"
+                )}`
+              );
+            }
           } else {
             doc.save("UrbanMiner.pdf");
           }
-          setTimeout(() => {
-            setLoading(false);
-          }, 1000);
+          setLoading(false);
         } catch (error) {
           setLoading(false);
         }
       },
     });
   };
-
-  var formattedBody = `Invoice PDF1 \n\n${url} \n\n\n Invoice PDF2\n\n${url1} \n `;
 
   return (
     <Wrapper>
@@ -121,24 +128,19 @@ export default function PdfContainer() {
           <button
             className="button"
             onClick={() => {
-              if (url && url1)
-                handleGeneratePdf("download") + console.log(url, url1);
+              handleGeneratePdf("download", false) + console.log(url, url1);
             }}
           >
             Download PDF
           </button>
-          {url && url1 && (
-            <a
-              style={btnStyle}
-              href={`mailto:${
-                customer.BusinessEmail
-              }?subject=${"UrbanMiner"}&body=${encodeURIComponent(
-                formattedBody
-              )}`}
-            >
-              Send Invoice
-            </a>
-          )}
+          <button
+            className="button"
+            onClick={() => {
+              handleGeneratePdf("sent", true);
+            }}
+          >
+            Mail Invoive
+          </button>
         </div>
         <div ref={reportTemplateRef} style={spacerView}>
           <ReportTemplate data={state?.data} />
