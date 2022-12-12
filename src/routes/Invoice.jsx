@@ -516,7 +516,7 @@ export default function Invoice() {
   return (
     <Wrapper>
       <LoaderSpinner visible={loading} isCenter={true} />
-      <Title>New Invoice</Title>
+      <Title>{invoiceType == "sent" ?"Send Invoice":"New Invoice"}</Title>
       {invoiceType == "sent" ? null : (
         <View_6>
           <Text_reg>Choose Customer:</Text_reg>
@@ -538,10 +538,10 @@ export default function Invoice() {
                 </TextSmall>
                 <TextSmall color="white">
                   <SmallBold color="white">Name: </SmallBold>
-                  {user?.firstName}
+                  {user?.firstName+' '+user?.lastName}
                 </TextSmall>
                 <TextSmall color="white">
-                  <SmallBold color="white">Address: </SmallBold>katra(samal)
+                  <SmallBold color="white">Phone: </SmallBold>{user?.phoneNumber}
                 </TextSmall>
               </SenderSubbox>
             </SenderBox>

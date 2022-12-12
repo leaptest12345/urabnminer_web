@@ -5,6 +5,7 @@ export default function ImageModal({
   url,
   style,
   imgWidth,
+  imgHeight,
   margin,
   disable,
   marginVertical,
@@ -20,6 +21,7 @@ export default function ImageModal({
         onLoadStart={() => setLoading(true)}
         onLoad={() => setLoading(false)}
         width={imgWidth}
+        height={imgHeight}
         margin={margin}
         marginVertical={marginVertical}
         onClick={() => setImageModal(true)}

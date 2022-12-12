@@ -16,7 +16,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { AuthContext } from "../utils/AuthContext";
 import { getData } from "../utils/firebase/firebaseApi";
-
+import CloseIcon from '@mui/icons-material/Close';
 export default function SideBar() {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(true);
@@ -53,29 +53,15 @@ export default function SideBar() {
     <SideBarContainer isOpen={isOpen}>
       <SideBarHeader onClick={() => setIsOpen(!isOpen)}>
         <SideBarContent isOpen={isOpen} background={null}>
+          {
+            !isOpen?
           <FaBars style={{ width: "20px", height: "20px" }} />
+:
+<CloseIcon style={{ width: "25px", height: "25px" }} />
+          }
           <SideBarTitle isOpen={isOpen}>UrbanMiner</SideBarTitle>
         </SideBarContent>
       </SideBarHeader>
-      {/* <RowView
-        style={{
-          width: "100%",
-          borderBottom: "1px solid grey",
-          justifyContent: "space-around",
-        }}
-      >
-        <img
-          src={user?.photo}
-          style={{
-            width: "50px",
-            heigth: "100px",
-            borderRadius: "100%",
-          }}
-        />
-        <SideBarTitle isOpen={isOpen}>
-          {user?.firstName + "".substring(0, 10)}
-        </SideBarTitle>
-      </RowView> */}
       <SideBarContentView>
         {SIDEBAR.map((item, index) => {
           return (

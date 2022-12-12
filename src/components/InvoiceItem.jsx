@@ -207,9 +207,6 @@ export default function InvoiceItem({
             </View_6>
           ) : null}
         </RowView>
-        {/* {IMG && IMG.length != 0 ? (
-          <Bold_1 style={{ marginTop: "10px" }}>Photo:</Bold_1>
-        ) : null} */}
         <InvoiceImage>
           {IMG &&
             IMG.map((item, index) => {

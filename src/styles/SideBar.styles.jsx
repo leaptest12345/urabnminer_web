@@ -29,7 +29,6 @@ export const SideBarContainer = styled.nav`
 export const SideBarHeader = styled.div`
   padding: 15px;
   display: flex;
-  /* padding: 25px; */
   flex-direction: column;
   align-items: center;
   justify-content: space-around;

@@ -27,7 +27,6 @@ import { uploadCustomerImage } from "../utils/firebase/firebaseStorage";
 import LoaderSpinner from "../components/Loader";
 import { emailReg } from "../utils/constants/commonConst";
 import { useLocation, useNavigate } from "react-router-dom";
-import { RouteName } from "../utils/constants/routeNavigate";
 import { toDataURL } from "../utils/toDataURL";
 export default function Customer() {
   const navigate = useNavigate();
@@ -150,13 +149,15 @@ export default function Customer() {
           userID: id,
         });
         toastAlert(1, "Customer Successfully Created!");
-        // navigate("/product", {
-        //   state: {
-        //     customerDetail: {
-        //       ID: uniqueId,
-        //     },
-        //   },
-        // });
+        navigate("/invoice", {
+          state: { customerDetail: {ID: customerID,
+            BusinessName: name,
+            BusinessEmail: email,
+            BusinessAddress: address,
+            UserFirstName: firstName,
+            UserLastName: lastName,
+            userID: id} },
+        });
       }
       setLoading(false);
     } catch (error) {
@@ -168,8 +169,19 @@ export default function Customer() {
   }, []);
 
   const onStartInvoice = () => {
-    navigate("/invoice");
-  };
+    if (custId != null) {
+      navigate("/invoice", {
+        state: { customerDetail: customerDetail },
+      });
+    } else {
+      if (!alredyExist()) {
+        if (emailReg.test(email)) createCustomer();
+        else toastAlert(0, "Please Enter Valid Email Address!");
+      } else {
+        toastAlert(0, "This Customer Already Exist!");
+      }
+    }
+  }
   const capturePhoto = (e) => {
     if (e.target.files.length !== 0) {
       toDataURL(URL.createObjectURL(e.target.files[0]), function (value) {
@@ -271,20 +283,7 @@ export default function Customer() {
       </CustomerBox>
       <Button
         title="Start Invoice"
-        onClick={() => {
-          if (custId != null) {
-            navigate("/invoice", {
-              state: { customerDetail: customerDetail },
-            });
-          } else {
-            if (!alredyExist()) {
-              if (emailReg.test(email)) createCustomer();
-              else toastAlert(0, "Please Enter Valid Email Address!");
-            } else {
-              toastAlert(0, "This Customer Already Exist!");
-            }
-          }
-        }}
+        onClick={() => onStartInvoice()}
       />
     </Wrapper>
   );

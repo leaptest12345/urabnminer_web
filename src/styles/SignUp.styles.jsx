@@ -11,7 +11,7 @@ export const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 10vh;
+  /* height: 5vh; */
   margin: 5px;
   margin-inline: 10px;
 `;
@@ -36,7 +36,7 @@ export const SignUpWrapper = styled.div`
   flex-wrap: wrap;
   padding: 2em;
   width: 80%;
-  height: 90vh;
+  height: 75vh;
   background-color: whitesmoke;
   border-radius: 10px;
   overflow: "scroll";

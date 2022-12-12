@@ -1,3 +1,4 @@
+import { SixKOutlined } from "@mui/icons-material";
 import { Autocomplete } from "@mui/material";
 import React from "react";
 import {
@@ -15,6 +16,11 @@ export default function SearchAutoComplete({
   placeholder,
   disabled,
 }) {
+  const sx={
+    width: width ? width : "100%",
+    backgroundColor: "white",
+    borderRadius: "3px",
+  }
   return (
     <Autocomplete
       disabled={disabled}
@@ -22,11 +28,7 @@ export default function SearchAutoComplete({
       disablePortal
       id="combo-box-demo"
       options={searchOptions || SearchOptions}
-      sx={{
-        width: width ? width : "100%",
-        backgroundColor: "white",
-        borderRadius: "3px",
-      }}
+      sx={sx}
       placeholder={placeholder}
       clearIcon={clearIcon}
       defaultValue={defaultValue}

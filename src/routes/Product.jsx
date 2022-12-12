@@ -73,7 +73,7 @@ export default function Product() {
               onClick={() =>
                 length > 0
                   ? navigate("/subproduct", {
-                      state: { productList: ArrayConverter(item.SUB_PRODUCT) },
+                      state: {ProductDetail:item, productList: ArrayConverter(item.SUB_PRODUCT) },
                     })
                   : null
               }

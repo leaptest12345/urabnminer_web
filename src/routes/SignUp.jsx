@@ -75,27 +75,18 @@ export default function SignUp() {
       if (photo != "") {
         const photoUrl = await uploadProfileImage(photo.url);
         await setData(`USERS/${userId}`, {
-          ID: userId,
           photo: photoUrl[0],
           photoName: photoUrl[1],
-          firstName: firstName,
-          lastName: lastName,
-          phoneNumber: phone,
-          email: email,
-          countryCode: countryCode,
-          googleId: "",
-          facebookId: "",
-          isApproved: false,
-          token: "",
+          ...data
         });
-        signIn(userId + "");
-        navigate("/");
+        
       } else {
         await SignUpAuth(email, pass);
         await setData(`USERS/${userId}`, data);
-        signIn(userId + "");
-        navigate("/");
       }
+      toastAlert(1,"We're Evaluating Your Profile,Once you'r Profile Approve From The Admin Then You Will Get Access Of The App")
+      // signIn(userId + "");
+      navigate("/");
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -118,7 +109,6 @@ export default function SignUp() {
       <SignUpWrapper>
         <ImageProfileView>
           <ImageModal
-            style={{ marginBottom: photo ? null : "10px" }}
             url={photo?.base64 ? photo.base64 : photo.url || defautlUrl}
             disable={true}
           />
