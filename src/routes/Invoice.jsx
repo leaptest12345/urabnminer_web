@@ -436,7 +436,7 @@ export default function Invoice() {
     }
   };
   const CalculateSameItems = (arr) => {
-    console.log("inside", arr);
+    let newArr = JSON.parse(JSON.stringify(arr));
     setEmailItems([]);
     const alredyExist = (itemname, WeightType) => {
       let temp = false;
@@ -447,8 +447,7 @@ export default function Invoice() {
       });
       return temp;
     };
-    console.log(InvoiceItems);
-    arr.map((item) => {
+    newArr.map((item) => {
       if (alredyExist(item.ItemName, item.WeightType)) {
         const index = emailItems.findIndex(
           (value) =>
