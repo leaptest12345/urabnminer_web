@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 const BackImg =
   "https://c4.wallpaperflare.com/wallpaper/665/162/516/tunnel-tracks-light-trees-wallpaper-preview.jpg";
+import BackImage from "../assets/urbanminer.png";
+
 export const LoginContainer = styled.div`
   display: flex;
   height: 100vh;
@@ -11,21 +13,24 @@ export const LoginContainer = styled.div`
   justify-content: center;
   padding: 0;
   overflow-y: scroll;
-  background-color: #dcdee1;
+  background-color: white;
   transition: all 0.3s ease-in-out;
 `;
 export const LoginBox = styled.div`
   display: grid;
   border-radius: 10px;
-  background-color: whitesmoke;
+  background-color: #e8e8e8;
   grid-template-columns: repeat(2, 50%);
   /* height: 90%; */
   box-shadow: 3px 0 5px -2px #888;
-  width: 80%;
+  width: 85%;
+  height: 85%;
   overflow: visible;
   @media (max-width: 900px) {
     grid-template-columns: 100%;
     grid-template-rows: 100%;
+    width: 100%;
+    height: 100vh;
   }
 `;
 export const LoginBoxLeft = styled.div`
