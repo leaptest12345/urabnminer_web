@@ -79,7 +79,6 @@ export default function SignUp() {
           photoName: photoUrl[1],
           ...data
         });
-        
       } else {
         await SignUpAuth(email, pass);
         await setData(`USERS/${userId}`, data);
