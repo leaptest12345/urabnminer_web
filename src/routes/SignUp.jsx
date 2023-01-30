@@ -8,6 +8,8 @@ import {
   SignUpContainer,
   SignUpWrapper,
   ImageProfileView,
+  View49,
+  BackImageView,
 } from "../styles/SignUp.styles";
 import { Link, useNavigate } from "react-router-dom";
 import PhotoCapture from "../components/PhotoCapture";
@@ -20,8 +22,8 @@ import { setData, SignUpAuth } from "../utils/firebase/firebaseApi";
 import { uploadProfileImage } from "../utils/firebase/firebaseStorage";
 import { toastAlert } from "../utils/toastAlert";
 import { AuthContext } from "../utils/AuthContext";
-import { ForgotLink } from "../styles/Login.styles";
-import { Text_reg } from "../utils/GlobalStyles";
+import { ForgotLink, LoginBoxRight } from "../styles/Login.styles";
+import { Bold_1, Row, Text_bold, Text_reg, Title } from "../utils/GlobalStyles";
 import { toDataURL } from "../utils/toDataURL";
 
 export default function SignUp() {
@@ -77,13 +79,16 @@ export default function SignUp() {
         await setData(`USERS/${userId}`, {
           photo: photoUrl[0],
           photoName: photoUrl[1],
-          ...data
+          ...data,
         });
       } else {
         await SignUpAuth(email, pass);
         await setData(`USERS/${userId}`, data);
       }
-      toastAlert(1,"We're Evaluating Your Profile,Once you'r Profile Approve From The Admin Then You Will Get Access Of The App")
+      toastAlert(
+        1,
+        "We're Evaluating Your Profile,Once you'r Profile Approve From The Admin Then You Will Get Access Of The App"
+      );
       // signIn(userId + "");
       navigate("/");
       setLoading(false);
@@ -106,28 +111,34 @@ export default function SignUp() {
     <Wrapper>
       <LoaderSpinner isCenter={true} visible={loading} />
       <SignUpWrapper>
-        <ImageProfileView>
-          <ImageModal
-            url={photo?.base64 ? photo.base64 : photo.url || defautlUrl}
-            disable={true}
-          />
-        </ImageProfileView>
-        <div>
-          <PhotoCapture
-            width={"50px"}
-            title="+"
-            handleChange={(e) => photoCapture(e)}
-          />
-        </div>
         <SignUpContainer>
-          <Input
-            label="FirstName"
-            onChange={(e) => setFirstName(e.target.value)}
-          />
-          <Input
-            label="LastName"
-            onChange={(e) => setLastName(e.target.value)}
-          />
+          <Row>
+            <ImageProfileView>
+              <ImageModal
+                url={photo?.base64 ? photo.base64 : photo.url || defautlUrl}
+                disable={true}
+                style={{
+                  height: "130px",
+                  width: "130px",
+                }}
+              />
+            </ImageProfileView>
+            <PhotoCapture handleChange={(e) => photoCapture(e)} />
+          </Row>
+          <Row>
+            <View49>
+              <Input
+                label="FirstName"
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+            </View49>
+            <View49>
+              <Input
+                label="LastName"
+                onChange={(e) => setLastName(e.target.value)}
+              />
+            </View49>
+          </Row>
           <Input
             label="Email"
             error={email ? !emailReg.test(email) : false}
@@ -138,25 +149,47 @@ export default function SignUp() {
             error={phone ? !phoneReg.test(phone) : false}
             onChange={(e) => setPhone(e.target.value)}
           />
-          <Input
-            label="Password"
-            type="password"
-            onChange={(e) => setPass(e.target.value)}
-          />
-          <Input
-            type="password"
-            label="ConfirmPassword"
-            onChange={(e) => setConfirmPass(e.target.value)}
-          />
+          <Row>
+            <View49>
+              <Input
+                label="Password"
+                type="password"
+                onChange={(e) => setPass(e.target.value)}
+              />
+            </View49>
+            <View49>
+              <Input
+                type="password"
+                label="ConfirmPassword"
+                onChange={(e) => setConfirmPass(e.target.value)}
+              />
+            </View49>
+          </Row>
+
+          <Text_reg>
+            Already Have Account? <ForgotLink to="/login">Login</ForgotLink>
+          </Text_reg>
           <Button
             title="Register"
             width="30%"
             onClick={() => validateDetail()}
           />
-          <Text_reg style={{ alignSelf: "center" }}>
-            Already Have Account? <ForgotLink to="/login">Login</ForgotLink>
-          </Text_reg>
         </SignUpContainer>
+        <LoginBoxRight>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Title style={{ color: "white" }}>Approval</Title>
+            <Bold_1 color="white">We're Evaluating Your Profile</Bold_1>
+          </div>
+          <Text_bold color="white">
+            In order to make sure our community holds up a standard,we don't
+            allow any profiles to get in.
+          </Text_bold>
+        </LoginBoxRight>
       </SignUpWrapper>
     </Wrapper>
   );

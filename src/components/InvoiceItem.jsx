@@ -47,7 +47,7 @@ export default function InvoiceItem({
   onDelete,
   disabled,
 }) {
-  const re = /^[0-9]+$/;
+  const re = /^\d*\.?\d*$/;
   const [itemList, setItemList] = useState([]);
   const getItemList = async () => {
     try {

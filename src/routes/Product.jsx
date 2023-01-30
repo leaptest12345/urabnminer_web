@@ -9,13 +9,6 @@ import { ArrayConverter } from "../utils/ArrayConverter";
 import { getData } from "../utils/firebase/firebaseApi";
 import { Title, Wrapper } from "../utils/GlobalStyles";
 import { useLocation, useNavigate } from "react-router-dom";
-import Button from "../components/Button";
-import jsPDF from "jspdf";
-import htmlToPdfmake from "html-to-pdfmake";
-import pdfMake from "pdfmake";
-import Email1 from "../utils/html/Email1";
-import Html from "react-pdf-html";
-import { Document, Page } from "react-pdf";
 
 export default function Product() {
   const [productList, setProductList] = useState([]);
@@ -73,7 +66,10 @@ export default function Product() {
               onClick={() =>
                 length > 0
                   ? navigate("/subproduct", {
-                      state: {ProductDetail:item, productList: ArrayConverter(item.SUB_PRODUCT) },
+                      state: {
+                        ProductDetail: item,
+                        productList: ArrayConverter(item.SUB_PRODUCT),
+                      },
                     })
                   : null
               }

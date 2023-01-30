@@ -43,6 +43,8 @@ export const ItemCard = styled.div`
   position: relative;
   height: 100%;
   width: 15%;
-  align-items: center;
+  /* align-items: center; */
+  /* justify-content: center; */
+  /* background-color: red; */
   display: flex;
 `;

@@ -1,6 +1,8 @@
 import styled, { keyframes } from "styled-components";
 const BackImg =
   "https://c4.wallpaperflare.com/wallpaper/665/162/516/tunnel-tracks-light-trees-wallpaper-preview.jpg";
+
+import BackImage from "../assets/urbanminer.png";
 export const InputText = styled.span`
   font-size: 0.9rem;
   color: black;
@@ -16,13 +18,14 @@ export const InputContainer = styled.div`
   margin-inline: 10px;
 `;
 export const Wrapper = styled.div`
-  /* background-image: url(${BackImg}); */
+  /* background-image: url(${BackImage}); */
+  background-size: 100vw 100vh;
   display: flex;
   height: 100vh;
   width: 100vw;
   padding: 0;
   margin: 0;
-  background-color: #dcdee1;
+  background-color: white;
   align-items: center;
   justify-content: center;
   transition: all 100ms ease;
@@ -32,36 +35,53 @@ export const Wrapper = styled.div`
 `;
 
 export const SignUpWrapper = styled.div`
-  display: flex;
+  display: grid;
   flex-wrap: wrap;
-  padding: 2em;
-  width: 80%;
-  height: 75vh;
-  background-color: whitesmoke;
+  width: 88%;
+  height: 88vh;
+  background-color: #e8e8e8;
   border-radius: 10px;
-  overflow: "scroll";
+  grid-template-columns: 50% 50%;
+
   box-shadow: 3px 0 5px -2px #888;
   @media (max-width: 800px) {
-    height: auto;
+    grid-template-columns: 100%;
+    width: 100%;
+    height: 100vh;
+    border-radius: 0px;
   }
 `;
 export const SignUpContainer = styled.div`
-  display: grid;
-  width: 70vw;
-  grid-template-columns: 48% 48%;
-  grid-column-gap: 2%;
-  @media (max-width: 800px) {
-    grid-template-columns: auto;
-    height: auto;
-  }
+  /* width: 35vw; */
+  /* grid-column-gap: 2%; */
+  padding: 2rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 export const ImageProfileView = styled.div`
   background-color: white;
   border-radius: 100%;
   display: flex;
-  width: 150px;
-  height: 150px;
+  width: 130px;
+  height: 130px;
   align-items: center;
   justify-content: center;
+`;
+
+export const View49 = styled.div`
+  width: 49%;
+`;
+
+export const BackImageView = styled.div`
+  background-image: url(${BackImg});
+  /* background-repeat: no-repeat; */
+  /* background-size: 100% 80vh; */
+  width: 100%;
+  height: 100%;
+  @media (max-width: 800px) {
+    display: none;
+  }
 `;
